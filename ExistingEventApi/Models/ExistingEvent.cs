@@ -2,7 +2,8 @@
 {
     public class ExistingEvent
     {
-        public long Id { get; }
+        public long Id { get; set; }
+
         public string Name { get; set; }
 
         public ExistingEvent(string name)
