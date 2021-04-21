@@ -8,6 +8,6 @@ namespace ExistingEventApi.Models
 
         public int Balance { get; set; }
 
-        public List<ExistingEvent> EventsWithRates { get; set; }
+        public ICollection<ExistingEvent> EventsWithRates { get; set; }
     }
 }
