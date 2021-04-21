@@ -1,3 +1,5 @@
+using System;
+
 namespace ExistingEventApi.Models
 {
     public class ExistingEvent
@@ -5,6 +7,10 @@ namespace ExistingEventApi.Models
         public long Id { get; set; }
 
         public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public DateTime BetDeadline { get; set; }
 
         public ExistingEvent(string name)
         {
