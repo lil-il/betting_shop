@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExistingEventApi.Models;
@@ -61,7 +62,7 @@ namespace ExistingEventApi.Controllers
         [HttpPost]
         public async Task<ActionResult<ExistingEvent>> PostEvent([FromBody]string name)
         {
-            var existingEvent = new ExistingEvent(name);
+            var existingEvent = new ExistingEvent(name) { Id = Guid.NewGuid() };
             context.ExistingEvents.Add(existingEvent);
             await context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetEvent), new { id = existingEvent.Id }, 
@@ -82,7 +83,7 @@ namespace ExistingEventApi.Controllers
 
         private bool EventExists(long id)
         {
-            return context.ExistingEvents.Any(e => e.Id == id);
+            return context.ExistingEvents.Any(e => e.Id.CompareTo(id) == 0);
         }
     }
 }
