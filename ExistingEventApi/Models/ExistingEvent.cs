@@ -1,4 +1,4 @@
-﻿namespace ExistingEventApi.Models
+namespace ExistingEventApi.Models
 {
     public class ExistingEvent
     {
