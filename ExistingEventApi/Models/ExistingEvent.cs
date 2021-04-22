@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace ExistingEventApi.Models
 {
@@ -11,10 +11,5 @@ namespace ExistingEventApi.Models
         public string Description { get; set; }
 
         public DateTime BetDeadline { get; set; }
-
-        public ExistingEvent(string name)
-        {
-            Name = name;
-        }
     }
 }

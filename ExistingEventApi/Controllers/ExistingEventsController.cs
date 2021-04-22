@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,7 +38,7 @@ namespace ExistingEventApi.Controllers
 
         // PUT: api/ExistingEvents/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvent(long id, [FromBody]string name)
+        public async Task<IActionResult> PutEvent(long id, [FromBody] string name)
         {
             var modifiedEvent = context.ExistingEvents.Find(id);
             if (modifiedEvent == null)
@@ -60,12 +60,13 @@ namespace ExistingEventApi.Controllers
 
         // POST: api/ExistingEvents
         [HttpPost]
-        public async Task<ActionResult<ExistingEvent>> PostEvent([FromBody]string name)
+        public async Task<ActionResult<ExistingEvent>> PostEvent([FromBody] string name)
         {
-            var existingEvent = new ExistingEvent(name) { Id = Guid.NewGuid() };
+            var existingEvent = new ExistingEvent() { Id = Guid.NewGuid() };
+            existingEvent.Name = name;
             context.ExistingEvents.Add(existingEvent);
             await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetEvent), new { id = existingEvent.Id }, 
+            return CreatedAtAction(nameof(GetEvent), new { id = existingEvent.Id },
                 existingEvent);
         }
 
