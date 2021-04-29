@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace ExistingEventApi.Models
+namespace UserApi.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public int Balance { get; set; }
 
-        public ICollection<ExistingEvent> EventsWithRates { get; set; }
+        public ICollection<ExistingEventApi.Models.ExistingEvent> EventsWithRates { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace ExistingEventApi.Controllers
 
         // GET: api/ExistingEvents/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ExistingEvent>> GetEvent(long id)
+        public async Task<ActionResult<ExistingEvent>> GetEvent(Guid id)
         {
             var todoItem = await context.ExistingEvents.FindAsync(id);
             if (todoItem == null)
@@ -38,12 +38,10 @@ namespace ExistingEventApi.Controllers
 
         // PUT: api/ExistingEvents/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvent(long id, [FromBody] string name)
+        public async Task<IActionResult> PutEvent(Guid id, ExistingEvent modifiedEvent)
         {
-            var modifiedEvent = context.ExistingEvents.Find(id);
-            if (modifiedEvent == null)
+            if (modifiedEvent == null || !modifiedEvent.Id.Equals(id))
                 return BadRequest();
-            modifiedEvent.Name = name;
             context.Entry(modifiedEvent).State = EntityState.Modified;
             try
             {
@@ -60,19 +58,17 @@ namespace ExistingEventApi.Controllers
 
         // POST: api/ExistingEvents
         [HttpPost]
-        public async Task<ActionResult<ExistingEvent>> PostEvent([FromBody] string name)
+        public async Task<ActionResult<ExistingEvent>> PostEvent(ExistingEvent newEvent)
         {
-            var existingEvent = new ExistingEvent() { Id = Guid.NewGuid() };
-            existingEvent.Name = name;
-            context.ExistingEvents.Add(existingEvent);
+            context.ExistingEvents.Add(newEvent);
             await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetEvent), new { id = existingEvent.Id },
-                existingEvent);
+            return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id },
+                newEvent);
         }
 
         // DELETE: api/ExistingEvents/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEvent(long id)
+        public async Task<IActionResult> DeleteEvent(Guid id)
         {
             var existingEvent = await context.ExistingEvents.FindAsync(id);
             if (existingEvent == null)
@@ -82,7 +78,7 @@ namespace ExistingEventApi.Controllers
             return NoContent();
         }
 
-        private bool EventExists(long id)
+        private bool EventExists(Guid id)
         {
             return context.ExistingEvents.Any(e => e.Id.CompareTo(id) == 0);
         }
