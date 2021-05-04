@@ -3,49 +3,44 @@ using System.Collections.Generic;
 using EchoBotForTest;
 using EchoBotForTest.Command.Commands;
 using EchoBotForTest.Commands;
+using Ninject;
 using Telegram.Bot;
-using Telegram.Bot.Args;
 
 namespace Awesome
 {
-    class Program
-    {
-        static TelegramBotClient botClient;
-        private static List<Command> commands;
-        static void Main()
+    internal static class Program
         {
-            botClient = new TelegramBotClient(Config.Token);
-            commands = new List<Command>();
-            commands.Add(new GetMyId());
-            commands.Add(new Casino());
-            commands.Add(new Bullshit());
+            private static ITelegramBotClient botClient;
+            private static BotHandler telegramHandler;
+            private static StandardKernel container = new StandardKernel();
 
-            var me = botClient.GetMeAsync().Result;
-            Console.WriteLine(
-                $"Hello, World! I am user {me.Id} and my name is {me.FirstName}."
-            );
-
-            botClient.OnMessage += Bot_OnMessage;
-            botClient.StartReceiving();
-
-            Console.ReadKey();
-
-            botClient.StopReceiving();
-        }
-
-        static void Bot_OnMessage(object sender, MessageEventArgs e)
-        {
-            var message = e.Message;
-            if (message.Text != null)
+            static void Main()
             {
-                Console.WriteLine($"Received a text message in chat from {message.From.FirstName} {message.From.LastName} with text {message.Text}.");
+                var token = Config.Token;
+                container.Bind<IInputParser>().To<InputParser>().InSingletonScope();
+               
 
-                foreach (var command in commands)
-                {
-                    if (command.Contains(message.Text))
-                        command.Execute(message, botClient);
-                }
+                botClient = new TelegramBotClient(token);
+
+                telegramHandler = new BotHandler(
+                    botClient,
+                    container.Get<IInputParser>());
+
+                AddAllEventHandlers();
+
+                telegramHandler.Initialize();
+
+                container.Get<Scheduler>().Run(10);
+
+                Console.WriteLine("Press key to shutdown bot");
+                Console.ReadKey();
+                telegramHandler.StopReciving();
+            }
+
+            private static void AddAllEventHandlers()
+            {
+                container.Get<BotLogic>().OnReply += telegramHandler.BotOnReply; ;
+                telegramHandler.OnMessage += container.Get<BotLogic>().ExecuteUserRequest;
             }
         }
     }
-}
