@@ -24,23 +24,14 @@ namespace Awesome
 
                 telegramHandler = new BotHandler(
                     botClient,
-                    container.Get<IInputParser>());
-
-                AddAllEventHandlers();
+                    container.Get<InputParser>());
 
                 telegramHandler.Initialize();
 
-                container.Get<Scheduler>().Run(10);
 
-                Console.WriteLine("Press key to shutdown bot");
+                Console.WriteLine("Press any key to shutdown bot");
                 Console.ReadKey();
-                telegramHandler.StopReciving();
-            }
-
-            private static void AddAllEventHandlers()
-            {
-                container.Get<BotLogic>().OnReply += telegramHandler.BotOnReply; ;
-                telegramHandler.OnMessage += container.Get<BotLogic>().ExecuteUserRequest;
+                telegramHandler.StopReceiving();
             }
         }
     }

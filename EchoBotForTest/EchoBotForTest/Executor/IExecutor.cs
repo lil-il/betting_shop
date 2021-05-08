@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
+using EchoBotForTest.Commands;
+using EchoBotForTest.Message;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace EchoBotForTest.Executor
 {
-    public interface IExecutor
+    public interface IExecutor<T> 
+        where T: ICommandType
     {
-        public void Execute(Message message, TelegramBotClient client);
+        public Task ExecuteAsync(Telegram.Bot.Types.Message message, TelegramBotClient client);
     }
 }
