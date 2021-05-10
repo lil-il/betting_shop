@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using ExistingEventApi.DTOs;
 using ExistingEventApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,62 +14,59 @@ namespace ExistingEventApi.Controllers
     public class ExistingEventsController : ControllerBase
     {
         private readonly ExistingEventContext context;
+        private readonly IMapper mapper;
 
-        public ExistingEventsController(ExistingEventContext context)
+        public ExistingEventsController(ExistingEventContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
         // GET: api/ExistingEvents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExistingEvent>>> GetAll()
+        public async Task<ActionResult<IEnumerable<EventReadDTO>>> GetAll()
         {
-            return await context.ExistingEvents.ToListAsync();
+            return new (mapper.Map<IEnumerable<EventReadDTO>>(await context.ExistingEvents.ToListAsync()));
         }
 
         // GET: api/ExistingEvents/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ExistingEvent>> GetEvent(Guid id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<EventReadDTO>> GetEvent(int id)
         {
-            var todoItem = await context.ExistingEvents.FindAsync(id);
-            if (todoItem == null)
+            var eventItem = await context.ExistingEvents.FindAsync(id);
+            if (eventItem == null)
                 return NotFound();
-            return todoItem;
+            return mapper.Map<EventReadDTO>(eventItem);
         }
 
         // PUT: api/ExistingEvents/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvent(Guid id, ExistingEvent modifiedEvent)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> PutEvent(int id, EventUpdateDTO eventUpdateDto)
         {
-            if (modifiedEvent == null || !modifiedEvent.Id.Equals(id))
+            var eventReadDTOForUpdating = GetEvent(id);
+            if (eventUpdateDto == null || eventReadDTOForUpdating == null)
                 return BadRequest();
-            context.Entry(modifiedEvent).State = EntityState.Modified;
-            try
-            {
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EventExists(id))
-                    return NotFound();
-                throw;
-            }
+            var eventForUpdating = mapper.Map<ExistingEvent>(eventReadDTOForUpdating);
+            context.Entry(eventForUpdating).State = EntityState.Modified;
+            await context.SaveChangesAsync();
             return NoContent();
         }
 
         // POST: api/ExistingEvents
         [HttpPost]
-        public async Task<ActionResult<ExistingEvent>> PostEvent(ExistingEvent newEvent)
+        public async Task<ActionResult<EventReadDTO>> PostEvent(EventCreateDTO eventCreateDTO)
         {
+            var newEvent = mapper.Map<ExistingEvent>(eventCreateDTO);
             context.ExistingEvents.Add(newEvent);
             await context.SaveChangesAsync();
+            var eventReadDTO = mapper.Map<EventReadDTO>(newEvent);
             return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id },
-                newEvent);
+                eventReadDTO);
         }
 
         // DELETE: api/ExistingEvents/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEvent(Guid id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteEvent(int id)
         {
             var existingEvent = await context.ExistingEvents.FindAsync(id);
             if (existingEvent == null)
@@ -78,7 +76,7 @@ namespace ExistingEventApi.Controllers
             return NoContent();
         }
 
-        private bool EventExists(Guid id)
+        private bool EventExists(int id)
         {
             return context.ExistingEvents.Any(e => e.Id.CompareTo(id) == 0);
         }

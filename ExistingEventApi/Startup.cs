@@ -1,5 +1,6 @@
 // Unused usings removed
 
+using System;
 using ExistingEventApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,7 @@ namespace ExistingEventApi
             services.AddDbContext<ExistingEventContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddControllers();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

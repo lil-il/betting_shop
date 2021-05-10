@@ -1,12 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ExistingEventApi.Models
+namespace ExistingEventApi.DTOs
 {
-    public class ExistingEvent
+    public class EventCreateDTO
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(150)]
         public string Name { get; set; }
