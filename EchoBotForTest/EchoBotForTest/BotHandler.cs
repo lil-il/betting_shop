@@ -1,7 +1,7 @@
-﻿using System;
-using System.Data;
-using EchoBotForTest.Executor;
+﻿using EchoBotForTest.Command.Commands;
+using EchoBotForTest.Executor.Executors;
 using EchoBotForTest.Message;
+using EchoBotForTest.User;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
@@ -10,15 +10,18 @@ namespace EchoBotForTest
 {
     public class BotHandler
     {
-        private readonly ITelegramBotClient botClient;
+        private readonly TelegramBotClient botClient;
         private ICommandSerializer serializer;
         private UserMessageParser parser;
+        private TelegramUser user;
+        private StateManager stateManager;
+        private ExecutorsManager executorsManager;
 
-
-        public BotHandler(ITelegramBotClient botClient,  ICommandSerializer serializer)
+        public BotHandler(TelegramBotClient botClient, ICommandSerializer serializer, UserMessageParser parser)
         {
             this.botClient = botClient;
             this.serializer = serializer;
+            this.parser = parser;
         }
 
         public void Initialize()
@@ -36,19 +39,29 @@ namespace EchoBotForTest
         {
             if (e.Message.Type != MessageType.Text)
                 return;
-            var userRequest = parser.ParseMessage( e.Message.Text);
-            if (userRequest.Command != null)
+            var userRequest = parser.ParseMessage(e.Message.Text);
+            userRequest.User = user;
+            if (userRequest.Command == null)
             {
-                //пойти спросить есть ли стэйт
-                //если есть, то вызвать исполнение
-                //если нет, то 
+                if (user.State == "") 
+                {
+                    NoCommandExecutor.ExecuteAsync(e.Message, botClient, new NoCommandCommandState());
+                }
+                else
+                {
+                    var state = stateManager.GetStateFromString(user.State);
+                    var executor = executorsManager.GetExecutorFromState(user.State);
+                    executor.ExecuteAsync(e.Message, botClient, state);
+                }
             }
             else
             {
                 var commandType = serializer.Deserialize(e.Message.Text);
-                var executor = GetExecutor(commandType);
-                executor.ExecuteAsync(e.Message, botClient);
+                var executor = executorsManager.GetExecutorFromType(commandType);
+                var state = stateManager.GetStateFromType(commandType);
+                executor.ExecuteAsync(e.Message, botClient, state);
             }
         }
+
     }
 }

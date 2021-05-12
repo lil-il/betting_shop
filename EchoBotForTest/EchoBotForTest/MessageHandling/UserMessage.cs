@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using EchoBotForTest.User;
 
 namespace EchoBotForTest.Message
 {
     public class UserMessage
     {
+        public TelegramUser User;
         public string Command;
         public string Tail;
     }
