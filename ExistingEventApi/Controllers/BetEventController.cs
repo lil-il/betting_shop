@@ -10,12 +10,12 @@ namespace ExistingEventApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExistingEventsController : ControllerBase
+    public class BetEventController : ControllerBase
     {
         private readonly ExistingEventContext context;
         private readonly IMapper mapper;
 
-        public ExistingEventsController(ExistingEventContext context, IMapper mapper)
+        public BetEventController(ExistingEventContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
@@ -57,7 +57,7 @@ namespace ExistingEventApi.Controllers
             context.ExistingEvents.Add(newEvent);
             await context.SaveChangesAsync();
             var eventReadDTO = mapper.Map<BetEvent>(newEvent);
-            return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, eventReadDTO);
+            return CreatedAtAction(nameof(GetEvent), new {id = newEvent.Id}, eventReadDTO);
         }
 
         // DELETE: api/ExistingEvents/5
@@ -71,4 +71,4 @@ namespace ExistingEventApi.Controllers
             return NoContent();
         }
     }
-} 
+}

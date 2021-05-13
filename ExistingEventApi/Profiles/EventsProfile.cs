@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using ApiClient.Models;
+using AutoMapper;
 using ExistingEventApi.DTOs;
 using ExistingEventApi.Models;
 
@@ -11,6 +12,8 @@ namespace ExistingEventApi.Profiles
             CreateMap<ExistingEvent, EventReadDTO>();
             CreateMap<EventCreateDTO, ExistingEvent>();
             CreateMap<EventUpdateDTO, ExistingEvent>();
+            CreateMap<BetEventMeta, ExistingEvent>();
+            CreateMap<BetEvent, ExistingEvent>();
         }
     }
 }
