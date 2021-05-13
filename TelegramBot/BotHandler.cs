@@ -43,9 +43,10 @@ namespace EchoBotForTest
             userRequest.User = user;
             if (userRequest.Command == null)
             {
-                if (user.State == "") 
+                if (user.State == "")
                 {
-                    NoCommandExecutor.ExecuteAsync(e.Message, botClient, new NoCommandCommandState());
+                    var noCommandExecutor = new NoCommandExecutor();
+                    noCommandExecutor.ExecuteAsync(e.Message, botClient, new NoCommandCommandState());
                 }
                 else
                 {
