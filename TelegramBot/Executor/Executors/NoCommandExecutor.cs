@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
-using EchoBotForTest.Command;
-using EchoBotForTest.Command.Commands;
+using BettingShop.TelegramBot.Command;
+using BettingShop.TelegramBot.Command.Commands;
 using Telegram.Bot;
 
-namespace EchoBotForTest.Executor.Executors
+namespace BettingShop.TelegramBot.Executor.Executors
 {
     public class NoCommandExecutor : IExecutor<NoCommandType>
     {
-        public async Task ExecuteAsync(Telegram.Bot.Types.Message message, TelegramBotClient client, ICommandState<NoCommandType> state)
+        private ITelegramBotClient client;
+        public async Task ExecuteAsync(Telegram.Bot.Types.Message message, ICommandState<NoCommandType> state)
         {
             throw new NotImplementedException();
+        }
+
+        public NoCommandExecutor(ITelegramBotClient botClient)
+        {
+            client = botClient;
         }
     }
 }

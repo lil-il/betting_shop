@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using EchoBotForTest.Command;
-using EchoBotForTest.Commands;
+using BettingShop.TelegramBot.Command;
+using BettingShop.TelegramBot.Commands;
 using Telegram.Bot;
 
-namespace EchoBotForTest.Executor
+namespace BettingShop.TelegramBot.Executor
 {
     public interface IExecutor<T> 
         where T: ICommandType

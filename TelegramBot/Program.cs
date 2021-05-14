@@ -1,26 +1,24 @@
 ﻿using System;
-using EchoBotForTest.Message;
-using Ninject;
+using BettingShop.TelegramBot.Message;
 using Telegram.Bot;
 
-namespace EchoBotForTest
+namespace BettingShop.TelegramBot
 {
     internal static class Program
         {
             private static ITelegramBotClient botClient;
             private static BotHandler telegramHandler;
-            private static ICommandSerializer serializer;
+            private static ICommandTypeParser _typeParser;
             private static UserMessageParser parser;
-            private static StandardKernel container = new StandardKernel();
 
-        static void Main()
+            static void Main()
         {
             var token = Config.Token;
 
             botClient = new TelegramBotClient(token);
             telegramHandler = new BotHandler(
                 botClient,
-                serializer,
+                _typeParser,
                 parser);
 
             telegramHandler.Initialize();

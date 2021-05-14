@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EchoBotForTest.Commands;
+using BettingShop.TelegramBot.Commands;
 
-namespace EchoBotForTest.Command.Commands
+namespace BettingShop.TelegramBot.Command.Commands
 {
     public class NoCommandType: ICommandType
     {

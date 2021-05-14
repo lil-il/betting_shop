@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace EchoBotForTest
+namespace BettingShop.TelegramBot
 {
     [AttributeUsage(AttributeTargets.Class)]
     class AliasAttribute : Attribute

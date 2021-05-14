@@ -1,26 +1,25 @@
-﻿using EchoBotForTest.Command.Commands;
-using EchoBotForTest.Executor.Executors;
-using EchoBotForTest.Message;
-using EchoBotForTest.User;
+﻿using BettingShop.TelegramBot.Command.Commands;
+using BettingShop.TelegramBot.Executor.Executors;
+using BettingShop.TelegramBot.Message;
+using BettingShop.TelegramBot.User;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 
-namespace EchoBotForTest
+namespace BettingShop.TelegramBot
 {
     public class BotHandler
     {
-        private readonly TelegramBotClient botClient;
-        private ICommandSerializer serializer;
+        private readonly ITelegramBotClient botClient;
+        private ICommandTypeParser _typeParser;
         private UserMessageParser parser;
-        private TelegramUser user;
         private StateManager stateManager;
         private ExecutorsManager executorsManager;
 
-        public BotHandler(TelegramBotClient botClient, ICommandSerializer serializer, UserMessageParser parser)
+        public BotHandler(ITelegramBotClient botClient, ICommandTypeParser typeParser, UserMessageParser parser)
         {
             this.botClient = botClient;
-            this.serializer = serializer;
+            this._typeParser = typeParser;
             this.parser = parser;
         }
 
@@ -45,22 +44,22 @@ namespace EchoBotForTest
             {
                 if (user.State == "")
                 {
-                    var noCommandExecutor = new NoCommandExecutor();
-                    noCommandExecutor.ExecuteAsync(e.Message, botClient, new NoCommandCommandState());
+                    var noCommandExecutor = new NoCommandExecutor(botClient);
+                    noCommandExecutor.ExecuteAsync(e.Message, new NoCommandCommandState());
                 }
                 else
                 {
                     var state = stateManager.GetStateFromString(user.State);
                     var executor = executorsManager.GetExecutorFromState(user.State);
-                    executor.ExecuteAsync(e.Message, botClient, state);
+                    executor.ExecuteAsync(e.Message, state);
                 }
             }
             else
             {
-                var commandType = serializer.Deserialize(e.Message.Text);
+                var commandType = _typeParser.Parse(e.Message.Text);
                 var executor = executorsManager.GetExecutorFromType(commandType);
                 var state = stateManager.GetStateFromType(commandType);
-                executor.ExecuteAsync(e.Message, botClient, state);
+                executor.ExecuteAsync(e.Message, state);
             }
         }
 

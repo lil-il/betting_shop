@@ -1,8 +1,8 @@
 ﻿using System;
-using EchoBotForTest.Commands;
-using EchoBotForTest.Executor;
+using BettingShop.TelegramBot.Commands;
+using BettingShop.TelegramBot.Executor;
 
-namespace EchoBotForTest
+namespace BettingShop.TelegramBot
 {
     public class ExecutorsManager
     {

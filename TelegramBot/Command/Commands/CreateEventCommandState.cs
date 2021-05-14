@@ -1,4 +1,4 @@
-﻿namespace EchoBotForTest.Command.Commands
+﻿namespace BettingShop.TelegramBot.Command.Commands
 {
     public enum CreateEventState
     {
@@ -10,7 +10,7 @@
     }
     public class CreateEventCommandState : ICommandState<CreateEventCommandType>
     {
-        public CreateEventState State { get; set; }
+        public CreateEventState State { get; }
 
         public CreateEventCommandState(CreateEventState state)
         {

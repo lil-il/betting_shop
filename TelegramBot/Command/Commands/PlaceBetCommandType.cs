@@ -1,10 +1,10 @@
-﻿using EchoBotForTest.Commands;
+﻿using BettingShop.TelegramBot.Commands;
 
-namespace EchoBotForTest.Command.Commands
+namespace BettingShop.TelegramBot.Command.Commands
 {
     [Alias("placcebet", "сделатьставку")]
     public class PlaceBetCommandType : ICommandType
     {
-        public string Name => "CreateEvent";
+        public string Name => "PlaceBet";
     }
 }

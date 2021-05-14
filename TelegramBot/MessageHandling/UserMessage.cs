@@ -1,6 +1,6 @@
-﻿using EchoBotForTest.User;
+﻿using BettingShop.TelegramBot.User;
 
-namespace EchoBotForTest.Message
+namespace BettingShop.TelegramBot.Message
 {
     public class UserMessage
     {

@@ -1,7 +1,7 @@
-﻿using EchoBotForTest.Command.Commands;
-using EchoBotForTest.Commands;
+﻿using BettingShop.TelegramBot.Commands;
+using BettingShop.TelegramBot.Command.Commands;
 
-namespace EchoBotForTest.Command
+namespace BettingShop.TelegramBot.Command
 {
     public interface ICommandState<T>
         where T: ICommandType

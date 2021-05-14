@@ -1,4 +1,4 @@
-﻿namespace EchoBotForTest
+﻿namespace BettingShop.TelegramBot
 {
     internal class Config
     {

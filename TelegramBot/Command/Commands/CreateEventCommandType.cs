@@ -1,6 +1,6 @@
-﻿using EchoBotForTest.Commands;
+﻿using BettingShop.TelegramBot.Commands;
 
-namespace EchoBotForTest.Command.Commands
+namespace BettingShop.TelegramBot.Command.Commands
 {
     [Alias("createevent", "создатьсобытие")]
     public class CreateEventCommandType : ICommandType

@@ -1,4 +1,4 @@
-﻿namespace EchoBotForTest.Commands
+﻿namespace BettingShop.TelegramBot.Commands
 {
     public interface ICommandType
     {

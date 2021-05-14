@@ -1,8 +1,8 @@
 ﻿using System;
-using EchoBotForTest.Command;
-using EchoBotForTest.Commands;
+using BettingShop.TelegramBot.Command;
+using BettingShop.TelegramBot.Commands;
 
-namespace EchoBotForTest
+namespace BettingShop.TelegramBot
 {
     public class StateManager
     {

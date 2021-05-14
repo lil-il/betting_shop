@@ -1,5 +1,5 @@
 ﻿using System;
-namespace EchoBotForTest.Message
+namespace BettingShop.TelegramBot.Message
 {
     public class UserMessageParser
     {
