@@ -11,7 +11,7 @@ namespace ApiClient.Tests
         public void TestMethod1()
         {
             var client = new BetEventClient("http://localhost:27254");
-            var result = client.Create(new BetEventMeta(){Name = "cdnsonc", BetDeadline = DateTime.Now});
+            var result = client.Create(new BetEventMeta {Name = "cdnsonc", Description = "vkdlnfodn", BetDeadline = DateTime.Now});
             Console.WriteLine(result.Name);
             return;
         }

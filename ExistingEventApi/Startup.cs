@@ -22,7 +22,7 @@ namespace ExistingEventApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ExistingEventContext>(opt =>
+            services.AddDbContext<BetEventContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

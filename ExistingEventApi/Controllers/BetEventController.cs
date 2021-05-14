@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ApiClient.Models;
 using AutoMapper;
 using ExistingEventApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +11,10 @@ namespace ExistingEventApi.Controllers
     [ApiController]
     public class BetEventController : ControllerBase
     {
-        private readonly ExistingEventContext context;
+        private readonly BetEventContext context;
         private readonly IMapper mapper;
 
-        public BetEventController(ExistingEventContext context, IMapper mapper)
+        public BetEventController(BetEventContext context, IMapper mapper)
         {
             this.context = context;
             this.mapper = mapper;
@@ -23,41 +22,41 @@ namespace ExistingEventApi.Controllers
 
         // GET: api/ExistingEvents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BetEvent>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ApiClient.Models.BetEvent>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<BetEvent>>(await context.ExistingEvents.ToListAsync()));
+            return new(mapper.Map<IEnumerable<ApiClient.Models.BetEvent>>(await context.ExistingEvents.ToListAsync()));
         }
 
         // GET: api/ExistingEvents/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<BetEvent>> GetEvent(int id)
+        public async Task<ActionResult<ApiClient.Models.BetEvent>> GetEvent(int id)
         {
             var eventItem = await context.ExistingEvents.FindAsync(id);
             if (eventItem == null) return NotFound();
-            return mapper.Map<BetEvent>(eventItem);
+            return mapper.Map<ApiClient.Models.BetEvent>(eventItem);
         }
 
         // PUT: api/ExistingEvents/5
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutEvent(BetEvent eventUpdateDto)
+        public async Task<IActionResult> PutEvent(ApiClient.Models.BetEvent eventUpdateDto)
         {
-            var eventReadDTOForUpdating = GetEvent(eventUpdateDto.Id);
+            var eventApiModel = mapper.Map<BetEvent>(eventUpdateDto);
+            var eventReadDTOForUpdating = GetEvent(eventApiModel.Id);
             if (eventUpdateDto == null || eventReadDTOForUpdating == null) return BadRequest();
-            var eventForUpdating = mapper.Map<ExistingEvent>(eventReadDTOForUpdating);
-            context.Entry(eventForUpdating).State = EntityState.Modified;
+            context.Entry(eventReadDTOForUpdating).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();
         }
 
         // POST: api/ExistingEvents
         [HttpPost]
-        public async Task<ActionResult<BetEvent>> PostEvent(BetEventMeta eventCreateDTO)
+        public async Task<ActionResult<ApiClient.Models.BetEvent>> PostEvent(ApiClient.Models.BetEventMeta eventCreateDTO)
         {
-            var newEvent = mapper.Map<ExistingEvent>(eventCreateDTO);
+            var newEventMeta = mapper.Map<BetEventMeta>(eventCreateDTO);
+            var newEvent = mapper.Map<BetEvent>(newEventMeta);
             context.ExistingEvents.Add(newEvent);
             await context.SaveChangesAsync();
-            var eventReadDTO = mapper.Map<BetEvent>(newEvent);
-            return CreatedAtAction(nameof(GetEvent), new {id = newEvent.Id}, eventReadDTO);
+            return CreatedAtAction(nameof(GetEvent), new {id = newEvent.Id}, mapper.Map<ApiClient.Models.BetEvent>(newEvent));
         }
 
         // DELETE: api/ExistingEvents/5

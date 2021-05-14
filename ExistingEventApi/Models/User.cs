@@ -9,6 +9,6 @@ namespace UserApi.Models
 
         public int Balance { get; set; }
 
-        public ICollection<ExistingEventApi.Models.ExistingEvent> EventsWithRates { get; set; }
+        public ICollection<ExistingEventApi.Models.BetEvent> EventsWithRates { get; set; }
     }
 }

@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExistingEventApi.Models
 {
-    public class ExistingEvent
+    public class BetEventMeta
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(150)]
         public string Name { get; set; }

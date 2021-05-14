@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 
 namespace ApiClient
@@ -19,7 +20,8 @@ namespace ApiClient
         {
             var betEventJson = JsonConvert.SerializeObject(betEventMeta);
             var httpClient = new HttpClient();
-            var result = httpClient.PostAsync($"{_address}/api/betevent", new StringContent(betEventJson)).Result;
+            var stringContent = new StringContent(betEventJson, Encoding.UTF8);
+            var result = httpClient.PostAsync($"{_address}/api/BetEvent", stringContent).Result;
             result.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<BetEvent>(result.Content.ReadAsStringAsync().Result);
         }
