@@ -47,11 +47,12 @@ namespace WebApplicationDataBase
             }
         }
 
-        public void CreateEvent(IExistingEvent Event)
+        public void CreateEvent(ExistingEvent Event)
         {
             using (SQLiteConnection Connect = new SQLiteConnection(databaseName))
             {
-                string commandText = string.Format("INSERT INTO events VALUES({}, {}, {})", Event.Id, Event.Name, Event.Description, Event.BetDeadline);
+                string commandText = string.Format("INSERT INTO events VALUES({}, {})", Event.Id, Event.Name);
+                // string commandText = string.Format("INSERT INTO events VALUES({}, {}, {})", Event.Id, Event.Name, "Event.Description", Event.BetDeadline);
                 SQLiteCommand Command = new SQLiteCommand(commandText, Connect);
                 Connect.Open();
                 Command.ExecuteNonQuery();
@@ -59,13 +60,16 @@ namespace WebApplicationDataBase
             }
         }
 
-        public void UpdateEvent(IExistingEvent Event)
+        public void UpdateEvent(ExistingEvent Event)
         {
             using (SQLiteConnection Connect = new SQLiteConnection(databaseName))
             {
-                string commandText =
-                    string.Format("UPDATE events SET name = {}, description = {}, betdeadline = {} WHERE id = {}",
-                        Event.Name, Event.Description, Event.BetDeadline, Event.Id);
+                string commandText = string.Format(
+                    "UPDATE events SET name = {}, description = '', betdeadline = '' WHERE id = {}",
+                    Event.Name, Event.Id);
+                /* string commandText =
+                     string.Format("UPDATE events SET name = {}, description = {}, betdeadline = {} WHERE id = {}",
+                         Event.Name, Event.Description, Event.BetDeadline, Event.Id); */
                 SQLiteCommand Command = new SQLiteCommand(commandText, Connect);
                 Connect.Open();
                 Command.ExecuteNonQuery();
@@ -78,9 +82,9 @@ namespace WebApplicationDataBase
             string commandText = string.Format("DELETE from events WHERE id = {}", Id);
         }
 
-        public List<IExistingEvent> GetAll()
+        public List<ExistingEvent> GetAll()
         {
-            List<IExistingEvent> events = new List<IExistingEvent>();
+            List<ExistingEvent> events = new List<ExistingEvent>();
             string connect = "SELECT * FROM events";
 
             using (var connection = new SQLiteConnection("Data Source=C:\\Users\\andrl\\source\\repos\\WebApplication1\\WebApplication1\\Tables\\events.db;"))
@@ -99,12 +103,12 @@ namespace WebApplicationDataBase
                             string description = reader.GetString(2);
                             DateTime betDeadline = DateTime.Parse(reader.GetString(3));
 
-                            IExistingEvent existingEvent = new IExistingEvent();
-                            existingEvent.Id = id;
-                            existingEvent.Name = name;
-                            existingEvent.Description = description;
-                            existingEvent.BetDeadline = betDeadline;
-                            events.Add(existingEvent);
+                            ExistingEvent existingEvent = new ExistingEvent(name);
+                            /* existingEvent.Id = id;
+                             existingEvent.Name = name;
+                             existingEvent.Description = description;
+                             existingEvent.BetDeadline = betDeadline;
+                             events.Add(existingEvent); */
                         }
                     }
                 }

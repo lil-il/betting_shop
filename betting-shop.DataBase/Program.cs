@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApplicationDataBase
+namespace betting_shop.DataBase
 {
     public class Program
     {
