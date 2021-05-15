@@ -1,19 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using BettingShop.TelegramBot.Message;
+using Newtonsoft.Json;
 using Telegram.Bot;
 
 namespace BettingShop.TelegramBot
 {
     internal static class Program
-        {
-            private static ITelegramBotClient botClient;
-            private static BotHandler telegramHandler;
-            private static ICommandTypeParser _typeParser;
-            private static UserMessageParser parser;
+    {
+        private static ITelegramBotClient botClient;
+        private static BotHandler telegramHandler;
+        private static ICommandTypeParser _typeParser;
+        private static UserMessageParser parser;
 
-            static void Main()
+        static void Main()
         {
-            var token = Config.Token;
+            var r = new StreamReader("C:/Users/iprok/bot/betting_shop/TelegramBot/Config.json");
+            var json = r.ReadToEnd();
+            var config = JsonConvert.DeserializeObject<Config>(json);
+            var token = config.Token;
 
             botClient = new TelegramBotClient(token);
             telegramHandler = new BotHandler(
