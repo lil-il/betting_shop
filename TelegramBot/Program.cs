@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BettingShop.TelegramBot.Message;
 using Newtonsoft.Json;
@@ -18,7 +19,7 @@ namespace BettingShop.TelegramBot
             var r = new StreamReader("C:/Users/iprok/bot/betting_shop/TelegramBot/Config.json");
             var json = r.ReadToEnd();
             var config = JsonConvert.DeserializeObject<Config>(json);
-            var token = Config.Token;
+            var token = config.Token;
 
             botClient = new TelegramBotClient(token);
             telegramHandler = new BotHandler(

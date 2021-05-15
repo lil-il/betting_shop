@@ -1,7 +1,7 @@
 ﻿namespace BettingShop.TelegramBot
 {
-    public class Config
+    class Config
     {
-        public static string Token;
+        public string Token;
     }
 }
