@@ -11,13 +11,14 @@ namespace WebApplicationDataBase
 {
     public class DBSQLite
     {
-        private const string databaseName = "Data Source=events.db";
+        private const string databaseName = "events.db";
 
         public DBSQLite()
         {
             if (!File.Exists(databaseName))
             {
                 SQLiteConnection.CreateFile(databaseName);
+                CreateEventTable();
             }
         }
 
