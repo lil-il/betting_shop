@@ -8,15 +8,16 @@ namespace BettingShop.TelegramBot.Executor.Executors
 {
     public class NoCommandExecutor : IExecutor<NoCommandType>
     {
-        private ITelegramBotClient client;
-        public async Task ExecuteAsync(Telegram.Bot.Types.Message message, ICommandState<NoCommandType> state)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly ITelegramBotClient client;
 
         public NoCommandExecutor(ITelegramBotClient botClient)
         {
             client = botClient;
+        }
+
+        public async Task ExecuteAsync(Telegram.Bot.Types.Message message, ICommandState<NoCommandType> state)
+        {
+            await client.SendTextMessageAsync(message.Chat, $"Called NoCommandExecutor with message {message.Text}");
         }
     }
 }

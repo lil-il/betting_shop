@@ -8,15 +8,17 @@ namespace BettingShop.TelegramBot.Executor.Executors
 {
     class PlaceBetExecutor : IExecutor<PlaceBetCommandType>
     {
-        private ITelegramBotClient client;
-        public async Task ExecuteAsync(Telegram.Bot.Types.Message message,  ICommandState<PlaceBetCommandType> state)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly ITelegramBotClient client;
 
         public PlaceBetExecutor(ITelegramBotClient botClient)
         {
             client = botClient;
         }
+
+        public async Task ExecuteAsync(Telegram.Bot.Types.Message message,  ICommandState<PlaceBetCommandType> state)
+        {
+            await client.SendTextMessageAsync(message.Chat, $"Called CreateEventExecutor with message {message.Text} and state {state}");
+        }
+
     }
 }

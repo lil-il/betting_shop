@@ -13,8 +13,8 @@ namespace BettingShop.TelegramBot
         private readonly ITelegramBotClient botClient;
         private ICommandTypeParser _typeParser;
         private UserMessageParser parser;
-        private StateManager stateManager;
-        private ExecutorsManager executorsManager;
+        private ExecutorsFactory executorsFactory;
+        private UserState userState;
 
         public BotHandler(ITelegramBotClient botClient, ICommandTypeParser typeParser, UserMessageParser parser)
         {
@@ -39,26 +39,26 @@ namespace BettingShop.TelegramBot
             if (e.Message.Type != MessageType.Text)
                 return;
             var userRequest = parser.ParseMessage(e.Message.Text);
-            userRequest.User = user;
+            userRequest.User = new TelegramUser(e.Message.From.Id);
             if (userRequest.Command == null)
             {
-                if (user.State == "")
+                if (userState.userState[userRequest.User] == null)
                 {
                     var noCommandExecutor = new NoCommandExecutor(botClient);
                     noCommandExecutor.ExecuteAsync(e.Message, new NoCommandCommandState());
                 }
                 else
                 {
-                    var state = stateManager.GetStateFromString(user.State);
-                    var executor = executorsManager.GetExecutorFromState(user.State);
+                    var state = userState.userState[userRequest.User];
+                    var executor = executorsFactory.GetExecutorFromState(state);
                     executor.ExecuteAsync(e.Message, state);
                 }
             }
             else
             {
                 var commandType = _typeParser.Parse(e.Message.Text);
-                var executor = executorsManager.GetExecutorFromType(commandType);
-                var state = stateManager.GetStateFromType(commandType);
+                var executor = executorsFactory.GetExecutor(commandType);
+                var state = userState.userState[userRequest.User];
                 executor.ExecuteAsync(e.Message, state);
             }
         }

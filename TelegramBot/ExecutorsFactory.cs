@@ -1,17 +1,18 @@
 ﻿using System;
 using BettingShop.TelegramBot.Command;
 using BettingShop.TelegramBot.Commands;
+using BettingShop.TelegramBot.Executor;
 
 namespace BettingShop.TelegramBot
 {
-    public class StateManager
+    public class ExecutorsFactory
     {
-        public ICommandState<ICommandType> GetStateFromString(string state)
+        public IExecutor<ICommandType> GetExecutor(ICommandType commandType)
         {
             throw new NotImplementedException();
         }
 
-        public ICommandState<ICommandType> GetStateFromType(ICommandType type)
+        public IExecutor<ICommandType> GetExecutorFromState(ICommandState<ICommandType> state)
         {
             throw new NotImplementedException();
         }
