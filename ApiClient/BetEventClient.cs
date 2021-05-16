@@ -10,6 +10,7 @@ namespace ApiClient
     public class BetEventClient : IBetEventClient
     {
         private readonly string _address;
+        private HttpClient httpClient = new HttpClient();
 
         public BetEventClient(string address)
         {
@@ -19,31 +20,38 @@ namespace ApiClient
         public BetEvent Create(BetEventMeta betEventMeta)
         {
             var betEventJson = JsonConvert.SerializeObject(betEventMeta);
-            var httpClient = new HttpClient();
-            var stringContent = new StringContent(betEventJson, Encoding.UTF8);
-            var result = httpClient.PostAsync($"{_address}/api/BetEvent", stringContent).Result;
-            result.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<BetEvent>(result.Content.ReadAsStringAsync().Result);
+            var stringContent = new StringContent(betEventJson, Encoding.UTF8, "application/json");
+            var httpResponse = httpClient.PostAsync($"{_address}/api/BetEvent", stringContent).Result;
+            httpResponse.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<BetEvent>(httpResponse.Content.ReadAsStringAsync().Result);
         }
 
         public BetEvent Delete(int id)
         {
-            throw new NotImplementedException();
+            var deletedEvent = Get(id);
+            var httpResponse = httpClient.DeleteAsync($"{_address}/api/BetEvent/{id}");
+            return deletedEvent;
         }
 
         public BetEvent Get(int id)
         {
-            throw new NotImplementedException();
+            var httpResponse = httpClient.GetAsync($"{_address}/api/BetEvent/{id}").Result;
+            return JsonConvert.DeserializeObject<BetEvent>(httpResponse.Content.ReadAsStringAsync().Result);
         }
 
         public IEnumerable<BetEvent> GetAll()
         {
-            throw new NotImplementedException();
+            var httpResponse = httpClient.GetAsync($"{_address}/api/BetEvent").Result;
+            return JsonConvert.DeserializeObject<IEnumerable<BetEvent>>(httpResponse.Content.ReadAsStringAsync().Result);
         }
 
         public BetEvent Update(BetEvent betEvent)
         {
-            throw new NotImplementedException();
+            var betEventJson = JsonConvert.SerializeObject(betEvent);
+            var stringContent = new StringContent(betEventJson, Encoding.UTF8, "application/json");
+            var httpResponse = httpClient.PutAsync($"{_address}/api/BetEvent/{betEvent.Id}", stringContent).Result;
+            httpResponse.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<BetEvent>(httpResponse.Content.ReadAsStringAsync().Result);
         }
     }
 }

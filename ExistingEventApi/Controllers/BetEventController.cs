@@ -38,21 +38,20 @@ namespace ExistingEventApi.Controllers
 
         // PUT: api/ExistingEvents/5
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutEvent(ApiClient.Models.BetEvent eventUpdateDto)
+        public async Task<IActionResult> PutEvent(int id, ApiClient.Models.BetEvent eventForUpdating)
         {
-            var eventApiModel = mapper.Map<BetEvent>(eventUpdateDto);
-            var eventReadDTOForUpdating = GetEvent(eventApiModel.Id);
-            if (eventUpdateDto == null || eventReadDTOForUpdating == null) return BadRequest();
-            context.Entry(eventReadDTOForUpdating).State = EntityState.Modified;
+            var betEventForUpdating = mapper.Map<BetEvent>(eventForUpdating);
+            if (id != betEventForUpdating.Id) return BadRequest();
+            context.Entry(betEventForUpdating).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();
         }
 
         // POST: api/ExistingEvents
         [HttpPost]
-        public async Task<ActionResult<ApiClient.Models.BetEvent>> PostEvent(ApiClient.Models.BetEventMeta eventCreateDTO)
+        public async Task<ActionResult<ApiClient.Models.BetEvent>> PostEvent(ApiClient.Models.BetEventMeta eventForCreating)
         {
-            var newEventMeta = mapper.Map<BetEventMeta>(eventCreateDTO);
+            var newEventMeta = mapper.Map<BetEventMeta>(eventForCreating);
             var newEvent = mapper.Map<BetEvent>(newEventMeta);
             context.ExistingEvents.Add(newEvent);
             await context.SaveChangesAsync();
