@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ApiClient.Models;
 
 namespace ApiClient
@@ -10,14 +11,14 @@ namespace ApiClient
 
     public interface IBetEventClient
     {
-        BetEvent Create(BetEventMeta betEventMeta);
+        Task<BetEvent> Create(BetEventMeta betEventMeta);
 
-        BetEvent Get(int id);
+        Task<BetEvent> Get(int id);
 
-        BetEvent Delete(int id);
+        Task<BetEvent> Delete(int id);
 
-        IEnumerable<BetEvent> GetAll();
+        Task<BetEvent[]> GetAll();
 
-        BetEvent Update(BetEvent betEvent);
+        Task<BetEvent> Update(BetEvent betEvent);
     }
 }

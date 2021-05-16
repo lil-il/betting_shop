@@ -1,8 +1,7 @@
 ﻿using ApiClient.Models;
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ApiClient
@@ -17,41 +16,41 @@ namespace ApiClient
             _address = address;
         }
 
-        public BetEvent Create(BetEventMeta betEventMeta)
+        public async Task<BetEvent> Create(BetEventMeta betEventMeta)
         {
             var betEventJson = JsonConvert.SerializeObject(betEventMeta);
             var stringContent = new StringContent(betEventJson, Encoding.UTF8, "application/json");
-            var httpResponse = httpClient.PostAsync($"{_address}/api/BetEvent", stringContent).Result;
+            var httpResponse = await httpClient.PostAsync($"{_address}/api/BetEvent", stringContent);
             httpResponse.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<BetEvent>(httpResponse.Content.ReadAsStringAsync().Result);
+            return JsonConvert.DeserializeObject<BetEvent>(await httpResponse.Content.ReadAsStringAsync());
         }
 
-        public BetEvent Delete(int id)
+        public async Task<BetEvent> Delete(int id)
         {
             var deletedEvent = Get(id);
-            var httpResponse = httpClient.DeleteAsync($"{_address}/api/BetEvent/{id}");
-            return deletedEvent;
+            var httpResponse = await httpClient.DeleteAsync($"{_address}/api/BetEvent/{id}");
+            return await deletedEvent;
         }
 
-        public BetEvent Get(int id)
+        public async Task<BetEvent> Get(int id)
         {
-            var httpResponse = httpClient.GetAsync($"{_address}/api/BetEvent/{id}").Result;
-            return JsonConvert.DeserializeObject<BetEvent>(httpResponse.Content.ReadAsStringAsync().Result);
+            var httpResponse = await httpClient.GetAsync($"{_address}/api/BetEvent/{id}");
+            return JsonConvert.DeserializeObject<BetEvent>(await httpResponse.Content.ReadAsStringAsync());
         }
 
-        public IEnumerable<BetEvent> GetAll()
+        public async Task<BetEvent[]> GetAll()
         {
-            var httpResponse = httpClient.GetAsync($"{_address}/api/BetEvent").Result;
-            return JsonConvert.DeserializeObject<IEnumerable<BetEvent>>(httpResponse.Content.ReadAsStringAsync().Result);
+            var httpResponse = await httpClient.GetAsync($"{_address}/api/BetEvent");
+            return JsonConvert.DeserializeObject<BetEvent[]>(await httpResponse.Content.ReadAsStringAsync());
         }
 
-        public BetEvent Update(BetEvent betEvent)
+        public async Task<BetEvent> Update(BetEvent betEvent)
         {
             var betEventJson = JsonConvert.SerializeObject(betEvent);
             var stringContent = new StringContent(betEventJson, Encoding.UTF8, "application/json");
-            var httpResponse = httpClient.PutAsync($"{_address}/api/BetEvent/{betEvent.Id}", stringContent).Result;
+            var httpResponse = await httpClient.PutAsync($"{_address}/api/BetEvent/{betEvent.Id}", stringContent);
             httpResponse.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<BetEvent>(httpResponse.Content.ReadAsStringAsync().Result);
+            return JsonConvert.DeserializeObject<BetEvent>(await httpResponse.Content.ReadAsStringAsync());
         }
     }
 }
