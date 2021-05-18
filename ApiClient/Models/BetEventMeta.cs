@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ApiClient.Models
+namespace BettingShop.Api.Client.Models
 {
     public class BetEventMeta
     {

@@ -1,4 +1,4 @@
-﻿namespace ApiClient.Models
+﻿namespace BettingShop.Api.Client.Models
 {
     public class BetEvent: BetEventMeta
     {

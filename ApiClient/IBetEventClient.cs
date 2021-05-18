@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using ApiClient.Models;
+﻿using System.Threading.Tasks;
+using BettingShop.Api.Client.Models;
 
-namespace ApiClient
+namespace BettingShop.Api.Client
 {
     public interface IApiClient
     {

@@ -1,10 +1,10 @@
-﻿using ApiClient.Models;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BettingShop.Api.Client.Models;
 using Newtonsoft.Json;
 
-namespace ApiClient
+namespace BettingShop.Api.Client
 {
     public class BetEventClient : IBetEventClient
     {
@@ -27,9 +27,8 @@ namespace ApiClient
 
         public async Task<BetEvent> Delete(int id)
         {
-            var deletedEvent = Get(id);
             var httpResponse = await httpClient.DeleteAsync($"{_address}/api/BetEvent/{id}");
-            return await deletedEvent;
+            return JsonConvert.DeserializeObject<BetEvent>(await httpResponse.Content.ReadAsStringAsync());
         }
 
         public async Task<BetEvent> Get(int id)
@@ -50,7 +49,7 @@ namespace ApiClient
             var stringContent = new StringContent(betEventJson, Encoding.UTF8, "application/json");
             var httpResponse = await httpClient.PutAsync($"{_address}/api/BetEvent/{betEvent.Id}", stringContent);
             httpResponse.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<BetEvent>(await httpResponse.Content.ReadAsStringAsync());
+            return betEvent;
         }
     }
 }

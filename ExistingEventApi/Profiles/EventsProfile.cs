@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
-using ExistingEventApi.Models;
+using BettingShop.Api.Models;
 
-namespace ExistingEventApi.Profiles
+namespace BettingShop.Api.Profiles
 {
     public class EventsProfile: Profile
     {
         public EventsProfile()
         {
-            CreateMap<ApiClient.Models.BetEventMeta, BetEventMeta>();
+            CreateMap<Client.Models.BetEventMeta, BetEventMeta>();
 
-            CreateMap<BetEventMeta, ApiClient.Models.BetEventMeta>();
+            CreateMap<BetEventMeta, Client.Models.BetEventMeta>();
 
-            CreateMap<ApiClient.Models.BetEvent, BetEvent>();
+            CreateMap<Client.Models.BetEvent, BetEvent>();
 
-            CreateMap<BetEvent, ApiClient.Models.BetEvent>();
+            CreateMap<BetEvent, Client.Models.BetEvent>();
 
             CreateMap<BetEventMeta, BetEvent>();
         }

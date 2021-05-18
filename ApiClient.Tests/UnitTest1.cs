@@ -1,25 +1,26 @@
 using System;
-using ApiClient.Models;
+using System.Threading.Tasks;
+using BettingShop.Api.Client.Models;
 using NUnit.Framework;
 
-namespace ApiClient.Tests
+namespace BettingShop.Api.Client.Tests
 {
     [TestFixture]
     public class UnitTest1
     {
         [Test]
-        public void TestMethod1()
+        public async Task TestMethod1()
         {
             var client = new BetEventClient("http://localhost:27254");
-            var createdEvent = client.Create(new BetEventMeta {Name = "Alex", BetDeadline = DateTime.Now}).Result;
-            var allEvents = client.GetAll().Result;
-            var anotherCreatedEvent = client.Create(new BetEventMeta { Name = "Steven", BetDeadline = DateTime.Now }).Result;
-            var updatedEvent = client.Update(new BetEvent
-                {Id = 1, Name = "Sam", Description = "Apple", BetDeadline = DateTime.Now}).Result;
-            var newEvent = client.Get(1).Result;
-            var deletedEvent = client.Delete(1).Result;
-            var allEventsAfterDeletion = client.GetAll().Result;
-            return;
+            var createdEvent = await client.Create(new BetEventMeta {Name = "Alex", BetDeadline = DateTime.Now});
+            var allEvents = await client.GetAll();
+            var anotherCreatedEvent = await client.Create(new BetEventMeta { Name = "Steven", BetDeadline = DateTime.Now });
+            var updatedEvent = await client.Update(new BetEvent
+                {Id = createdEvent.Id, Name = "Sam", Description = "Apple", BetDeadline = DateTime.Now});
+            var newEvent = await client.Get(updatedEvent.Id);
+            var deletedEvent = await client.Delete(newEvent.Id);
+            var allEventsAfterDeletion = await client.GetAll();
+            System.Console.WriteLine(allEventsAfterDeletion);
         }
     }
 }
