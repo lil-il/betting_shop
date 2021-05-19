@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using BettingShop.TelegramBot.Command;
+using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Commands;
 using BettingShop.TelegramBot.User;
 using LightInject;
@@ -47,6 +48,8 @@ namespace BettingShop.TelegramBot
 
         public ICommandType GetCurrentCommandType(ITelegramUser user)
         {
+            if (user.State == null)
+                return new NoCommandType();
             return Assembly.GetCallingAssembly().GetTypes().Where(T => 
                 T.IsAssignableFrom(typeof(ICommandState)) && T.Attributes.Equals(user.State))
                 .First().GenericTypeArguments.Select(T => container.GetInstance(T)).Cast<ICommandType>().First();

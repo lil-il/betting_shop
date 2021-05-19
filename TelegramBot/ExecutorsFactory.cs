@@ -1,8 +1,10 @@
 ﻿
 using System.Linq;
 using System.Reflection;
+using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Commands;
 using BettingShop.TelegramBot.Executor;
+using BettingShop.TelegramBot.Executor.Executors;
 using LightInject;
 
 namespace BettingShop.TelegramBot

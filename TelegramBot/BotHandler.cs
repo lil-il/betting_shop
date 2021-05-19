@@ -45,7 +45,7 @@ namespace BettingShop.TelegramBot
             if (userRequest.Command == null)
             {
                 var commandType = commandTypeService.GetCurrentCommandType(userRequest.User);
-                if (commandType == null)
+                if (commandType.Name == "NoCommand")
                 {
                     var noCommandExecutor = new NoCommandExecutor(botClient);
                     noCommandExecutor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
