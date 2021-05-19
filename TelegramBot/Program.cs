@@ -4,6 +4,7 @@ using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Executor;
 using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.Message;
+using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using LightInject;
 using Newtonsoft.Json;
@@ -19,6 +20,7 @@ namespace BettingShop.TelegramBot
         private static UserMessageParser parser;
         private static IUserCommandTypeService commandTypeService;
         private static ServiceContainer container;
+        private static CommandParser commandParser;
 
         static void Main()
         {
@@ -30,6 +32,7 @@ namespace BettingShop.TelegramBot
             commandTypeService = new UserService(container);
             executorsFactory = new ExecutorsFactory(container);
             parser = new UserMessageParser();
+            commandParser = new CommandParser();
 
             container.Register<CreateEventCommandType, CreateEventCommandType>();
             container.Register<NoCommandType, NoCommandType>();
@@ -45,7 +48,8 @@ namespace BettingShop.TelegramBot
                 botClient,
                 executorsFactory,
                 parser,
-                commandTypeService);
+                commandTypeService,
+                commandParser);
 
             telegramHandler.Initialize();
 

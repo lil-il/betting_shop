@@ -11,7 +11,7 @@ namespace BettingShop.TelegramBot.Message
             var splitedMessage = message.Split(' ');
             for (var i = 0; i < splitedMessage.Length; i++)
             {
-                if (splitedMessage[i] == "Createevent") //какой-то из команд
+                if (splitedMessage[i] == "Createevent" || splitedMessage[i] == "Placebet") //какой-то из команд
                 {
                     command = splitedMessage[i];
                     continue;

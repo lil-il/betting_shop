@@ -2,6 +2,7 @@
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.Message;
+using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -15,13 +16,15 @@ namespace BettingShop.TelegramBot
         private UserMessageParser parser;
         private ExecutorsFactory executorsFactory;
         private IUserCommandTypeService commandTypeService;
+        private CommandParser commandParser;
 
-        public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService)
+        public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService, CommandParser commandParser)
         {
             this.botClient = botClient;
             this.executorsFactory = factory;
             this.parser = parser;
             this.commandTypeService = typeService;
+            this.commandParser = commandParser;
         }
 
         public void Initialize()
@@ -58,7 +61,7 @@ namespace BettingShop.TelegramBot
             }
             else
             {
-                var commandType = commandTypeService.GetCurrentCommandType(userRequest.User);
+                var commandType = commandParser.ParseCommandType(userRequest.Command);
                 var executor = executorsFactory.GetExecutor(commandType);
                 executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
             }
