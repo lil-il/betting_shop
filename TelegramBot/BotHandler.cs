@@ -1,4 +1,5 @@
-﻿using BettingShop.TelegramBot.Command.Commands;
+﻿using System.Runtime.InteropServices;
+using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.Message;
 using BettingShop.TelegramBot.User;
@@ -11,16 +12,16 @@ namespace BettingShop.TelegramBot
     public class BotHandler
     {
         private readonly ITelegramBotClient botClient;
-        private ICommandTypeParser _typeParser;
         private UserMessageParser parser;
         private ExecutorsFactory executorsFactory;
-        private UserState userState;
+        private IUserCommandTypeService commandTypeService;
 
-        public BotHandler(ITelegramBotClient botClient, ICommandTypeParser typeParser, UserMessageParser parser)
+        public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService)
         {
             this.botClient = botClient;
-            this._typeParser = typeParser;
+            this.executorsFactory = factory;
             this.parser = parser;
+            this.commandTypeService = typeService;
         }
 
         public void Initialize()
@@ -40,26 +41,26 @@ namespace BettingShop.TelegramBot
                 return;
             var userRequest = parser.ParseMessage(e.Message.Text);
             userRequest.User = new TelegramUser(e.Message.From.Id);
+            userRequest.telegramMessage = e.Message;
             if (userRequest.Command == null)
             {
-                if (userState.userState[userRequest.User] == null)
+                var commandType = commandTypeService.GetCurrentCommandType(userRequest.User);
+                if (commandType == null)
                 {
                     var noCommandExecutor = new NoCommandExecutor(botClient);
-                    noCommandExecutor.ExecuteAsync(e.Message, new NoCommandCommandState());
+                    noCommandExecutor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
                 }
                 else
                 {
-                    var state = userState.userState[userRequest.User];
-                    var executor = executorsFactory.GetExecutorFromState(state);
-                    executor.ExecuteAsync(e.Message, state);
+                    var executor = executorsFactory.GetExecutor(commandType);
+                    executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
                 }
             }
             else
             {
-                var commandType = _typeParser.Parse(e.Message.Text);
+                var commandType = commandTypeService.GetCurrentCommandType(userRequest.User);
                 var executor = executorsFactory.GetExecutor(commandType);
-                var state = userState.userState[userRequest.User];
-                executor.ExecuteAsync(e.Message, state);
+                executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
             }
         }
 

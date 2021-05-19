@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using BettingShop.TelegramBot.Command;
+﻿using System.Threading.Tasks;
 using BettingShop.TelegramBot.Command.Commands;
+using BettingShop.TelegramBot.Message;
 using Telegram.Bot;
 
 namespace BettingShop.TelegramBot.Executor.Executors
@@ -15,9 +14,9 @@ namespace BettingShop.TelegramBot.Executor.Executors
             client = botClient;
         }
 
-        public async Task ExecuteAsync(Telegram.Bot.Types.Message message, ICommandState<NoCommandType> state)
+        public async Task ExecuteAsync(UserMessage message)
         {
-            await client.SendTextMessageAsync(message.Chat, $"Called NoCommandExecutor with message {message.Text}");
+            await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called NoCommandExecutor with message {message.telegramMessage.Text}");
         }
     }
 }

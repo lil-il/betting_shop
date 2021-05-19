@@ -1,7 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using BettingShop.TelegramBot.Command.Commands;
+using BettingShop.TelegramBot.Executor;
+using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.Message;
+using BettingShop.TelegramBot.User;
+using LightInject;
 using Newtonsoft.Json;
 using Telegram.Bot;
 
@@ -11,8 +15,10 @@ namespace BettingShop.TelegramBot
     {
         private static ITelegramBotClient botClient;
         private static BotHandler telegramHandler;
-        private static ICommandTypeParser _typeParser;
+        private static ExecutorsFactory executorsFactory;
         private static UserMessageParser parser;
+        private static IUserCommandTypeService commandTypeService;
+        private static ServiceContainer container;
 
         static void Main()
         {
@@ -20,12 +26,26 @@ namespace BettingShop.TelegramBot
             var json = r.ReadToEnd();
             var config = JsonConvert.DeserializeObject<Config>(json);
             var token = config.Token;
+            container = new ServiceContainer();
+            commandTypeService = new UserService(container);
+            executorsFactory = new ExecutorsFactory(container);
+            parser = new UserMessageParser();
+
+            container.Register<CreateEventCommandType, CreateEventCommandType>();
+            container.Register<NoCommandType, NoCommandType>();
+            container.Register<PlaceBetCommandType, PlaceBetCommandType>();
+            container.Register<ITelegramUser, TelegramUser>();
+            container.Register<IUserCommandTypeService, UserService>();
+            container.Register<IExecutor<CreateEventCommandType>, CreateEventExecutor>();
+            container.Register<IExecutor<PlaceBetCommandType>, PlaceBetExecutor>();
+            container.Register<IExecutor<NoCommandType>, NoCommandExecutor>();
 
             botClient = new TelegramBotClient(token);
             telegramHandler = new BotHandler(
                 botClient,
-                _typeParser,
-                parser);
+                executorsFactory,
+                parser,
+                commandTypeService);
 
             telegramHandler.Initialize();
 

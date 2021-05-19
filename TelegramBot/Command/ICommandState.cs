@@ -1,9 +1,10 @@
 ﻿using BettingShop.TelegramBot.Commands;
-using BettingShop.TelegramBot.Command.Commands;
 
 namespace BettingShop.TelegramBot.Command
 {
-    public interface ICommandState<T>
+    public interface ICommandState { }
+
+    public interface ICommandState<T> : ICommandState
         where T: ICommandType
     {
     }
