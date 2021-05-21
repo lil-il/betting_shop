@@ -9,9 +9,9 @@ namespace WebApplicationDataBase
     {
         IEnumerable<ExistingEvent> GetExistingEvents();
         ExistingEvent GetExistingEventById(int EventId);
-        void CreateEvent(ExistingEvent Event);
+        void Create(ExistingEvent Event);
 
-        void UpdateEvent(ExistingEvent Event);
-        void DeleteEvent(int Id);
+        void Update(ExistingEvent Event);
+        void Delete(int Id);
     }
 }

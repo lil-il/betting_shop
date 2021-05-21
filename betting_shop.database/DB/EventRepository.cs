@@ -5,7 +5,7 @@ using ExistingEventApi.Models;
 
 namespace WebApplicationDataBase
 {
-    public class EventRepository
+    public class EventRepository : IEventRepository
     {
         private readonly DBSQLite context;
 
@@ -24,22 +24,22 @@ namespace WebApplicationDataBase
             return context.GetAll().FirstOrDefault(ev => ev.Id == id);
         }
 
-        public void CreateEvent(ExistingEvent existingEvent)
+        public void Create(ExistingEvent existingEvent)
         {
             if (existingEvent == null)
                 throw new ArgumentNullException(nameof(existingEvent));
 
-            context.CreateEvent(existingEvent);
+            context.Create(existingEvent);
         }
 
-        public void DeleteEvent(int studentID)
+        public void Delete(int studentID)
         {
-            context.DeleteEvent(studentID);
+            context.Delete(studentID);
         }
 
-        public void UpdateEvent(ExistingEvent existingEvent)
+        public void Update(ExistingEvent existingEvent)
         {
-            context.UpdateEvent(existingEvent);
+            context.Update(existingEvent);
         }
     }
 }

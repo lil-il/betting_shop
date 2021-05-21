@@ -47,7 +47,7 @@ namespace WebApplicationDataBase
             }
         }
 
-        public void CreateEvent(ExistingEvent Event)
+        public void Create(ExistingEvent Event)
         {
             using (SQLiteConnection Connect = new SQLiteConnection(databaseName))
             {
@@ -60,7 +60,7 @@ namespace WebApplicationDataBase
             }
         }
 
-        public void UpdateEvent(ExistingEvent Event)
+        public void Update(ExistingEvent Event)
         {
             using (SQLiteConnection Connect = new SQLiteConnection(databaseName))
             {
@@ -77,7 +77,7 @@ namespace WebApplicationDataBase
             }
         }
 
-        public void DeleteEvent(int Id)
+        public void Delete(int Id)
         {
             string commandText = string.Format("DELETE from events WHERE id = {}", Id);
         }
@@ -87,7 +87,7 @@ namespace WebApplicationDataBase
             List<ExistingEvent> events = new List<ExistingEvent>();
             string connect = "SELECT * FROM events";
 
-            using (var connection = new SQLiteConnection("Data Source=C:\\Users\\andrl\\source\\repos\\WebApplication1\\WebApplication1\\Tables\\events.db;"))
+            using (var connection = new SQLiteConnection(databaseName))
             {
                 connection.Open();
 
