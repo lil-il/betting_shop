@@ -7,7 +7,7 @@ using System.Data.SQLite;
 using System.IO;
 using ExistingEventApi.Models;
 
-namespace WebApplicationDataBase
+namespace betting_shop.database.DB
 {
     public class DBSQLite
     {

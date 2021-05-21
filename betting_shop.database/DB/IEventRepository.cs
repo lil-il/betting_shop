@@ -1,9 +1,8 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ExistingEventApi.Models;
 
 
-namespace WebApplicationDataBase
+namespace betting_shop.database.DB
 {
     public interface IEventRepository
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ExistingEventApi.Models;
 
-namespace WebApplicationDataBase
+namespace betting_shop.database.DB
 {
     public class EventRepository : IEventRepository
     {
