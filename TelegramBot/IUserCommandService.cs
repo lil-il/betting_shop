@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using BettingShop.TelegramBot.Command;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Commands;
@@ -32,10 +32,8 @@ namespace BettingShop.TelegramBot
         }
 
         public ICommandState GetCurrentState(ITelegramUser user)
-        { 
-            if (userState.ContainsKey(user))
-                return userState[user];
-            return null;
+        {
+            return userState.ContainsKey(user) ? userState[user] : null;
         }
 
         public bool SaveState(ITelegramUser user, ICommandState state)
@@ -54,10 +52,8 @@ namespace BettingShop.TelegramBot
         {
             if (!userState.ContainsKey(user))
                 return new NoCommandType();
-            return Assembly.GetCallingAssembly().GetTypes().Where(T => 
-                T.GetInterfaces().Contains(typeof(ICommandState)) && T.GetInterfaces().Length == 2 &&
-                T.Equals(userState[user].GetType()))
-                .First().GenericTypeArguments.Select(T => container.GetInstance(T)).Cast<ICommandType>().First();
+            var currentType = userState[user].GetType().GetInterface("ICommandState`1").GetGenericArguments().First();
+            return (ICommandType) Activator.CreateInstance(currentType);
         }
     }
 }

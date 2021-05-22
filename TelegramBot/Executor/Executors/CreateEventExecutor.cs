@@ -27,20 +27,27 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (createState.State)
                 {
                     case CreateEventState.Name:
-                        await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите возможные исходы события");
+                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
+                            "Введите возможные исходы события");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Lines));
-                        //сохранить исходы
                         break;
                     case CreateEventState.Lines:
-                        await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите дату и время окончания события");
+                        //сохранить исходы
+                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
+                            "Введите дату и время окончания события");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Deadline));
-                        //сохранить дедлайн
                         break;
                     case CreateEventState.Deadline:
-                        await client.SendTextMessageAsync(message.telegramMessage.Chat, "Напишите описание своего события, если не хотите, поставьте \"-\" ");
+                        //сохранить дедлайн
+                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
+                            "Напишите описание своего события, если не хотите, поставьте \"-\" ");
+                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Description));
                         stateService.DeleteState(message.User);
+                        break;
+                    case CreateEventState.Description:
                         //сохранить описание
                         //сгенерить событие
+                        stateService.DeleteState(message.User);
                         break;
                 }
             }
