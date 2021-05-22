@@ -21,8 +21,40 @@ namespace BettingShop.TelegramBot.Executor.Executors
 
         public async Task ExecuteAsync(UserMessage message)
         {
-            await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called CreateEventExecutor with message {message.telegramMessage.Text} " +
-                                                                            $"and state {stateService.GetCurrentState(message.User)}");
+            var state = stateService.GetCurrentState(message.User);
+            if (state is CreateEventCommandState createState)
+            {
+                if (createState.State == CreateEventState.Name)
+                {
+                    await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите возможные исходы события");
+                    stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Lines));
+                    //сохранить исходы
+                }
+                
+                if (createState.State == CreateEventState.Lines)
+                {
+                    await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите дату и время окончания события");
+                    stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Deadline));
+                    //сохранить дедлайн
+                }
+
+                if (createState.State == CreateEventState.Deadline)
+                {
+                    await client.SendTextMessageAsync(message.telegramMessage.Chat, "Напишите описание своего события, если не хотите, поставьте \"-\" ");
+                    stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Description));
+                    //сохранить описание
+                    //сгенерить событие
+                }
+            }
+            else
+            {
+                await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите название события");
+                stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Name));
+                //сохранить название события
+            }
+
+            //await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called CreateEventExecutor with message {message.telegramMessage.Text} " +
+              //                                                               $"and state {stateService.GetCurrentState(message.User)}");
         }
 
     }

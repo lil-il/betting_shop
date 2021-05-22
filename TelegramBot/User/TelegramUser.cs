@@ -1,4 +1,6 @@
-﻿using BettingShop.TelegramBot.Command;
+﻿using System.Linq;
+using System.Reflection;
+using BettingShop.TelegramBot.Command;
 
 namespace BettingShop.TelegramBot.User
 {

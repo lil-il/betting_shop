@@ -2,11 +2,10 @@
 {
     public enum CreateEventState
     {
-        No = 0,
-        Name = 1,
-        Description = 2,
-        Lines = 3,
-        Deadline = 4,
+        Name = 0,
+        Lines = 1,
+        Deadline = 2,
+        Description = 3,
     }
     public class CreateEventCommandState : ICommandState<CreateEventCommandType>
     {

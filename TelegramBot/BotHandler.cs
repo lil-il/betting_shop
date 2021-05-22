@@ -1,7 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using BettingShop.TelegramBot.Command.Commands;
+﻿using System.Collections.Generic;
 using BettingShop.TelegramBot.Executor.Executors;
-using BettingShop.TelegramBot.Message;
 using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using Telegram.Bot;
@@ -13,11 +11,11 @@ namespace BettingShop.TelegramBot
     public class BotHandler
     {
         private readonly ITelegramBotClient botClient;
-        private UserMessageParser parser;
-        private ExecutorsFactory executorsFactory;
-        private IUserCommandTypeService commandTypeService;
-        private CommandParser commandParser;
-
+        private readonly UserMessageParser parser;
+        private readonly ExecutorsFactory executorsFactory;
+        private readonly IUserCommandTypeService commandTypeService;
+        private readonly CommandParser commandParser;
+        private Dictionary<long, TelegramUser> userIdDictionary = new Dictionary<long, TelegramUser>();
         public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService, CommandParser commandParser)
         {
             this.botClient = botClient;
@@ -43,7 +41,16 @@ namespace BettingShop.TelegramBot
             if (e.Message.Type != MessageType.Text)
                 return;
             var userRequest = parser.ParseMessage(e.Message.Text);
-            userRequest.User = new TelegramUser(e.Message.From.Id);
+            if (userIdDictionary.ContainsKey(e.Message.From.Id))
+            {
+                userRequest.User = userIdDictionary[e.Message.From.Id];
+            }
+            else
+            {
+                userRequest.User = new TelegramUser(e.Message.From.Id);
+                userIdDictionary[e.Message.From.Id] = userRequest.User;
+            }
+
             userRequest.telegramMessage = e.Message;
             if (userRequest.Command == null)
             {

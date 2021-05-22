@@ -33,7 +33,6 @@ namespace BettingShop.TelegramBot
             executorsFactory = new ExecutorsFactory(container);
             parser = new UserMessageParser();
             commandParser = new CommandParser();
-            botClient = new TelegramBotClient(token);
 
             container.Register<CreateEventCommandType, CreateEventCommandType>();
             container.Register<NoCommandType, NoCommandType>();
@@ -42,7 +41,6 @@ namespace BettingShop.TelegramBot
             container.Register<IUserCommandTypeService, UserService>();
             container.Register<ITelegramBotClient>(sf => new TelegramBotClient(sf.GetInstance<Config>().Token));
             container.Register<Config>(sf => JsonConvert.DeserializeObject<Config>(json));
-
             container.Register<IUserCommandStateService, UserService>();
             container.Register<UserService, UserService>();
             container.Register<ServiceContainer, ServiceContainer>();

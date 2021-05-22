@@ -51,7 +51,8 @@ namespace BettingShop.TelegramBot
             if (user.State == null)
                 return new NoCommandType();
             return Assembly.GetCallingAssembly().GetTypes().Where(T => 
-                T.GetInterfaces().Contains(typeof(ICommandState)) && T.Equals(user.State.GetType()))
+                T.GetInterfaces().Contains(typeof(ICommandState)) && T.GetInterfaces().Length == 2 &&
+                T.Equals(user.State.GetType()))
                 .First().GenericTypeArguments.Select(T => container.GetInstance(T)).Cast<ICommandType>().First();
         }
     }
