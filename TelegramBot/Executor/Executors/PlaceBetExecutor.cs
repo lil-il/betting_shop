@@ -18,7 +18,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
 
         public async Task ExecuteAsync(UserMessage message)
         {
-            await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called CreateEventExecutor with message {message.telegramMessage.Text} " +
+            await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called PlaceBetExecutor with message {message.telegramMessage.Text} " +
                                                                             $"and state {stateService.GetCurrentState(message.User)}");
         }
 

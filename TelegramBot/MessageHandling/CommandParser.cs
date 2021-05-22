@@ -7,6 +7,7 @@ namespace BettingShop.TelegramBot.MessageHandling
     {
         public ICommandType ParseCommandType(string commandString)
         {
+
             if (commandString == "Placebet")
                 return new PlaceBetCommandType();
             else return new CreateEventCommandType();

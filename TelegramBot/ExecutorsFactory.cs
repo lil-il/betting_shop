@@ -1,10 +1,7 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Commands;
 using BettingShop.TelegramBot.Executor;
-using BettingShop.TelegramBot.Executor.Executors;
 using LightInject;
 
 namespace BettingShop.TelegramBot
@@ -20,8 +17,8 @@ namespace BettingShop.TelegramBot
         public IExecutor GetExecutor(ICommandType commandType)
         {
             return Assembly.GetCallingAssembly().GetTypes().Where(T =>
-                    T.BaseType.IsAssignableFrom(typeof(IExecutor)) &&
-                    T.BaseType.GenericTypeArguments.First().Equals(commandType.GetType()))
+                    T.GetInterfaces().Contains(typeof(IExecutor)) && T.GetInterfaces().Length == 2 &&
+                    T.GetInterface("IExecutor`1").GenericTypeArguments.First().Equals(commandType.GetType()))
                 .Select(T => container.GetInstance(T)).Cast<IExecutor>().First();
         }
     }
