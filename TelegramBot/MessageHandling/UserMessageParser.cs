@@ -11,27 +11,26 @@ namespace BettingShop.TelegramBot.MessageHandling
     {
         public UserMessage ParseMessage(string message)
         {
-            var commandNames = GetCommandNames();
-            string command = null;
-            var tail = new StringBuilder();
-            var splitedMessage = message.Split(' ');
-            foreach (var word in splitedMessage)
-            {
-                if (commandNames.Contains(word)) 
-                {
-                    command = word;
-                    continue;
-                }
-                tail.Append(word);
-            }
-            return new UserMessage(command, tail.ToString());
-        }
+            message = message.Trim(' ');
+            var firstSpaceIndex = message.IndexOf(' ');
 
-        public List<string> GetCommandNames()
-        {
-            var commandTypes = Assembly.GetCallingAssembly().GetTypes().Where(T =>
-                T.GetInterfaces().Contains(typeof(ICommandType)));
-            return commandTypes.SelectMany(com => com.GetCustomAttributes()).OfType<AliasAttribute>().SelectMany(a => a.Aliases).ToList();
+            var result = new UserMessage();
+
+            if (message[0] == '/')
+            {
+                result.Command = message.TrimStart('/');
+                
+                if (firstSpaceIndex > 0)
+                {
+                    result.Command = result.Command.Substring(0, firstSpaceIndex);
+                }
+                
+                result.Tail = message.Substring(firstSpaceIndex + 1);
+                return result;
+            }
+
+            result.Tail = message;
+            return result;
         }
     }
 }
