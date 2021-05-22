@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using BettingShop.TelegramBot.Commands;
-using BettingShop.TelegramBot.Message;
+﻿using BettingShop.TelegramBot.Message;
 
 namespace BettingShop.TelegramBot.MessageHandling
 {

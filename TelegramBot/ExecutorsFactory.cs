@@ -16,10 +16,10 @@ namespace BettingShop.TelegramBot
         }
         public IExecutor GetExecutor(ICommandType commandType)
         {
-            return Assembly.GetCallingAssembly().GetTypes().Where(T =>
-                    T.GetInterfaces().Contains(typeof(IExecutor)) && T.GetInterfaces().Length == 2 &&
-                    T.GetInterface("IExecutor`1").GenericTypeArguments.First().Equals(commandType.GetType()))
-                .Select(T => container.GetInstance(T)).Cast<IExecutor>().First();
+            return Assembly.GetCallingAssembly().GetTypes()
+                .Where(T => T.IsClass)
+                .Where(T => typeof(IExecutor).MakeGenericType(commandType.GetType()).IsAssignableFrom(T))
+                .Select((T => container.GetInstance(T))).Cast<IExecutor>().First();
         }
     }
 }
