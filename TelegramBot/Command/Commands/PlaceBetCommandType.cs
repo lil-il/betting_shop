@@ -2,7 +2,7 @@
 
 namespace BettingShop.TelegramBot.Command.Commands
 {
-    [Alias("placcebet", "сделатьставку")]
+    [Alias("placebet", "сделатьставку")]
     public class PlaceBetCommandType : ICommandType
     {
         public string Name => "PlaceBet";
