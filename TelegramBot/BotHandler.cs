@@ -15,7 +15,6 @@ namespace BettingShop.TelegramBot
         private readonly ExecutorsFactory executorsFactory;
         private readonly IUserCommandTypeService commandTypeService;
         private readonly CommandParser commandParser;
-        private Dictionary<long, TelegramUser> userIdDictionary = new Dictionary<long, TelegramUser>();
         public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService, CommandParser commandParser)
         {
             this.botClient = botClient;
@@ -41,16 +40,7 @@ namespace BettingShop.TelegramBot
             if (e.Message.Type != MessageType.Text)
                 return;
             var userRequest = parser.ParseMessage(e.Message.Text);
-            if (userIdDictionary.ContainsKey(e.Message.From.Id))
-            {
-                userRequest.User = userIdDictionary[e.Message.From.Id];
-            }
-            else
-            {
-                userRequest.User = new TelegramUser(e.Message.From.Id);
-                userIdDictionary[e.Message.From.Id] = userRequest.User;
-            }
-
+            userRequest.User = new TelegramUser(e.Message.From.Id);
             userRequest.telegramMessage = e.Message;
             if (userRequest.Command == null)
             {

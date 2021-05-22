@@ -3,7 +3,6 @@ using System.IO;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Executor;
 using BettingShop.TelegramBot.Executor.Executors;
-using BettingShop.TelegramBot.Message;
 using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using LightInject;

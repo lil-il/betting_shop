@@ -24,26 +24,24 @@ namespace BettingShop.TelegramBot.Executor.Executors
             var state = stateService.GetCurrentState(message.User);
             if (state is CreateEventCommandState createState)
             {
-                if (createState.State == CreateEventState.Name)
+                switch (createState.State)
                 {
-                    await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите возможные исходы события");
-                    stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Lines));
-                    //сохранить исходы
-                }
-                
-                if (createState.State == CreateEventState.Lines)
-                {
-                    await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите дату и время окончания события");
-                    stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Deadline));
-                    //сохранить дедлайн
-                }
-
-                if (createState.State == CreateEventState.Deadline)
-                {
-                    await client.SendTextMessageAsync(message.telegramMessage.Chat, "Напишите описание своего события, если не хотите, поставьте \"-\" ");
-                    stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Description));
-                    //сохранить описание
-                    //сгенерить событие
+                    case CreateEventState.Name:
+                        await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите возможные исходы события");
+                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Lines));
+                        //сохранить исходы
+                        break;
+                    case CreateEventState.Lines:
+                        await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите дату и время окончания события");
+                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Deadline));
+                        //сохранить дедлайн
+                        break;
+                    case CreateEventState.Deadline:
+                        await client.SendTextMessageAsync(message.telegramMessage.Chat, "Напишите описание своего события, если не хотите, поставьте \"-\" ");
+                        stateService.DeleteState(message.User);
+                        //сохранить описание
+                        //сгенерить событие
+                        break;
                 }
             }
             else

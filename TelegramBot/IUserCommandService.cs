@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BettingShop.TelegramBot.Command;
 using BettingShop.TelegramBot.Command.Commands;
@@ -23,6 +24,7 @@ namespace BettingShop.TelegramBot
     public class UserService : IUserCommandStateService, IUserCommandTypeService
     {
         private ServiceContainer container;
+        private static Dictionary<ITelegramUser, ICommandState> userState = new Dictionary<ITelegramUser, ICommandState>();
 
         public UserService(ServiceContainer container)
         {
@@ -31,28 +33,30 @@ namespace BettingShop.TelegramBot
 
         public ICommandState GetCurrentState(ITelegramUser user)
         { 
-            return user.State;
+            if (userState.ContainsKey(user))
+                return userState[user];
+            return null;
         }
 
         public bool SaveState(ITelegramUser user, ICommandState state)
         {
-            user.State = state;
+            userState[user] = state;
             return true;
         }
 
         public bool DeleteState(ITelegramUser user)
         {
-            user.State = null;
+            userState.Remove(user);
             return true;
         }
 
         public ICommandType GetCurrentCommandType(ITelegramUser user)
         {
-            if (user.State == null)
+            if (!userState.ContainsKey(user))
                 return new NoCommandType();
             return Assembly.GetCallingAssembly().GetTypes().Where(T => 
                 T.GetInterfaces().Contains(typeof(ICommandState)) && T.GetInterfaces().Length == 2 &&
-                T.Equals(user.State.GetType()))
+                T.Equals(userState[user].GetType()))
                 .First().GenericTypeArguments.Select(T => container.GetInstance(T)).Cast<ICommandType>().First();
         }
     }
