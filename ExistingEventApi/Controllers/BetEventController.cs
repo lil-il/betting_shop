@@ -21,23 +21,23 @@ namespace BetEvent.Api.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/ExistingEvents
+        // GET: api/Events
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client.Models.BetEvent>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<Client.Models.BetEvent>>(await context.ExistingEvents.ToListAsync()));
+            return new(mapper.Map<IEnumerable<Client.Models.BetEvent>>(await context.Events.ToListAsync()));
         }
 
-        // GET: api/ExistingEvents/5
+        // GET: api/Events/5
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Client.Models.BetEvent>> GetEvent(Guid id)
         {
-            var eventItem = await context.ExistingEvents.FindAsync(id);
+            var eventItem = await context.Events.FindAsync(id);
             if (eventItem == null) return NotFound();
             return mapper.Map<Client.Models.BetEvent>(eventItem);
         }
 
-        // PUT: api/ExistingEvents/5
+        // PUT: api/Events/5
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutEvent(Guid id, Client.Models.BetEvent eventForUpdating)
         {
@@ -48,24 +48,24 @@ namespace BetEvent.Api.Controllers
             return NoContent();
         }
 
-        // POST: api/ExistingEvents
+        // POST: api/Events
         [HttpPost]
         public async Task<ActionResult<Client.Models.BetEvent>> PostEvent(Client.Models.BetEventMeta eventForCreating)
         {
             var newEventMeta = mapper.Map<BetEventMeta>(eventForCreating);
             var newEvent = mapper.Map<Models.BetEvent>(newEventMeta);
-            context.ExistingEvents.Add(newEvent);
+            context.Events.Add(newEvent);
             await context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetEvent), new {id = newEvent.Id}, mapper.Map<Client.Models.BetEvent>(newEvent));
         }
 
-        // DELETE: api/ExistingEvents/5
+        // DELETE: api/Events/5
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Client.Models.BetEvent>> DeleteEvent(Guid id)
         {
-            var existingEvent = await context.ExistingEvents.FindAsync(id);
+            var existingEvent = await context.Events.FindAsync(id);
             if (existingEvent == null) return NotFound();
-            context.ExistingEvents.Remove(existingEvent);
+            context.Events.Remove(existingEvent);
             await context.SaveChangesAsync();
             return mapper.Map<Client.Models.BetEvent>(existingEvent);
         }

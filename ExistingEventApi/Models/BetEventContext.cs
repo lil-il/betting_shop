@@ -9,6 +9,6 @@ namespace BetEvent.Api.Models
         {
         }
 
-        public DbSet<BetEvent> ExistingEvents { get; set; }
+        public DbSet<BetEvent> Events { get; set; }
     }
 }

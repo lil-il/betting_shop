@@ -1,5 +1,3 @@
-// Unused usings removed
-
 using System;
 using BetEvent.Api.Models;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +21,10 @@ namespace BetEvent.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BetEventContext>(opt =>
+                opt.UseInMemoryDatabase("TodoList"));
+            services.AddDbContext<BetContext>(opt =>
+                opt.UseInMemoryDatabase("TodoList"));
+            services.AddDbContext<UserContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
