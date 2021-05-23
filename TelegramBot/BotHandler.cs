@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BettingShop.TelegramBot.Executor.Executors;
+﻿using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using Telegram.Bot;
