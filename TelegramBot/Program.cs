@@ -38,6 +38,7 @@ namespace BettingShop.TelegramBot
             container.Register<PlaceBetCommandType, PlaceBetCommandType>();
             container.Register<ProfileInfoCommandType, ProfileInfoCommandType>();
             container.Register<UnknownCommandType, UnknownCommandType>();
+            container.Register<HelpCommandType, HelpCommandType>();
             container.Register<ITelegramUser, TelegramUser>();
             container.Register<IUserCommandTypeService, UserService>();
             container.Register<ITelegramBotClient>(sf => new TelegramBotClient(sf.GetInstance<Config>().Token));
@@ -50,10 +51,12 @@ namespace BettingShop.TelegramBot
             container.Register<IExecutor<NoCommandType>, NoCommandExecutor>();
             container.Register<IExecutor<ProfileInfoCommandType>, ProfileInfoExecutor>();
             container.Register<IExecutor<UnknownCommandType>, UnknownCommandExecutor>();
+            container.Register<IExecutor<HelpCommandType>, HelpExecutor>();
             container.Register<CreateEventExecutor, CreateEventExecutor>();
             container.Register<PlaceBetExecutor, PlaceBetExecutor>();
             container.Register<ProfileInfoExecutor, ProfileInfoExecutor>();
             container.Register<UnknownCommandExecutor, UnknownCommandExecutor>();
+            container.Register<HelpExecutor, HelpExecutor>();
 
             botClient = new TelegramBotClient(token);
             telegramHandler = new BotHandler(
