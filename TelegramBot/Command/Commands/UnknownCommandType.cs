@@ -2,8 +2,8 @@
 
 namespace BettingShop.TelegramBot.Command.Commands
 {
-    public class NoCommandType: ICommandType
+    class UnknownCommandType : ICommandType
     {
-        public string Name => "NoCommand";
+        public string Name => "UnknownCommand";
     }
 }

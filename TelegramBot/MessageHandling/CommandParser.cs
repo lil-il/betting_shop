@@ -18,7 +18,7 @@ namespace BettingShop.TelegramBot.MessageHandling
                 return new CreateEventCommandType();
             if (profileNames.Contains(commandString))
                 return new ProfileInfoCommandType();
-            throw new ArgumentException($"the command name {createEventNames} cannot be recognized");
+            return new UnknownCommandType();
         }
     }
 }
