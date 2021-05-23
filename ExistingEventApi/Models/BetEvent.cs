@@ -1,7 +1,9 @@
-﻿namespace BettingShop.Api.Models
+﻿using System;
+
+namespace BetEvent.Api.Models
 {
     public class BetEvent: BetEventMeta
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }
