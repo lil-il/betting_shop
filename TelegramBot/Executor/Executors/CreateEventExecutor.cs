@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using BettingShop.TelegramBot.Command;
+﻿using System.Threading.Tasks;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Message;
 using Telegram.Bot;
@@ -43,11 +41,12 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         await client.SendTextMessageAsync(message.telegramMessage.Chat,
                             "Напишите описание своего события, если не хотите, поставьте \"-\" ");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Description));
-                        stateService.DeleteState(message.User);
                         break;
                     case CreateEventState.Description:
                         //сохранить описание
                         //сгенерить событие
+                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
+                            "Ваше событие сохранено");
                         stateService.DeleteState(message.User);
                         break;
                 }
