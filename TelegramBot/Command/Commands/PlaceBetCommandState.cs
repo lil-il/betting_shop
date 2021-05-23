@@ -1,13 +1,13 @@
 ﻿namespace BettingShop.TelegramBot.Command.Commands
 {
     public enum PlaceBetState
-    {
-        No = 0,
-        EventNumber = 1,
-        LineNumber = 2,
+    { 
+        EventNumber = 0,
+        LineNumber = 1,
+        OutcomeNumber = 2,
         BetAmount = 3,
     }
-    public class PlaceBetCommandState : ICommandState<CreateEventCommandType>
+    public class PlaceBetCommandState : ICommandState<PlaceBetCommandType>
     {
         public PlaceBetState State { get; }
 

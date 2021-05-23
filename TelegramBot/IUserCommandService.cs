@@ -52,6 +52,7 @@ namespace BettingShop.TelegramBot
         {
             if (!userState.ContainsKey(user))
                 return new NoCommandType();
+            var statetype = userState[user].GetType();
             var currentType = userState[user].GetType().GetInterface("ICommandState`1").GetGenericArguments().First();
             return (ICommandType) Activator.CreateInstance(currentType);
         }

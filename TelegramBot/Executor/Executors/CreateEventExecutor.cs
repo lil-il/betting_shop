@@ -27,6 +27,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (createState.State)
                 {
                     case CreateEventState.Name:
+                        //сохранить название события
                         await client.SendTextMessageAsync(message.telegramMessage.Chat,
                             "Введите возможные исходы события");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Lines));
@@ -55,7 +56,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
             {
                 await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите название события");
                 stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Name));
-                //сохранить название события
             }
 
             //await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called CreateEventExecutor with message {message.telegramMessage.Text} " +
