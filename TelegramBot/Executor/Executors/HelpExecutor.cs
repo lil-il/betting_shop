@@ -16,7 +16,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
 
         public async Task ExecuteAsync(UserMessage message)
         {
-            //вывод информации о профиле
             await client.SendTextMessageAsync(message.telegramMessage.Chat,
                 $"Вот список моих команд:\n" +
                 $" - /placebet - сделать ставку\n" +
