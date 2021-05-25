@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BetEvent.Api.Models
+namespace BettingShop.Api.Models
 {
     public class BetMeta
     {
@@ -13,5 +13,8 @@ namespace BetEvent.Api.Models
 
         [Required]
         public Guid UserId { get; set; }
+
+        [Required]
+        public string Outcome { get; set; }
     }
 }

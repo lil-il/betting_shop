@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using BetEvent.Api.Models;
+using BettingShop.Api.Models;
 
-namespace BetEvent.Api.Profiles
+namespace BettingShop.Api.Profiles
 {
     public class EventsProfile: Profile
     {

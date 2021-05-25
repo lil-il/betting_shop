@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BetEvent.Api.Client.Models;
+using BettingShop.Api.Client.Models;
 
-namespace BetEvent.Api.Client
+namespace BettingShop.Api.Client
 {
     public interface IUserClient
     {

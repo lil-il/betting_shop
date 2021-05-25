@@ -2,10 +2,10 @@
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using BetEvent.Api.Client.Models;
+using BettingShop.Api.Client.Models;
 using Newtonsoft.Json;
 
-namespace BetEvent.Api.Client
+namespace BettingShop.Api.Client
 {
     public class UserClient: IUserClient
     {

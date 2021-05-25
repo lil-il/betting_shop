@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiClient\BetEvent.Api.Client.csproj" />
+    <ProjectReference Include="..\ApiClient\BettingShop.Api.Client.csproj" />
   </ItemGroup>
 
 </Project>

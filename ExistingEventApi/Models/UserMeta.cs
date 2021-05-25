@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace BetEvent.Api.Models
+namespace BettingShop.Api.Models
 {
     public class UserMeta
     {

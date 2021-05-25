@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetEvent.Api.Client", "ApiClient\BetEvent.Api.Client.csproj", "{A00B90F5-488A-4ADA-91AE-C1021C6BCF18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.Api.Client", "ApiClient\BettingShop.Api.Client.csproj", "{A00B90F5-488A-4ADA-91AE-C1021C6BCF18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetEvent.Api.Client.Tests", "ApiClient.Tests\BetEvent.Api.Client.Tests.csproj", "{2BC8E8CD-1AFC-422C-B4C3-081154A599CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.Api.Client.Tests", "ApiClient.Tests\BettingShop.Api.Client.Tests.csproj", "{2BC8E8CD-1AFC-422C-B4C3-081154A599CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetEvent.Api", "ExistingEventApi\BetEvent.Api.csproj", "{54875E58-CCC6-457E-B26F-F0A4483EC769}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.Api", "ExistingEventApi\BettingShop.Api.csproj", "{54875E58-CCC6-457E-B26F-F0A4483EC769}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

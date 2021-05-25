@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace BetEvent.Api.Models
+namespace BettingShop.Api.Models
 {
     public class BetEventContext : DbContext
     {

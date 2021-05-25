@@ -1,15 +1,15 @@
 using System;
 using System.Threading.Tasks;
-using BetEvent.Api.Client.Models;
+using BettingShop.Api.Client.Models;
 using NUnit.Framework;
 
-namespace BetEvent.Api.Client.Tests
+namespace BettingShop.Api.Client.Tests
 {
     [TestFixture]
     public class UnitTest
     {
         [Test]
-        public async Task TestBetEvent()
+        public async Task CRUD_BetEvent_Test()
         {
             var client = new BetEventClient("http://localhost:27254");
             var createdEvent = await client.CreateAsync(new BetEventMeta {Name = "Alex", BetDeadline = DateTime.Now});
@@ -24,14 +24,14 @@ namespace BetEvent.Api.Client.Tests
         }
 
         [Test]
-        public async Task TestBet()
+        public async Task CRUD_Bet_Test()
         {
             var client = new BetClient("http://localhost:27254");
-            var createdBet = await client.CreateAsync(new BetMeta { BetSize = 19, EventId = Guid.NewGuid(), UserId = Guid.NewGuid()});
+            var createdBet = await client.CreateAsync(new BetMeta { BetSize = 19, EventId = Guid.NewGuid(), UserId = Guid.NewGuid(), Outcome = "win"});
             var allBets = await client.GetAllAsync();
-            var anotherCreatedBet = await client.CreateAsync(new BetMeta { BetSize = 4, EventId = Guid.NewGuid(), UserId = Guid.NewGuid()});
+            var anotherCreatedBet = await client.CreateAsync(new BetMeta { BetSize = 4, EventId = Guid.NewGuid(), UserId = Guid.NewGuid(), Outcome = "lose"});
             var updatedBet = await client.UpdateAsync(new Bet
-                { Id = createdBet.Id, BetSize = 100, EventId = createdBet.EventId, UserId = createdBet.UserId});
+                { Id = createdBet.Id, BetSize = 100, EventId = createdBet.EventId, UserId = createdBet.UserId, Outcome = "lose"});
             var newBet = await client.GetAsync(updatedBet.Id);
             var deletedBet = await client.DeleteAsync(newBet.Id);
             var allBetsAfterDeletion = await client.GetAllAsync();
@@ -39,7 +39,7 @@ namespace BetEvent.Api.Client.Tests
         }
 
         [Test]
-        public async Task TestUser()
+        public async Task CRUD_User_Test()
         {
             var client = new UserClient("http://localhost:27254");
             var createdUser = await client.CreateAsync(new UserMeta { Balance = 1000});

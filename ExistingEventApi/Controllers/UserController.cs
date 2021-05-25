@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using BetEvent.Api.Models;
+using BettingShop.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace BetEvent.Api.Controllers
+namespace BettingShop.Api.Controllers
 {
     [Route("api/User")]
     [ApiController]

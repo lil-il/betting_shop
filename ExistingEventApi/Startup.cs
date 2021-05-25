@@ -1,5 +1,5 @@
 using System;
-using BetEvent.Api.Models;
+using BettingShop.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 
-namespace BetEvent.Api
+namespace BettingShop.Api
 {
     public class Startup
     {
