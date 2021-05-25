@@ -5,12 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD:BettingShop.TelegramBot/BettingShop.TelegramBot.csproj
     <PackageReference Include="LightInject" Version="6.4.0" />
     <PackageReference Include="Telegram.Bot" Version="15.7.1" />
-=======
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
->>>>>>> origin/main:ApiClient/BetEvent.Api.Client.csproj
   </ItemGroup>
 
 </Project>
