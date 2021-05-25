@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
-using ExistingEventApi.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BetEvent.Api.Models;
 
 
 namespace betting_shop.database.DB
 {
     public interface IEventRepository
     {
-        IEnumerable<ExistingEvent> GetExistingEvents();
-        ExistingEvent GetExistingEventById(int EventId);
-        void Create(ExistingEvent Event);
+        Task<BetEvent.Api.Models.BetEvent[]> GetExistingEvents();
+        Task<BetEvent.Api.Models.BetEvent> GetExistingEventById(Guid EventId);
+        Task<BetEvent.Api.Models.BetEvent> Create(BetEvent.Api.Models.BetEvent Event);
 
-        void Update(ExistingEvent Event);
-        void Delete(int Id);
+        Task<BetEvent.Api.Models.BetEvent> Update(BetEvent.Api.Models.BetEvent Event);
+        Task<BetEvent.Api.Models.BetEvent> Delete(Guid Id);
     }
 }
+
