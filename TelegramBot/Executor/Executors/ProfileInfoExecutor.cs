@@ -5,19 +5,19 @@ using Telegram.Bot;
 
 namespace BettingShop.TelegramBot.Executor.Executors
 {
-    class ProfileInfoExecutor : IExecutor<ProfileInfoCommandType>
+    public class ProfileInfoExecutor : IExecutor<ProfileInfoCommandType>
     {
         private readonly ITelegramBotClient client;
 
         public ProfileInfoExecutor(ITelegramBotClient botClient)
         {
-            client = botClient;
+            this.client = botClient;
         }
 
         public async Task ExecuteAsync(UserMessage message)
         {
             //вывод информации о профиле
-            await client.SendTextMessageAsync(message.telegramMessage.Chat,
+            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                 $"Информация о профиле");
         }
     }

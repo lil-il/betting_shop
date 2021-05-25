@@ -1,5 +1,4 @@
-﻿using System;
-using BettingShop.TelegramBot.User;
+﻿using BettingShop.TelegramBot.User;
 
 namespace BettingShop.TelegramBot.Message
 {
@@ -11,7 +10,7 @@ namespace BettingShop.TelegramBot.Message
 
         public string Tail { get; set; }
 
-        public Telegram.Bot.Types.Message telegramMessage { get; set; }
+        public Telegram.Bot.Types.Message TelegramMessage { get; set; }
     }
 
 }

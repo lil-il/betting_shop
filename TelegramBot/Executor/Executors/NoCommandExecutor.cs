@@ -11,12 +11,12 @@ namespace BettingShop.TelegramBot.Executor.Executors
 
         public NoCommandExecutor(ITelegramBotClient botClient)
         {
-            client = botClient;
+            this.client = botClient;
         }
 
         public async Task ExecuteAsync(UserMessage message)
         {
-            await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called NoCommandExecutor with message {message.telegramMessage.Text}");
+            await client.SendTextMessageAsync(message.TelegramMessage.Chat, $"Called NoCommandExecutor with message {message.TelegramMessage.Text}");
         }
     }
 }

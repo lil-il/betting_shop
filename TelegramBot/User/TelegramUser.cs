@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
-using BettingShop.TelegramBot.Command;
-
-namespace BettingShop.TelegramBot.User
+﻿namespace BettingShop.TelegramBot.User
 {
     public class TelegramUser : ITelegramUser
     {

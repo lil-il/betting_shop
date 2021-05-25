@@ -13,25 +13,41 @@ namespace BettingShop.TelegramBot
 {
     internal static class Program
     {
-        private static ITelegramBotClient botClient;
-        private static BotHandler telegramHandler;
-        private static ExecutorsFactory executorsFactory;
-        private static UserMessageParser parser;
-        private static IUserCommandTypeService commandTypeService;
-        private static ServiceContainer container;
-        private static CommandParser commandParser;
-
-        static void Main()
+        private static void Main()
         {
-            var r = new StreamReader("C:/Users/iprok/bot/betting_shop/TelegramBot/Config.json");
-            var json = r.ReadToEnd();
-            var config = JsonConvert.DeserializeObject<Config>(json);
+            var container = CreateContainer();
+            RegisterDependencies(container);
+            var config = container.GetInstance<Config>();
             var token = config.Token;
-            container = new ServiceContainer();
-            commandTypeService = new UserService(container);
-            executorsFactory = new ExecutorsFactory(container);
-            parser = new UserMessageParser();
-            commandParser = new CommandParser();
+            var commandTypeService = new UserCommandStateService();
+            var executorsFactory = new ExecutorsFactory(container);
+            var parser = new UserMessageParser();
+            var commandParser = new CommandParser();
+            //var telegramHandler = container.GetInstance<BotHandler>();
+
+            var botClient = new TelegramBotClient(token);
+            var telegramHandler = new BotHandler(
+                botClient,
+                executorsFactory,
+                parser,
+                commandTypeService,
+                commandParser);
+
+            telegramHandler.Initialize();
+
+            Console.WriteLine("Press any key to shutdown bot");
+            Console.ReadKey();
+            telegramHandler.StopReceiving();
+        }
+        private static ServiceContainer CreateContainer()
+        {
+            return new ServiceContainer();
+        }
+
+        private static void RegisterDependencies(ServiceContainer container)
+        {
+            var r = new StreamReader("C:/Users/iprok/bot/betting_shop/TelegramBot/configs/Config.json");
+            var json = r.ReadToEnd();
 
             container.Register<CreateEventCommandType, CreateEventCommandType>();
             container.Register<NoCommandType, NoCommandType>();
@@ -40,11 +56,11 @@ namespace BettingShop.TelegramBot
             container.Register<UnknownCommandType, UnknownCommandType>();
             container.Register<HelpCommandType, HelpCommandType>();
             container.Register<ITelegramUser, TelegramUser>();
-            container.Register<IUserCommandTypeService, UserService>();
+            container.Register<IUserCommandTypeService, UserCommandStateService>();
             container.Register<ITelegramBotClient>(sf => new TelegramBotClient(sf.GetInstance<Config>().Token));
-            container.Register<Config>(sf => JsonConvert.DeserializeObject<Config>(json));
-            container.Register<IUserCommandStateService, UserService>();
-            container.Register<UserService, UserService>();
+            container.Register(sf => JsonConvert.DeserializeObject<Config>(json));
+            container.Register<IUserCommandStateService, UserCommandStateService>();
+            container.Register<UserCommandStateService, UserCommandStateService>();
             container.Register<ServiceContainer, ServiceContainer>();
             container.Register<IExecutor<CreateEventCommandType>, CreateEventExecutor>();
             container.Register<IExecutor<PlaceBetCommandType>, PlaceBetExecutor>();
@@ -57,20 +73,10 @@ namespace BettingShop.TelegramBot
             container.Register<ProfileInfoExecutor, ProfileInfoExecutor>();
             container.Register<UnknownCommandExecutor, UnknownCommandExecutor>();
             container.Register<HelpExecutor, HelpExecutor>();
-
-            botClient = new TelegramBotClient(token);
-            telegramHandler = new BotHandler(
-                botClient,
-                executorsFactory,
-                parser,
-                commandTypeService,
-                commandParser);
-
-            telegramHandler.Initialize();
-
-            Console.WriteLine("Press any key to shutdown bot");
-            Console.ReadKey();
-            telegramHandler.StopReceiving();
+            container.Register<BotHandler, BotHandler>();
+            container.Register<ExecutorsFactory, ExecutorsFactory>();
+            container.Register<UserMessageParser, UserMessageParser>();
+            container.Register<CommandParser, CommandParser>();
         }
     }
 }

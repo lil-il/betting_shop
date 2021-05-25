@@ -11,7 +11,7 @@ namespace BettingShop.TelegramBot.Executor
         Task ExecuteAsync(UserMessage message);
     }
 
-    public interface IExecutor<T>: IExecutor //внутри экзекьютора получим стэйт
+    public interface IExecutor<T>: IExecutor
         where T: ICommandType
     {
     }

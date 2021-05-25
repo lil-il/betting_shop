@@ -13,7 +13,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
 
         public CreateEventExecutor(ITelegramBotClient botClient, IUserCommandStateService stateService)
         {
-            client = botClient;
+            this.client = botClient;
             this.stateService = stateService;
         }
 
@@ -25,27 +25,33 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (createState.State)
                 {
                     case CreateEventState.Name:
-                        //сохранить название события
-                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
-                            "Введите возможные исходы события");
+                        createState.Forming.Name = message.Tail; 
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                            "Введите линии вашего события");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Lines));
                         break;
                     case CreateEventState.Lines:
-                        //сохранить исходы
-                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
+                        createState.Forming.Lines = message.Tail;
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                            "Введите возможные исходы вашего события");
+                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Outcomes));
+                        break;
+                    case CreateEventState.Outcomes:
+                        createState.Forming.Outcomes = message.Tail;
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Введите дату и время окончания события");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Deadline));
                         break;
                     case CreateEventState.Deadline:
-                        //сохранить дедлайн
-                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
+                        createState.Forming.Deadline = message.Tail;
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Напишите описание своего события, если не хотите, поставьте \"-\" ");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Description));
                         break;
                     case CreateEventState.Description:
-                        //сохранить описание
+                        createState.Forming.Description = message.Tail;
                         //сгенерить событие
-                        await client.SendTextMessageAsync(message.telegramMessage.Chat,
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Ваше событие сохранено");
                         stateService.DeleteState(message.User);
                         break;
@@ -53,12 +59,12 @@ namespace BettingShop.TelegramBot.Executor.Executors
             }
             else
             {
-                await client.SendTextMessageAsync(message.telegramMessage.Chat, "Введите название события");
+                await client.SendTextMessageAsync(message.TelegramMessage.Chat, "Введите название события");
                 stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Name));
             }
 
-            //await client.SendTextMessageAsync(message.telegramMessage.Chat, $"Called CreateEventExecutor with message {message.telegramMessage.Text} " +
-              //                                                               $"and state {stateService.GetCurrentState(message.User)}");
+            await client.SendTextMessageAsync(message.TelegramMessage.Chat, $"Called CreateEventExecutor with message {message.TelegramMessage.Text} " +
+                                                                           $"and state {stateService.GetCurrentState(message.User)}");
         }
 
     }
