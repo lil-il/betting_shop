@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 #Token
-.BettingShop.TelegramBot/Config.json/
+/BettingShop.TelegramBot/configs/
