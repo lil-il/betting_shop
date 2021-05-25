@@ -1,6 +1,7 @@
 // Unused usings removed
 
-using ExistingEventApi.Models;
+using System;
+using BetEvent.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExistingEventApi
+namespace BetEvent.Api
 {
     public class Startup
     {
@@ -21,9 +22,10 @@ namespace ExistingEventApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ExistingEventContext>(opt =>
+            services.AddDbContext<BetEventContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddControllers();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
