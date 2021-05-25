@@ -1,6 +1,4 @@
-﻿using BettingShop.TelegramBot.Commands;
-using BettingShop.TelegramBot.Executor.Executors;
-using BettingShop.TelegramBot.MessageHandling;
+﻿using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -44,11 +42,10 @@ namespace BettingShop.TelegramBot
             userRequest.TelegramMessage = e.Message;
             if (userRequest.Command == null)
             {
-                commandTypeService.TryGetCurrentCommandType(userRequest.User, out var commandType);
-                if (commandType.Name == "NoCommand")
+                if (!commandTypeService.TryGetCurrentCommandType(userRequest.User, out var commandType))
                 {
-                    var noCommandExecutor = new NoCommandExecutor(botClient);
-                    noCommandExecutor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
+                    botClient.SendTextMessageAsync(e.Message.Chat,
+                        $"Called NoCommandExecutor with message {e.Message.Text}");
                 }
                 else
                 {

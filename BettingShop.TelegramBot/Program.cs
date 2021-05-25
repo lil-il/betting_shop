@@ -23,15 +23,15 @@ namespace BettingShop.TelegramBot
             var executorsFactory = new ExecutorsFactory(container);
             var parser = new UserMessageParser();
             var commandParser = new CommandParser();
-            //var telegramHandler = container.GetInstance<BotHandler>();
+            var telegramHandler = container.GetInstance<BotHandler>();
 
             var botClient = new TelegramBotClient(token);
-            var telegramHandler = new BotHandler(
-                botClient,
-                executorsFactory,
-                parser,
-                commandTypeService,
-                commandParser);
+            //var telegramHandler = new BotHandler(
+            //    botClient,
+            //    executorsFactory,
+            //    parser,
+            //    commandTypeService,
+            //    commandParser);
 
             telegramHandler.Initialize();
 
@@ -46,25 +46,22 @@ namespace BettingShop.TelegramBot
 
         private static void RegisterDependencies(ServiceContainer container)
         {
-            var r = new StreamReader("C:/Users/iprok/bot/betting_shop/TelegramBot/configs/Config.json");
-            var json = r.ReadToEnd();
+            var json = File.ReadAllText(System.IO.Path.GetFullPath("configs/Config.json"));
 
             container.Register<CreateEventCommandType, CreateEventCommandType>();
-            container.Register<NoCommandType, NoCommandType>();
             container.Register<PlaceBetCommandType, PlaceBetCommandType>();
             container.Register<ProfileInfoCommandType, ProfileInfoCommandType>();
             container.Register<UnknownCommandType, UnknownCommandType>();
             container.Register<HelpCommandType, HelpCommandType>();
             container.Register<ITelegramUser, TelegramUser>();
-            container.Register<IUserCommandTypeService, UserCommandStateService>();
+            container.Register<IUserCommandTypeService>(sf => sf.GetInstance<UserCommandStateService>());
             container.Register<ITelegramBotClient>(sf => new TelegramBotClient(sf.GetInstance<Config>().Token));
             container.Register(sf => JsonConvert.DeserializeObject<Config>(json));
-            container.Register<IUserCommandStateService, UserCommandStateService>();
-            container.Register<UserCommandStateService, UserCommandStateService>();
+            container.Register<IUserCommandStateService>(sf=> sf.GetInstance<UserCommandStateService>());
+            container.RegisterSingleton<UserCommandStateService>();
             container.Register<ServiceContainer, ServiceContainer>();
             container.Register<IExecutor<CreateEventCommandType>, CreateEventExecutor>();
             container.Register<IExecutor<PlaceBetCommandType>, PlaceBetExecutor>();
-            container.Register<IExecutor<NoCommandType>, NoCommandExecutor>();
             container.Register<IExecutor<ProfileInfoCommandType>, ProfileInfoExecutor>();
             container.Register<IExecutor<UnknownCommandType>, UnknownCommandExecutor>();
             container.Register<IExecutor<HelpCommandType>, HelpExecutor>();
@@ -74,9 +71,9 @@ namespace BettingShop.TelegramBot
             container.Register<UnknownCommandExecutor, UnknownCommandExecutor>();
             container.Register<HelpExecutor, HelpExecutor>();
             container.Register<BotHandler, BotHandler>();
-            container.Register<ExecutorsFactory, ExecutorsFactory>();
-            container.Register<UserMessageParser, UserMessageParser>();
-            container.Register<CommandParser, CommandParser>();
+            container.Register<ExecutorsFactory>();
+            container.Register<UserMessageParser>();
+            container.Register<CommandParser>();
         }
     }
 }

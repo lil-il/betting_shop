@@ -34,11 +34,14 @@ namespace BettingShop.TelegramBot
         {
             if (!userState.ContainsKey(user))
             {
-                commandType = new NoCommandType();
+                commandType = null;
                 return false;
             }
 
             commandType = (ICommandType)Activator.CreateInstance(userState[user].GetType().GetInterfaces().Where(T=>T.IsGenericType).First().GetGenericArguments().First());
+            commandType = (ICommandType) Activator.CreateInstance(userState[user].GetType().GetInterfaces()
+                .Where(T => T.IsGenericType && T.GetGenericTypeDefinition().Equals(typeof(ICommandState<>))).First()
+                .GetGenericArguments().First());
             return true;
         }
     }

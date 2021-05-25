@@ -9,12 +9,8 @@
     }
     public class CreateEventCommandState : ICommandState<CreateEventCommandType>
     {
-        public CreateEventState State { get; }
-        public FormingEvent Forming { get; set; } = new FormingEvent();
+        public CreateEventState State { get; set; }
+        public BetEvent.Api.Client.Models.BetEvent Forming { get; set; }
 
-        public CreateEventCommandState(CreateEventState state)
-        {
-            State = state;
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Message;
 using Telegram.Bot;
@@ -25,25 +26,27 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (createState.State)
                 {
                     case CreateEventState.Name:
-                        createState.Forming.Name = message.Tail; 
+                        //createState.Forming.Name = message.Tail; 
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Введите возможные исходы вашего события");
-                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Outcomes));
+                        stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Outcomes });
+
                         break;
                     case CreateEventState.Outcomes:
-                        createState.Forming.Outcomes = message.Tail;
+                        //createState.Forming.Outcomes = message.Tail;
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Введите дату и время окончания события");
-                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Deadline));
+                        stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Deadline });
                         break;
                     case CreateEventState.Deadline:
-                        createState.Forming.Deadline = message.Tail;
+                        var date = DateTime.Parse(message.Tail);
+                        //createState.Forming.BetDeadline = date;
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Напишите описание своего события, если не хотите, поставьте \"-\" ");
-                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Description));
+                        stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Description });
                         break;
                     case CreateEventState.Description:
-                        createState.Forming.Description = message.Tail;
+                        //createState.Forming.Description = message.Tail;
                         //сгенерить событие
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Ваше событие сохранено");
@@ -54,7 +57,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
             else
             {
                 await client.SendTextMessageAsync(message.TelegramMessage.Chat, "Введите название события");
-                stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Name));
+                stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Name });
             }
 
             await client.SendTextMessageAsync(message.TelegramMessage.Chat, $"Called CreateEventExecutor with message {message.TelegramMessage.Text} " +
