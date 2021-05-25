@@ -27,12 +27,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
                     case CreateEventState.Name:
                         createState.Forming.Name = message.Tail; 
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                            "Введите линии вашего события");
-                        stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Lines));
-                        break;
-                    case CreateEventState.Lines:
-                        createState.Forming.Lines = message.Tail;
-                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Введите возможные исходы вашего события");
                         stateService.SaveState(message.User, new CreateEventCommandState(CreateEventState.Outcomes));
                         break;
