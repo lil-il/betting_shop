@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
-using BettingShop.Api.Client.Models;
+﻿using System;
+using System.Threading.Tasks;
+using BetEvent.Api.Client.Models;
 
-namespace BettingShop.Api.Client
+namespace BetEvent.Api.Client
 {
     public interface IApiClient
     {
@@ -10,14 +11,14 @@ namespace BettingShop.Api.Client
 
     public interface IBetEventClient
     {
-        Task<BetEvent> Create(BetEventMeta betEventMeta);
+        Task<Models.BetEvent> CreateAsync(BetEventMeta betEventMeta);
 
-        Task<BetEvent> Get(int id);
+        Task<Models.BetEvent> GetAsync(Guid id);
 
-        Task<BetEvent> Delete(int id);
+        Task<Models.BetEvent> DeleteAsync(Guid id);
 
-        Task<BetEvent[]> GetAll();
+        Task<Models.BetEvent[]> GetAllAsync();
 
-        Task<BetEvent> Update(BetEvent betEvent);
+        Task<Models.BetEvent> UpdateAsync(Models.BetEvent betEvent);
     }
 }

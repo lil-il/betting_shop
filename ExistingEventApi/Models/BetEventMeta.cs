@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BettingShop.Api.Models
+namespace BetEvent.Api.Models
 {
     public class BetEventMeta
     {
@@ -13,5 +13,8 @@ namespace BettingShop.Api.Models
 
         [Required]
         public DateTime BetDeadline { get; set; }
+
+        /*[Required]
+        public List<string> EventOutcomes { get; set; }*/
     }
 }

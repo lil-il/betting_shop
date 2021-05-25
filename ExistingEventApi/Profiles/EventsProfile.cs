@@ -1,7 +1,8 @@
-﻿using AutoMapper;
-using BettingShop.Api.Models;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using BetEvent.Api.Models;
 
-namespace BettingShop.Api.Profiles
+namespace BetEvent.Api.Profiles
 {
     public class EventsProfile: Profile
     {
@@ -11,11 +12,13 @@ namespace BettingShop.Api.Profiles
 
             CreateMap<BetEventMeta, Client.Models.BetEventMeta>();
 
-            CreateMap<Client.Models.BetEvent, BetEvent>();
+            CreateMap<Client.Models.BetEvent, Models.BetEvent>();
 
-            CreateMap<BetEvent, Client.Models.BetEvent>();
+            CreateMap<Models.BetEvent, Client.Models.BetEvent>();
 
-            CreateMap<BetEventMeta, BetEvent>();
+            CreateMap<BetEventMeta, Models.BetEvent>();
+
+            CreateMap<List<string>, List<string>>();
         }
     }
 }

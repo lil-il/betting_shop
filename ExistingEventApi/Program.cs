@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace BettingShop.Api
+namespace BetEvent.Api
 {
     public class Program
     {

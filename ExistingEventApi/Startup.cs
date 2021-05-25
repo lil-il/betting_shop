@@ -1,7 +1,7 @@
 // Unused usings removed
 
 using System;
-using BettingShop.Api.Models;
+using BetEvent.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 
-namespace BettingShop.Api
+namespace BetEvent.Api
 {
     public class Startup
     {
