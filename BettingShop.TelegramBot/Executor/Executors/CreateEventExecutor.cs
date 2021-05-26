@@ -29,31 +29,23 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (createState.State)
                 {
                     case CreateEventState.Name:
-                        createState.Forming = await eventClient.CreateAsync(new BetEventMeta { Name = message.Tail});
-
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Введите возможные исходы вашего события, имя:{createState.Forming.Name}");
                         stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Outcomes });
 
                         break;
                     case CreateEventState.Outcomes:
-                        createState.Forming = await eventClient.UpdateAsync(new BetEvent.Api.Client.Models.BetEvent
-                            { Id = createState.Forming.Id });
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat, 
                             $"Введите дату и время окончания события,  имя:{createState.Forming.Name}");
                         stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Deadline });
                         break;
                     case CreateEventState.Deadline:
                         var date = DateTime.Parse(message.Tail);
-                        createState.Forming = await eventClient.UpdateAsync(new BetEvent.Api.Client.Models.BetEvent
-                            { Id = createState.Forming.Id, BetDeadline = date});
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Напишите описание своего события, если не хотите, поставьте \"-\",  имя:{createState.Forming.Name}, дедлайн: {createState.Forming.BetDeadline}");
                         stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Description });
                         break;
                     case CreateEventState.Description:
-                        createState.Forming = await eventClient.UpdateAsync(new BetEvent.Api.Client.Models.BetEvent
-                            { Id = createState.Forming.Id, Description = message.Tail});
                         //сгенерить событие
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Ваше событие сохранено,  имя:{createState.Forming.Name}, дедлайн: {createState.Forming.BetDeadline}, описание:{createState.Forming.Description}");
