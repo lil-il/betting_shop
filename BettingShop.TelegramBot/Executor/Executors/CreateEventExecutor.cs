@@ -23,7 +23,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
         public async Task ExecuteAsync(UserMessage message)
         {
             var state = stateService.GetCurrentState(message.User);
-            var eventClient = new BetEventClient("http://localhost:27254");
             if (state is CreateEventCommandState createState)
             {
                 switch (createState.State)
