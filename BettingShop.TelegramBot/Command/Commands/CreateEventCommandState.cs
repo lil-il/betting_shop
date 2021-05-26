@@ -1,4 +1,8 @@
-﻿namespace BettingShop.TelegramBot.Command.Commands
+﻿using System;
+using BetEvent.Api.Client;
+using BetEvent.Api.Client.Models;
+
+namespace BettingShop.TelegramBot.Command.Commands
 {
     public enum CreateEventState
     {
@@ -10,7 +14,8 @@
     public class CreateEventCommandState : ICommandState<CreateEventCommandType>
     {
         public CreateEventState State { get; set; }
-        public BetEvent.Api.Client.Models.BetEvent Forming { get; set; }
+        public BetEvent.Api.Client.Models.BetEvent Forming { get; set; } 
+        
 
     }
 }

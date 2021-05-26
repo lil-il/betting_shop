@@ -44,7 +44,7 @@ namespace BettingShop.TelegramBot
             container.RegisterSingleton(sf => JsonConvert.DeserializeObject<Config>(File.ReadAllText(Path.GetFullPath("configs/Config.json"))));
             container.Register<IUserCommandStateService>(sf=> sf.GetInstance<UserCommandStateService>()); 
             container.RegisterSingleton<UserCommandStateService>();
-            container.RegisterInstance(container, "container");
+            container.RegisterInstance(container);
             container.Register<IExecutor<CreateEventCommandType>, CreateEventExecutor>();
             container.Register<IExecutor<PlaceBetCommandType>, PlaceBetExecutor>();
             container.Register<IExecutor<ProfileInfoCommandType>, ProfileInfoExecutor>();
