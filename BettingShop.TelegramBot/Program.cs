@@ -17,22 +17,8 @@ namespace BettingShop.TelegramBot
         {
             var container = CreateContainer();
             RegisterDependencies(container);
-            var config = container.GetInstance<Config>();
-            var token = config.Token;
-            var commandTypeService = new UserCommandStateService();
-            var executorsFactory = new ExecutorsFactory(container);
-            var parser = new UserMessageParser();
-            var commandParser = new CommandParser();
+
             var telegramHandler = container.GetInstance<BotHandler>();
-
-            var botClient = new TelegramBotClient(token);
-            //var telegramHandler = new BotHandler(
-            //    botClient,
-            //    executorsFactory,
-            //    parser,
-            //    commandTypeService,
-            //    commandParser);
-
             telegramHandler.Initialize();
 
             Console.WriteLine("Press any key to shutdown bot");
@@ -46,31 +32,30 @@ namespace BettingShop.TelegramBot
 
         private static void RegisterDependencies(ServiceContainer container)
         {
-            var json = File.ReadAllText(System.IO.Path.GetFullPath("configs/Config.json"));
-
-            container.Register<CreateEventCommandType, CreateEventCommandType>();
-            container.Register<PlaceBetCommandType, PlaceBetCommandType>();
-            container.Register<ProfileInfoCommandType, ProfileInfoCommandType>();
-            container.Register<UnknownCommandType, UnknownCommandType>();
-            container.Register<HelpCommandType, HelpCommandType>();
+            container.Register<CreateEventCommandType>();
+            container.Register<PlaceBetCommandType>();
+            container.Register<ProfileInfoCommandType>();
+            container.Register<UnknownCommandType>();
+            container.Register<HelpCommandType>();
             container.Register<ITelegramUser, TelegramUser>();
             container.Register<IUserCommandTypeService>(sf => sf.GetInstance<UserCommandStateService>());
             container.Register<ITelegramBotClient>(sf => new TelegramBotClient(sf.GetInstance<Config>().Token));
-            container.Register(sf => JsonConvert.DeserializeObject<Config>(json));
-            container.Register<IUserCommandStateService>(sf=> sf.GetInstance<UserCommandStateService>());
+            container.RegisterSingleton<TelegramBotClient>();
+            container.RegisterSingleton(sf => JsonConvert.DeserializeObject<Config>(File.ReadAllText(Path.GetFullPath("configs/Config.json"))));
+            container.Register<IUserCommandStateService>(sf=> sf.GetInstance<UserCommandStateService>()); 
             container.RegisterSingleton<UserCommandStateService>();
-            container.Register<ServiceContainer, ServiceContainer>();
+            container.RegisterInstance(container, "container");
             container.Register<IExecutor<CreateEventCommandType>, CreateEventExecutor>();
             container.Register<IExecutor<PlaceBetCommandType>, PlaceBetExecutor>();
             container.Register<IExecutor<ProfileInfoCommandType>, ProfileInfoExecutor>();
             container.Register<IExecutor<UnknownCommandType>, UnknownCommandExecutor>();
             container.Register<IExecutor<HelpCommandType>, HelpExecutor>();
-            container.Register<CreateEventExecutor, CreateEventExecutor>();
-            container.Register<PlaceBetExecutor, PlaceBetExecutor>();
-            container.Register<ProfileInfoExecutor, ProfileInfoExecutor>();
-            container.Register<UnknownCommandExecutor, UnknownCommandExecutor>();
-            container.Register<HelpExecutor, HelpExecutor>();
-            container.Register<BotHandler, BotHandler>();
+            container.Register<CreateEventExecutor>();
+            container.Register<PlaceBetExecutor>();
+            container.Register<ProfileInfoExecutor>();
+            container.Register<UnknownCommandExecutor>();
+            container.Register<HelpExecutor>();
+            container.Register<BotHandler>();
             container.Register<ExecutorsFactory>();
             container.Register<UserMessageParser>();
             container.Register<CommandParser>();
