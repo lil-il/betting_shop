@@ -12,7 +12,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BetEvent.Api", "ExistingEventApi\BetEvent.Api.csproj", "{54875E58-CCC6-457E-B26F-F0A4483EC769}"
 EndProject
 Global
-Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

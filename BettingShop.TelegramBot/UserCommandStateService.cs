@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using BettingShop.TelegramBot.Command;
-using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Commands;
 using BettingShop.TelegramBot.User;
 
@@ -38,10 +37,12 @@ namespace BettingShop.TelegramBot
                 return false;
             }
 
-            commandType = (ICommandType)Activator.CreateInstance(userState[user].GetType().GetInterfaces().Where(T=>T.IsGenericType).First().GetGenericArguments().First());
-            commandType = (ICommandType) Activator.CreateInstance(userState[user].GetType().GetInterfaces()
-                .Where(T => T.IsGenericType && T.GetGenericTypeDefinition().Equals(typeof(ICommandState<>))).First()
-                .GetGenericArguments().First());
+            var type = userState[user].GetType()
+                .GetInterfaces() 
+                .Where(T=>T.IsGenericType).
+                First(T => T.GetGenericTypeDefinition().Equals(typeof(ICommandState<>)))
+                .GetGenericArguments().First();
+            commandType = (ICommandType) Activator.CreateInstance(type);
             return true;
         }
     }
