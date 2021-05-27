@@ -14,13 +14,13 @@ namespace BettingShop.DataBase.Tests
         [TestMethod]
         public void CreateTableTest()
         {
-            var repo = new EventRepository();
+            var repo = new EventRepository(new Deserializer());
         }
 
         [TestMethod]
         public async Task CreateTest()
         {
-            var repo = new EventRepository();
+            var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
             var createdEvent = await repo.Create(event1);
@@ -30,7 +30,7 @@ namespace BettingShop.DataBase.Tests
         [TestMethod]
         public async Task UpdateTest()
         {
-            var repo = new EventRepository();
+            var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
             await repo.Create(event1);
@@ -43,7 +43,7 @@ namespace BettingShop.DataBase.Tests
         [TestMethod]
         public async Task DeleteTest()
         {
-            var repo = new EventRepository();
+            var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
             await repo.Create(event1);
@@ -53,7 +53,7 @@ namespace BettingShop.DataBase.Tests
         [TestMethod]
         public async Task GetAllTest()
         {
-            var repo = new EventRepository();
+            var repo = new EventRepository(new Deserializer());
             var lengthBefore = (await repo.GetExistingEvents()).Length;
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };

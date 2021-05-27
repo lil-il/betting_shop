@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace BettingShop.DataBase.DB
 {
-    public class Deserializer
+    public class Deserializer : IDeserializer
     {
-        public static BetEvent.Api.Models.BetEvent[] DeserializeAll(SQLiteDataReader reader)
+        public BetEvent.Api.Models.BetEvent[] DeserializeAll(SQLiteDataReader reader)
         {
             var events = new List<BetEvent.Api.Models.BetEvent>();
             while (reader.Read())
@@ -26,7 +26,7 @@ namespace BettingShop.DataBase.DB
             return events.ToArray();
         }
 
-        public static BetEvent.Api.Models.BetEvent DeserializeOne(SQLiteDataReader reader)
+        public BetEvent.Api.Models.BetEvent DeserializeOne(SQLiteDataReader reader)
         {
             return DeserializeAll(reader)[0];
         }
