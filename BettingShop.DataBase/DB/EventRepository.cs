@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using BetEvent.Api;
 
-namespace betting_shop.database.DB
+namespace BettingShop.DataBase.DB
 {
     public class EventRepository : IEventRepository
     {
@@ -23,14 +23,16 @@ namespace betting_shop.database.DB
             }
             connection = new SQLiteConnection(connectionString);
             connection.Open();
+            CreateTable();
         }
-        public void CreateTable()
+
+        private void CreateTable()
         {
             var command = CommandBuilder.CreateEventTable(connection);
             command.ExecuteNonQuery();
         }
 
-        public void DeleteTable()
+        private void DeleteTable()
         {
             var command = CommandBuilder.DeleteEventTable(connection);
             command.ExecuteNonQuery();

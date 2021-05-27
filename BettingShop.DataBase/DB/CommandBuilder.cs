@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BetEvent.Api.Models;
 
-namespace betting_shop.database.DB
+namespace BettingShop.DataBase.DB
 {
     static class CommandBuilder
     {

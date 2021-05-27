@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace betting_shop.database.DB
+namespace BettingShop.DataBase.DB
 {
-    static class Deserializer
+    public class Deserializer
     {
         public static BetEvent.Api.Models.BetEvent[] DeserializeAll(SQLiteDataReader reader)
         {
