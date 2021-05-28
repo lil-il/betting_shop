@@ -40,7 +40,7 @@ namespace BettingShop.DataBase.DB
             command.ExecuteNonQuery();
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent[]> GetExistingEvents()
+        public async Task<BetEvent.Api.Models.BetEvent[]> GetExistingEventsAsync()
         {
             var events = new List<BetEvent.Api.Models.BetEvent>();
             var command = CommandBuilder.BuildGetAllCommand("events", connection);
@@ -48,21 +48,21 @@ namespace BettingShop.DataBase.DB
             return deserializer.DeserializeAll(reader);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> GetExistingEventById(Guid id)
+        public async Task<BetEvent.Api.Models.BetEvent> GetExistingEventByIdAsync(Guid id)
         {
             var command = CommandBuilder.BuildGetByIdCommand(id, connection);
             var reader = command.ExecuteReader();
             return deserializer.DeserializeOne(reader);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> Create(BetEvent.Api.Models.BetEvent betEvent)
+        public async Task<BetEvent.Api.Models.BetEvent> CreateAsync(BetEvent.Api.Models.BetEvent betEvent)
         {
             var command = CommandBuilder.BuildCreateCommand(betEvent, connection);
             var reader = command.ExecuteReader();
-            return await GetExistingEventById(betEvent.Id);
+            return await GetExistingEventByIdAsync(betEvent.Id);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> Delete(Guid id)
+        public async Task<BetEvent.Api.Models.BetEvent> DeleteAsync(Guid id)
         {
             var commandToGetId = CommandBuilder.BuildGetByIdCommand(id, connection);
             var returnReader = commandToGetId.ExecuteReader();
@@ -71,11 +71,11 @@ namespace BettingShop.DataBase.DB
             return deserializer.DeserializeOne(returnReader);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> Update(BetEvent.Api.Models.BetEvent betEvent)
+        public async Task<BetEvent.Api.Models.BetEvent> UpdateAsync(BetEvent.Api.Models.BetEvent betEvent)
         {
             var command = CommandBuilder.BuildUpdateCommand(betEvent, connection);
             command.ExecuteReader();
-            return await GetExistingEventById(betEvent.Id);
+            return await GetExistingEventByIdAsync(betEvent.Id);
         }
     }
 }

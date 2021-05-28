@@ -23,7 +23,7 @@ namespace BettingShop.DataBase.Tests
             var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
-            var createdEvent = await repo.Create(event1);
+            var createdEvent = await repo.CreateAsync(event1);
             Assert.AreEqual(event1.Id, createdEvent.Id);
         }
 
@@ -33,10 +33,10 @@ namespace BettingShop.DataBase.Tests
             var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
-            await repo.Create(event1);
+            await repo.CreateAsync(event1);
             var event2 = new BetEvent.Api.Models.BetEvent
             { Id = event1.Id, Name = "namenew", Description = "descnew", BetDeadline = DateTime.Now };
-            var updatedEvent = await repo.Update(event2);
+            var updatedEvent = await repo.UpdateAsync(event2);
             Assert.AreEqual(updatedEvent.Id, event1.Id);
         }
 
@@ -46,27 +46,27 @@ namespace BettingShop.DataBase.Tests
             var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
-            await repo.Create(event1);
-            await repo.Delete(event1.Id);
+            await repo.CreateAsync(event1);
+            await repo.DeleteAsync(event1.Id);
         }
 
         [TestMethod]
         public async Task GetAllTest()
         {
             var repo = new EventRepository(new Deserializer());
-            var lengthBefore = (await repo.GetExistingEvents()).Length;
+            var lengthBefore = (await repo.GetExistingEventsAsync()).Length;
             var event1 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
-            await repo.Create(event1);
+            await repo.CreateAsync(event1);
             Thread.Sleep(1000);
             var event2 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name2", Description = "desc2", BetDeadline = DateTime.Now };
-            await repo.Create(event2);
+            await repo.CreateAsync(event2);
             Thread.Sleep(1000);
             var event3 = new BetEvent.Api.Models.BetEvent
             { Id = Guid.NewGuid(), Name = "name3", Description = "desc3", BetDeadline = DateTime.Now };
-            await repo.Create(event3);
-            var events = await repo.GetExistingEvents();
+            await repo.CreateAsync(event3);
+            var events = await repo.GetExistingEventsAsync();
             Assert.AreEqual(lengthBefore + 3, events.Length);
         }
     }
