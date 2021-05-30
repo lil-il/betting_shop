@@ -18,7 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BettingShop.DataBase\BettingShop.DataBase.csproj" />
+	  <ProjectReference Include="..\BettingShop.DataLayer\BettingShop.DataLayer.csproj" />
 	</ItemGroup>
 
 </Project>

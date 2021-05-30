@@ -4,9 +4,10 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BetEvent.Api.Models;
 
-namespace BettingShop.DataBase.DB
+using BettingShop.DataLayer.Models;
+
+namespace BettingShop.DataLayer.DB
 {
     static class CommandBuilder
     {
@@ -26,7 +27,7 @@ namespace BettingShop.DataBase.DB
             return new SQLiteCommand(string.Format("SELECT * FROM events WHERE id = '{0}'", id.ToString()), connection);
         }
 
-        public static SQLiteCommand BuildCreateCommand(BetEvent.Api.Models.BetEvent betEvent, SQLiteConnection connection)
+        public static SQLiteCommand BuildCreateCommand(BetEvent betEvent, SQLiteConnection connection)
         {
             return new SQLiteCommand(string.Format("INSERT INTO events VALUES('{0}', '{1}', '{2}', '{3}')", betEvent.Id.ToString(),
                 betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString()), connection);
@@ -37,7 +38,7 @@ namespace BettingShop.DataBase.DB
             return new SQLiteCommand(string.Format("DELETE FROM events WHERE id = '{0}'", id.ToString()), connection);
         }
 
-        public static SQLiteCommand BuildUpdateCommand(BetEvent.Api.Models.BetEvent betEvent, SQLiteConnection connection)
+        public static SQLiteCommand BuildUpdateCommand(BetEvent betEvent, SQLiteConnection connection)
         {
             return new SQLiteCommand(string.Format("UPDATE events SET name = '{0}', description = '{1}', betdeadline = '{2}' WHERE id = '{3}'",
                 betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Id.ToString()), connection);

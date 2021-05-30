@@ -1,7 +1,7 @@
 // Unused usings removed
 
 using System;
-using BetEvent.Api.Models;
+using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

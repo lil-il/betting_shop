@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using BetEvent.Api.Models;
+using BettingShop.DataLayer.Models;
 
 namespace BetEvent.Api.Profiles
 {
-    public class EventsProfile: Profile
+    public class EventsProfile : Profile
     {
         public EventsProfile()
         {
@@ -12,11 +12,11 @@ namespace BetEvent.Api.Profiles
 
             CreateMap<BetEventMeta, Client.Models.BetEventMeta>();
 
-            CreateMap<Client.Models.BetEvent, Models.BetEvent>();
+            CreateMap<Client.Models.BetEvent, BettingShop.DataLayer.Models.BetEvent>();
 
-            CreateMap<Models.BetEvent, Client.Models.BetEvent>();
+            CreateMap<BettingShop.DataLayer.Models.BetEvent, Client.Models.BetEvent>();
 
-            CreateMap<BetEventMeta, Models.BetEvent>();
+            CreateMap<BetEventMeta, BettingShop.DataLayer.Models.BetEvent>();
 
             CreateMap<List<string>, List<string>>();
         }

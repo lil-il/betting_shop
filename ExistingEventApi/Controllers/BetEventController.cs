@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using BetEvent.Api.Models;
+using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,7 +41,7 @@ namespace BetEvent.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutEvent(Guid id, Client.Models.BetEvent eventForUpdating)
         {
-            var betEventForUpdating = mapper.Map<Models.BetEvent>(eventForUpdating);
+            var betEventForUpdating = mapper.Map<BettingShop.DataLayer.Models.BetEvent>(eventForUpdating);
             if (id != betEventForUpdating.Id) return BadRequest();
             context.Entry(betEventForUpdating).State = EntityState.Modified;
             await context.SaveChangesAsync();
@@ -53,10 +53,10 @@ namespace BetEvent.Api.Controllers
         public async Task<ActionResult<Client.Models.BetEvent>> PostEvent(Client.Models.BetEventMeta eventForCreating)
         {
             var newEventMeta = mapper.Map<BetEventMeta>(eventForCreating);
-            var newEvent = mapper.Map<Models.BetEvent>(newEventMeta);
+            var newEvent = mapper.Map<BettingShop.DataLayer.Models.BetEvent>(newEventMeta);
             context.ExistingEvents.Add(newEvent);
             await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetEvent), new {id = newEvent.Id}, mapper.Map<Client.Models.BetEvent>(newEvent));
+            return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, mapper.Map<Client.Models.BetEvent>(newEvent));
         }
 
         // DELETE: api/ExistingEvents/5
