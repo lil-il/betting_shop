@@ -40,7 +40,7 @@ namespace BettingShop.DataLayer.DB
             command.ExecuteNonQuery();
         }
 
-        public async Task<BetEvent[]> GetExistingEventsAsync()
+        public async Task<BetEvent[]> GetAllAsync()
         {
             var events = new List<BetEvent>();
             var command = CommandBuilder.BuildGetAllCommand("events", connection);
@@ -48,7 +48,7 @@ namespace BettingShop.DataLayer.DB
             return deserializer.DeserializeAll(reader);
         }
 
-        public async Task<BetEvent> GetExistingEventByIdAsync(Guid id)
+        public async Task<BetEvent> GetByIdAsync(Guid id)
         {
             var command = CommandBuilder.BuildGetByIdCommand(id, connection);
             var reader = command.ExecuteReader();
@@ -59,7 +59,7 @@ namespace BettingShop.DataLayer.DB
         {
             var command = CommandBuilder.BuildCreateCommand(betEvent, connection);
             var reader = command.ExecuteReader();
-            return await GetExistingEventByIdAsync(betEvent.Id);
+            return await GetByIdAsync(betEvent.Id);
         }
 
         public async Task<BetEvent> DeleteAsync(Guid id)
@@ -75,7 +75,7 @@ namespace BettingShop.DataLayer.DB
         {
             var command = CommandBuilder.BuildUpdateCommand(betEvent, connection);
             command.ExecuteReader();
-            return await GetExistingEventByIdAsync(betEvent.Id);
+            return await GetByIdAsync(betEvent.Id);
         }
     }
 }

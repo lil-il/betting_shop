@@ -27,14 +27,14 @@ namespace BetEvent.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client.Models.BetEvent>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<Client.Models.BetEvent>>((await repo.GetExistingEventsAsync()).ToList()));
+            return new(mapper.Map<IEnumerable<Client.Models.BetEvent>>((await repo.GetAllAsync()).ToList()));
         }
 
         // GET: api/ExistingEvents/5
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Client.Models.BetEvent>> GetEvent(Guid id)
         {
-            var eventItem = await repo.GetExistingEventByIdAsync(id);
+            var eventItem = await repo.GetByIdAsync(id);
             if (eventItem == null) return NotFound();
             return mapper.Map<Client.Models.BetEvent>(eventItem);
         }

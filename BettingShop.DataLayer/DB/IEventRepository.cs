@@ -8,8 +8,8 @@ namespace BettingShop.DataLayer.DB
 {
     public interface IEventRepository
     {
-        Task<BetEvent[]> GetExistingEventsAsync();
-        Task<BetEvent> GetExistingEventByIdAsync(Guid EventId);
+        Task<BetEvent[]> GetAllAsync();
+        Task<BetEvent> GetByIdAsync(Guid EventId);
         Task<BetEvent> CreateAsync(BetEvent Event);
 
         Task<BetEvent> UpdateAsync(BetEvent Event);

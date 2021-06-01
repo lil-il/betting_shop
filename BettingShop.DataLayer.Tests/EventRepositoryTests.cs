@@ -7,7 +7,7 @@ using BettingShop.DataLayer.DB;
 using BettingShop.DataLayer.Models;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
-namespace BettingShop.DataBase.Tests
+namespace BettingShop.DataLayer.Tests
 {
     [TestClass]
     public class EventRepositoryTests
@@ -55,7 +55,7 @@ namespace BettingShop.DataBase.Tests
         public async Task GetAllTest()
         {
             var repo = new EventRepository(new Deserializer());
-            var lengthBefore = (await repo.GetExistingEventsAsync()).Length;
+            var lengthBefore = (await repo.GetAllAsync()).Length;
             var event1 = new BetEvent
             { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
             await repo.CreateAsync(event1);
@@ -67,7 +67,7 @@ namespace BettingShop.DataBase.Tests
             var event3 = new BetEvent
             { Id = Guid.NewGuid(), Name = "name3", Description = "desc3", BetDeadline = DateTime.Now };
             await repo.CreateAsync(event3);
-            var events = await repo.GetExistingEventsAsync();
+            var events = await repo.GetAllAsync();
             Assert.AreEqual(lengthBefore + 3, events.Length);
         }
     }
