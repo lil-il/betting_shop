@@ -1,7 +1,8 @@
 // Unused usings removed
 
 using System;
-using BetEvent.Api.Models;
+using BettingShop.DataLayer.DB;
+using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,8 @@ namespace BetEvent.Api
             services.AddDbContext<BetEventContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddControllers();
+            services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IDeserializer, Deserializer>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 

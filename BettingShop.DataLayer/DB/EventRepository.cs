@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using BetEvent.Api;
+using BettingShop.DataLayer.Models;
 
-namespace BettingShop.DataBase.DB
+namespace BettingShop.DataLayer.DB
 {
     public class EventRepository : IEventRepository
     {
@@ -40,29 +40,29 @@ namespace BettingShop.DataBase.DB
             command.ExecuteNonQuery();
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent[]> GetExistingEventsAsync()
+        public async Task<BetEvent[]> GetAllAsync()
         {
-            var events = new List<BetEvent.Api.Models.BetEvent>();
+            var events = new List<BetEvent>();
             var command = CommandBuilder.BuildGetAllCommand("events", connection);
             var reader = command.ExecuteReader();
             return deserializer.DeserializeAll(reader);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> GetExistingEventByIdAsync(Guid id)
+        public async Task<BetEvent> GetByIdAsync(Guid id)
         {
             var command = CommandBuilder.BuildGetByIdCommand(id, connection);
             var reader = command.ExecuteReader();
             return deserializer.DeserializeOne(reader);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> CreateAsync(BetEvent.Api.Models.BetEvent betEvent)
+        public async Task<BetEvent> CreateAsync(BetEvent betEvent)
         {
             var command = CommandBuilder.BuildCreateCommand(betEvent, connection);
             var reader = command.ExecuteReader();
-            return await GetExistingEventByIdAsync(betEvent.Id);
+            return await GetByIdAsync(betEvent.Id);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> DeleteAsync(Guid id)
+        public async Task<BetEvent> DeleteAsync(Guid id)
         {
             var commandToGetId = CommandBuilder.BuildGetByIdCommand(id, connection);
             var returnReader = commandToGetId.ExecuteReader();
@@ -71,11 +71,11 @@ namespace BettingShop.DataBase.DB
             return deserializer.DeserializeOne(returnReader);
         }
 
-        public async Task<BetEvent.Api.Models.BetEvent> UpdateAsync(BetEvent.Api.Models.BetEvent betEvent)
+        public async Task<BetEvent> UpdateAsync(BetEvent betEvent)
         {
             var command = CommandBuilder.BuildUpdateCommand(betEvent, connection);
             command.ExecuteReader();
-            return await GetExistingEventByIdAsync(betEvent.Id);
+            return await GetByIdAsync(betEvent.Id);
         }
     }
 }

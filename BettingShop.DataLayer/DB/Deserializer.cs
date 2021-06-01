@@ -5,17 +5,18 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BettingShop.DataLayer.Models;
 
-namespace BettingShop.DataBase.DB
+namespace BettingShop.DataLayer.DB
 {
     public class Deserializer : IDeserializer
     {
-        public BetEvent.Api.Models.BetEvent[] DeserializeAll(SQLiteDataReader reader)
+        public BetEvent[] DeserializeAll(SQLiteDataReader reader)
         {
-            var events = new List<BetEvent.Api.Models.BetEvent>();
+            var events = new List<BetEvent>();
             while (reader.Read())
             {
-                events.Add(new BetEvent.Api.Models.BetEvent
+                events.Add(new BetEvent
                 {
                     Id = Guid.Parse(reader["id"].ToString()),
                     Name = reader["name"].ToString(),
@@ -26,7 +27,7 @@ namespace BettingShop.DataBase.DB
             return events.ToArray();
         }
 
-        public BetEvent.Api.Models.BetEvent DeserializeOne(SQLiteDataReader reader)
+        public BetEvent DeserializeOne(SQLiteDataReader reader)
         {
             return DeserializeAll(reader)[0];
         }
