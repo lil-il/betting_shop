@@ -14,7 +14,7 @@ namespace BettingShop.DataLayer.Models
         [Required]
         public DateTime BetDeadline { get; set; }
 
-        /*[Required]
-        public List<string> EventOutcomes { get; set; }*/
+        [Required]
+        public string Outcomes { get; set; }
     }
 }

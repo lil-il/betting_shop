@@ -6,9 +6,8 @@ using AutoMapper;
 using BettingShop.DataLayer.DB;
 using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace BetEvent.Api.Controllers
+namespace BettingShop.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
