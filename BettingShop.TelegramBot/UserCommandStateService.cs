@@ -9,7 +9,7 @@ namespace BettingShop.TelegramBot
 {
     public class UserCommandStateService : IUserCommandStateService, IUserCommandTypeService
     {
-        private static readonly ConcurrentDictionary<ITelegramUser, ICommandState> userState =
+        private readonly ConcurrentDictionary<ITelegramUser, ICommandState> userState =
             new ConcurrentDictionary<ITelegramUser, ICommandState>();
 
         public ICommandState GetCurrentState(ITelegramUser user)

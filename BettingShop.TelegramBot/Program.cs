@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Executor;
 using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using LightInject;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using Newtonsoft.Json;
 using Telegram.Bot;
 
@@ -13,16 +16,26 @@ namespace BettingShop.TelegramBot
 {
     internal static class Program
     {
-        private static void Main()
+        public static async Task Main(string[] args)
         {
+            var cancellationTokenSource = new CancellationTokenSource();
+            var token = cancellationTokenSource.Token;
+            Console.CancelKeyPress += (sender, eventArgs) =>
+            {
+                eventArgs.Cancel = true;
+                cancellationTokenSource.Cancel(true);
+            };
+
             var container = CreateContainer();
             RegisterDependencies(container);
 
             var telegramHandler = container.GetInstance<BotHandler>();
             telegramHandler.Initialize();
 
-            Console.WriteLine("Press any key to shutdown bot");
-            Console.ReadKey();
+            while (!token.IsCancellationRequested)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(60), token);
+            }
             telegramHandler.StopReceiving();
         }
         private static ServiceContainer CreateContainer()
