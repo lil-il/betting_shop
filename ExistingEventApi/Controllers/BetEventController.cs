@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BetEvent.Api.Models;
+using BettingShop.DataLayer.DB;
+using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +14,12 @@ namespace BetEvent.Api.Controllers
     [ApiController]
     public class BetEventController : ControllerBase
     {
-        private readonly BetEventContext context;
+        private readonly IEventRepository repo;
         private readonly IMapper mapper;
 
-        public BetEventController(BetEventContext context, IMapper mapper)
+        public BetEventController(IEventRepository repo, IMapper mapper)
         {
-            this.context = context;
+            this.repo = repo;
             this.mapper = mapper;
         }
 
@@ -25,14 +27,14 @@ namespace BetEvent.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client.Models.BetEvent>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<Client.Models.BetEvent>>(await context.ExistingEvents.ToListAsync()));
+            return new(mapper.Map<IEnumerable<Client.Models.BetEvent>>((await repo.GetAllAsync()).ToList()));
         }
 
         // GET: api/ExistingEvents/5
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Client.Models.BetEvent>> GetEvent(Guid id)
         {
-            var eventItem = await context.ExistingEvents.FindAsync(id);
+            var eventItem = await repo.GetByIdAsync(id);
             if (eventItem == null) return NotFound();
             return mapper.Map<Client.Models.BetEvent>(eventItem);
         }
@@ -41,10 +43,9 @@ namespace BetEvent.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutEvent(Guid id, Client.Models.BetEvent eventForUpdating)
         {
-            var betEventForUpdating = mapper.Map<Models.BetEvent>(eventForUpdating);
+            var betEventForUpdating = mapper.Map<BettingShop.DataLayer.Models.BetEvent>(eventForUpdating);
             if (id != betEventForUpdating.Id) return BadRequest();
-            context.Entry(betEventForUpdating).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            var updatedEvent = await repo.UpdateAsync(betEventForUpdating);
             return NoContent();
         }
 
@@ -53,20 +54,17 @@ namespace BetEvent.Api.Controllers
         public async Task<ActionResult<Client.Models.BetEvent>> PostEvent(Client.Models.BetEventMeta eventForCreating)
         {
             var newEventMeta = mapper.Map<BetEventMeta>(eventForCreating);
-            var newEvent = mapper.Map<Models.BetEvent>(newEventMeta);
-            context.ExistingEvents.Add(newEvent);
-            await context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetEvent), new {id = newEvent.Id}, mapper.Map<Client.Models.BetEvent>(newEvent));
+            var newEvent = mapper.Map<BettingShop.DataLayer.Models.BetEvent>(newEventMeta);
+            var createdEvent = await repo.CreateAsync(newEvent);
+            return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, mapper.Map<Client.Models.BetEvent>(newEvent));
         }
 
         // DELETE: api/ExistingEvents/5
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Client.Models.BetEvent>> DeleteEvent(Guid id)
         {
-            var existingEvent = await context.ExistingEvents.FindAsync(id);
+            var existingEvent = await repo.DeleteAsync(id);
             if (existingEvent == null) return NotFound();
-            context.ExistingEvents.Remove(existingEvent);
-            await context.SaveChangesAsync();
             return mapper.Map<Client.Models.BetEvent>(existingEvent);
         }
     }

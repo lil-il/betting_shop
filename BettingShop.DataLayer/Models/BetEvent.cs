@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BetEvent.Api.Models
+namespace BettingShop.DataLayer.Models
 {
     public class BetEvent: BetEventMeta
     {
