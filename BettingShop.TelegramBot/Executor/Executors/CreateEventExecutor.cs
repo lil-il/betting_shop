@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using BetEvent.Api.Client;
-using BetEvent.Api.Client.Models;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Message;
 using Telegram.Bot;
