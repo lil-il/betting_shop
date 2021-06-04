@@ -1,6 +1,5 @@
-// Unused usings removed
-
 using System;
+using BettingShop.Api.Models;
 using BettingShop.DataLayer.DB;
 using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 
-namespace BetEvent.Api
+namespace BettingShop.Api
 {
     public class Startup
     {
@@ -24,6 +23,10 @@ namespace BetEvent.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BetEventContext>(opt =>
+                opt.UseInMemoryDatabase("TodoList"));
+            services.AddDbContext<BetContext>(opt =>
+                opt.UseInMemoryDatabase("TodoList"));
+            services.AddDbContext<UserContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddControllers();
             services.AddScoped<IEventRepository, EventRepository>();
