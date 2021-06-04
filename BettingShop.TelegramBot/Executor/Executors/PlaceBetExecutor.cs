@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
+using BettingShop.Api.Client;
+using BettingShop.Api.Client.Models;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Message;
 using Telegram.Bot;
@@ -19,80 +23,54 @@ namespace BettingShop.TelegramBot.Executor.Executors
         public async Task ExecuteAsync(UserMessage message)
         {
             var state = stateService.GetCurrentState(message.User);
-
+            var eventClient = new BetEventClient("http://localhost:27254");
+            var betClient = new BetClient("http://localhost:27254");
             if (state is PlaceBetCommandState betState)
             {
-                switch (betState.State)
+                switch (betState.State)// нужно проверять на корректность ввода
                 {
                     case PlaceBetState.EventNumber:
-                        if (true) //если введен существующий номер
-                        {
-                            //вывод информации о выбранном событии
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "информация о выбранном событии \n Введите номер линии, на которую вы хотите сделать ставку");
-                            stateService.SaveState(message.User, new PlaceBetCommandState(PlaceBetState.LineNumber));
-                        }
-                        else
-                        {
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "События с таким номером нет, пожалуйста, уточните номер и введите еще раз");
-                        }
-
+                        var chosenEvent = await eventClient.GetAsync(Guid.Parse(message.Tail));//надо как-то не по гуиду
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat, 
+                            $"Событие {chosenEvent.Id}  - {chosenEvent.Name}\n" +
+                            $"Исходы: {chosenEvent.Outcomes}\n" +
+                            $"Дедлайн: {chosenEvent.BetDeadline}\n" +
+                            $"Описание: {chosenEvent.Description}\n" +
+                            $"----------------\n" +
+                            $" Введите номер линии, на которую вы хотите сделать ставку");
+                        stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.Outcome, EventId = chosenEvent.Id});
                         break;
-                    case PlaceBetState.LineNumber:
-                        if (true) //если введен существующий номер линии
-                        {
-                            //вывод информации о выбранной линии
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "информация о выбранной линии \n Введите номер исхода, на который вы хотите сделать ставку");
-                            stateService.SaveState(message.User, new PlaceBetCommandState(PlaceBetState.OutcomeNumber));
-                        }
-                        else
-                        {
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "На это событие нет линии с таким номером, пожалуйста, уточните номер и введите еще раз");
-                        }
-                        break;
-                    case PlaceBetState.OutcomeNumber:
-                        if (true) //если введен существующий номер исхода
-                        {
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                    case PlaceBetState.Outcome:
+                        var chosenOutcome = message.Tail;
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                                 "Введите размер ставки");
-                            stateService.SaveState(message.User, new PlaceBetCommandState(PlaceBetState.BetAmount));
-                        }
-                        else
-                        {
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "Нет исхода с таким номером, пожалуйста, уточните номер и введите еще раз");
-                        }
+                        stateService.SaveState(message.User, new PlaceBetCommandState(){ State = PlaceBetState.BetAmount, EventId = betState.EventId, Outcome = chosenOutcome});
                         break;
                     case PlaceBetState.BetAmount:
-                        if (true) //если введена нормальная сумма ставки
-                        {
-                            //сохранить эту ставку
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "Ваша ставка сохранена");
-                            stateService.DeleteState(message.User);
-                        }
-                        else
-                        {
-                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "На вашем счету недостаточно средств, введте новую сумму ставки");
-                        }
+                        var betAmount = Int16.Parse(message.Tail);
+                        await betClient.CreateAsync(new BetMeta { BetSize = betAmount, EventId = betState.EventId, UserId = Guid.NewGuid(), Outcome = betState.Outcome });//поправить юзер айди
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                            "Ваша ставка сохранена");
+                        stateService.DeleteState(message.User);
                         break;
                 }
             }
             else
             {
-                //вывести список событий
+                var allEvents = await eventClient.GetAllAsync();
+                var allEventsString = new StringBuilder();
+                foreach (var oneEvent in allEvents)
+                {
+                    allEventsString.Append($"{oneEvent.Id} - {oneEvent.Name}\n" +
+                                           $"Исходы: {oneEvent.Outcomes}\n" +
+                                           $"Дедлайн: {oneEvent.BetDeadline}\n" +
+                                           $"Описание: {oneEvent.Description}\n" +
+                                           $"----------------\n");
+                }
                 await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                    "Список событий \n Введите номер события, на которое хотите сделать ставку");
-                stateService.SaveState(message.User, new PlaceBetCommandState(PlaceBetState.EventNumber));
+                    $"{allEventsString.ToString()} \n Введите номер события, на которое хотите сделать ставку");
+                stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.EventNumber });
             }
-
-
-            await client.SendTextMessageAsync(message.TelegramMessage.Chat, $"Called PlaceBetExecutor with message {message.TelegramMessage.Text} " +
-                                                                          $"and state {stateService.GetCurrentState(message.User)}");
         }
 
     }

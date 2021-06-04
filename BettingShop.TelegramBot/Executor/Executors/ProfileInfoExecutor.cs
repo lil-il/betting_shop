@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BettingShop.Api.Client;
 using BettingShop.TelegramBot.Command.Commands;
 using BettingShop.TelegramBot.Message;
 using Telegram.Bot;
@@ -16,7 +17,8 @@ namespace BettingShop.TelegramBot.Executor.Executors
 
         public async Task ExecuteAsync(UserMessage message)
         {
-            //вывод информации о профиле
+            var userClient = new UserClient("http://localhost:27254");
+            //var newUser = await UserClient.GetAsync(message.TelegramMessage.From.Id);
             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                 $"Информация о профиле");
         }
