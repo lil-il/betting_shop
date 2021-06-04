@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.TelegramBot", "BettingShop.TelegramBot\BettingShop.TelegramBot.csproj", "{D35C5DBF-9F77-4669-A3FA-7FE9DCD131C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.DataLayer", "BettingShop.DataLayer\BettingShop.DataLayer.csproj", "{6B36A475-460D-4AE7-AD53-20BF228C6A51}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.DataLayer.Tests", "BettingShop.DataLayer.Tests\BettingShop.DataLayer.Tests.csproj", "{7A5C3D37-1386-42CB-A83D-C2FAAA40DC88}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.Api.Client", "BettingShop.Api.Client\BettingShop.Api.Client.csproj", "{48373B19-D337-4CAD-BF0A-C0E3C54D1F2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.Api.Client.Tests", "BettingShop.Api.Client.Tests\BettingShop.Api.Client.Tests.csproj", "{71706218-A3EE-413D-893B-317E7550A32A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BettingShop.Api", "BettingShop.Api\BettingShop.Api.csproj", "{1CA18223-9A0B-4F6F-96CD-F553203BC656}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D35C5DBF-9F77-4669-A3FA-7FE9DCD131C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35C5DBF-9F77-4669-A3FA-7FE9DCD131C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35C5DBF-9F77-4669-A3FA-7FE9DCD131C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35C5DBF-9F77-4669-A3FA-7FE9DCD131C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B36A475-460D-4AE7-AD53-20BF228C6A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B36A475-460D-4AE7-AD53-20BF228C6A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B36A475-460D-4AE7-AD53-20BF228C6A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B36A475-460D-4AE7-AD53-20BF228C6A51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A5C3D37-1386-42CB-A83D-C2FAAA40DC88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A5C3D37-1386-42CB-A83D-C2FAAA40DC88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A5C3D37-1386-42CB-A83D-C2FAAA40DC88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5C3D37-1386-42CB-A83D-C2FAAA40DC88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48373B19-D337-4CAD-BF0A-C0E3C54D1F2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48373B19-D337-4CAD-BF0A-C0E3C54D1F2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48373B19-D337-4CAD-BF0A-C0E3C54D1F2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48373B19-D337-4CAD-BF0A-C0E3C54D1F2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71706218-A3EE-413D-893B-317E7550A32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71706218-A3EE-413D-893B-317E7550A32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71706218-A3EE-413D-893B-317E7550A32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71706218-A3EE-413D-893B-317E7550A32A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CA18223-9A0B-4F6F-96CD-F553203BC656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CA18223-9A0B-4F6F-96CD-F553203BC656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CA18223-9A0B-4F6F-96CD-F553203BC656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CA18223-9A0B-4F6F-96CD-F553203BC656}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA68E44E-F09A-43A4-BEE3-24537B089DE3}
+	EndGlobalSection
+EndGlobal
