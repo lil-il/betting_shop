@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Threading.Tasks;
 using BettingShop.Api.Client;
@@ -13,6 +14,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
     {
         private readonly IUserCommandStateService stateService;
         private readonly ITelegramBotClient client;
+        private ConcurrentDictionary<int, Guid> idDictionary = new ConcurrentDictionary<int, Guid>();
 
         public PlaceBetExecutor(ITelegramBotClient botClient, IUserCommandStateService stateService)
         {
@@ -30,9 +32,9 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (betState.State)// нужно проверять на корректность ввода
                 {
                     case PlaceBetState.EventNumber:
-                        var chosenEvent = await eventClient.GetAsync(Guid.Parse(message.Tail));//надо как-то не по гуиду
+                        var chosenEvent = await eventClient.GetAsync((idDictionary[int.Parse(message.Tail)]));//надо как-то не по гуиду
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat, 
-                            $"Событие {chosenEvent.Id}  - {chosenEvent.Name}\n" +
+                            $"Событие {int.Parse(message.Tail)}  - {chosenEvent.Name}\n" +
                             $"Исходы: {chosenEvent.Outcomes}\n" +
                             $"Дедлайн: {chosenEvent.BetDeadline}\n" +
                             $"Описание: {chosenEvent.Description}\n" +
@@ -59,13 +61,16 @@ namespace BettingShop.TelegramBot.Executor.Executors
             {
                 var allEvents = await eventClient.GetAllAsync();
                 var allEventsString = new StringBuilder();
+                var i = 1;
                 foreach (var oneEvent in allEvents)
                 {
-                    allEventsString.Append($"{oneEvent.Id} - {oneEvent.Name}\n" +
+                    idDictionary[i] = oneEvent.Id;
+                    allEventsString.Append($"{i} - {oneEvent.Name}\n" +
                                            $"Исходы: {oneEvent.Outcomes}\n" +
                                            $"Дедлайн: {oneEvent.BetDeadline}\n" +
                                            $"Описание: {oneEvent.Description}\n" +
                                            $"----------------\n");
+                    i++;
                 }
                 await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                     $"{allEventsString.ToString()} \n Введите номер события, на которое хотите сделать ставку");

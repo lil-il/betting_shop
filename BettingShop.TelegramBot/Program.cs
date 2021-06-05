@@ -36,8 +36,10 @@ namespace BettingShop.TelegramBot
             {
                 await Task.Delay(TimeSpan.FromSeconds(60), token);
             }
+
             telegramHandler.StopReceiving();
         }
+
         private static ServiceContainer CreateContainer()
         {
             return new ServiceContainer();
@@ -54,8 +56,9 @@ namespace BettingShop.TelegramBot
             container.Register<IUserCommandTypeService>(sf => sf.GetInstance<UserCommandStateService>());
             container.Register<ITelegramBotClient>(sf => new TelegramBotClient(sf.GetInstance<Config>().Token));
             container.RegisterSingleton<TelegramBotClient>();
-            container.RegisterSingleton(sf => JsonConvert.DeserializeObject<Config>(File.ReadAllText(Path.GetFullPath("configs/Config.json"))));
-            container.Register<IUserCommandStateService>(sf=> sf.GetInstance<UserCommandStateService>()); 
+            container.RegisterSingleton(sf =>
+                JsonConvert.DeserializeObject<Config>(File.ReadAllText(Path.GetFullPath("configs/Config.json"))));
+            container.Register<IUserCommandStateService>(sf => sf.GetInstance<UserCommandStateService>());
             container.RegisterSingleton<UserCommandStateService>();
             container.RegisterInstance(container);
             container.Register<IExecutor<CreateEventCommandType>, CreateEventExecutor>();
@@ -64,7 +67,7 @@ namespace BettingShop.TelegramBot
             container.Register<IExecutor<UnknownCommandType>, UnknownCommandExecutor>();
             container.Register<IExecutor<HelpCommandType>, HelpExecutor>();
             container.Register<CreateEventExecutor>();
-            container.Register<PlaceBetExecutor>();
+            container.RegisterSingleton<PlaceBetExecutor>();
             container.Register<ProfileInfoExecutor>();
             container.Register<UnknownCommandExecutor>();
             container.Register<HelpExecutor>();
@@ -75,3 +78,4 @@ namespace BettingShop.TelegramBot
         }
     }
 }
+
