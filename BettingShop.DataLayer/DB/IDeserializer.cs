@@ -5,8 +5,11 @@ namespace BettingShop.DataLayer.DB
 {
     public interface IDeserializer
     {
-        public BetEvent[] DeserializeAll(SQLiteDataReader reader);
-
-        public BetEvent DeserializeOne(SQLiteDataReader reader);
+        public BetEvent[] DeserializeAllEvents(SQLiteDataReader reader);
+        public BetEvent DeserializeOneEvent(SQLiteDataReader reader);
+        public Bet[] DeserializeAllBets(SQLiteDataReader reader);
+        public Bet DeserializeOneBet(SQLiteDataReader reader);
+        public User[] DeserializeAllUsers(SQLiteDataReader reader);
+        public User DeserializeOneUser(SQLiteDataReader reader);
     }
 }

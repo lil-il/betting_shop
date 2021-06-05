@@ -11,7 +11,7 @@ namespace BettingShop.DataLayer.DB
 {
     public class Deserializer : IDeserializer
     {
-        public BetEvent[] DeserializeAll(SQLiteDataReader reader)
+        public BetEvent[] DeserializeAllEvents(SQLiteDataReader reader)
         {
             var events = new List<BetEvent>();
             while (reader.Read())
@@ -27,9 +27,51 @@ namespace BettingShop.DataLayer.DB
             return events.ToArray();
         }
 
-        public BetEvent DeserializeOne(SQLiteDataReader reader)
+        public BetEvent DeserializeOneEvent(SQLiteDataReader reader)
         {
-            return DeserializeAll(reader)[0];
+            return DeserializeAllEvents(reader)[0];
+        }
+
+        public Bet[] DeserializeAllBets(SQLiteDataReader reader)
+        {
+            var bets = new List<Bet>();
+            while (reader.Read())
+            {
+                bets.Add(new Bet
+                {
+                    Id = Guid.Parse(reader["id"].ToString()),
+                    BetSize = (int)reader["bet"],
+                    EventId = Guid.Parse(reader["event-id"].ToString()),
+                    UserId = Guid.Parse(reader["user-id"].ToString()),
+                    Outcome = reader["description"].ToString()
+                });
+            }
+            return bets.ToArray();
+        }
+
+        public Bet DeserializeOneBet(SQLiteDataReader reader)
+        {
+            return DeserializeAllBets(reader)[0];
+        }
+
+        public User[] DeserializeAllUsers(SQLiteDataReader reader)
+        {
+            var users = new List<User>();
+            while (reader.Read())
+            {
+                users.Add(new User
+                {
+                    Id = Guid.Parse(reader["id"].ToString()),
+                    Balance = (int)reader["balance"],
+                    ParticipateBetsId = reader["event-id"].ToString()
+                });
+            }
+            return users.ToArray();
+        }
+
+        public User DeserializeOneUser(SQLiteDataReader reader)
+        {
+            return DeserializeAllUsers(reader)[0];
         }
     }
 }

@@ -19,7 +19,21 @@ namespace BettingShop.DataLayer.DB
         public static SQLiteCommand CreateEventTable(SQLiteConnection connection)
         {
             return new SQLiteCommand(
-                "CREATE TABLE IF NOT EXISTS [events] ([id] NVARCHAR(32), [name] NVARCHAR(150), [description] NVARCHAR(1024), [betdeadline] NVARCHAR(100))", connection);
+                "CREATE TABLE IF NOT EXISTS [events] ([id] NVARCHAR(32), [name] NVARCHAR(150), [description] NVARCHAR(1024), [betdeadline] NVARCHAR(100), [outcomes] NVARCHAR(1024))", connection);
+        }
+
+        public static SQLiteCommand CreateBetTable(SQLiteConnection connection)
+        {
+            return new SQLiteCommand(
+                "CREATE TABLE IF NOT EXISTS [bets] ([id] NVARCHAR(32), [bet] INTEGER, [event-id] NVARCHAR(32), [user-id] NVARCHAR(32), [outcome] NVARCHAR(1024))",
+                connection);
+        }
+
+        public static SQLiteCommand CreateUserTable(SQLiteConnection connection)
+        {
+            return new SQLiteCommand(
+                "CREATE TABLE IF NOT EXISTS [users] ([id] NVARCHAR(32), [balance] INTEGER, [participate-bets-id] NVARCHAR(1024))",
+                connection);
         }
 
         public static SQLiteCommand BuildGetByIdCommand(Guid id, SQLiteConnection connection)
@@ -27,26 +41,52 @@ namespace BettingShop.DataLayer.DB
             return new SQLiteCommand(string.Format("SELECT * FROM events WHERE id = '{0}'", id.ToString()), connection);
         }
 
-        public static SQLiteCommand BuildCreateCommand(BetEvent betEvent, SQLiteConnection connection)
+        public static SQLiteCommand BuildCreateEventCommand(BetEvent betEvent, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("INSERT INTO events VALUES('{0}', '{1}', '{2}', '{3}')", betEvent.Id.ToString(),
-                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString()), connection);
+            return new SQLiteCommand(string.Format("INSERT INTO events VALUES('{0}', '{1}', '{2}', '{3}', '{4}')", betEvent.Id.ToString(),
+                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Outcomes), connection);
         }
 
-        public static SQLiteCommand BuildDeleteCommand(Guid id, SQLiteConnection connection)
+        public static SQLiteCommand BuildCreateBetCommand(Bet bet, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("DELETE FROM events WHERE id = '{0}'", id.ToString()), connection);
+            return new SQLiteCommand(string.Format("INSERT INTO bets VALUES('{0}', {1}, '{2}', '{3}', '{4}')", bet.Id.ToString(),
+                bet.BetSize, bet.EventId.ToString(), bet.UserId.ToString(), bet.Outcome), connection);
         }
 
-        public static SQLiteCommand BuildUpdateCommand(BetEvent betEvent, SQLiteConnection connection)
+        public static SQLiteCommand BuildCreateUserCommand(User user, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("UPDATE events SET name = '{0}', description = '{1}', betdeadline = '{2}' WHERE id = '{3}'",
-                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Id.ToString()), connection);
+            return new SQLiteCommand(string.Format("INSERT INTO users VALUES('{0}', {1}, '{2}')", user.Id.ToString(),
+                user.Balance, user.ParticipateBetsId), connection);
         }
 
-        public static SQLiteCommand DeleteEventTable(SQLiteConnection connection)
+        public static SQLiteCommand BuildDeleteCommand(Guid id, SQLiteConnection connection, string tablename)
         {
-            return new SQLiteCommand("DROP TABLE events", connection);
+            return new SQLiteCommand(string.Format("DELETE FROM {0} WHERE id = '{0}'", tablename, id.ToString()), connection);
         }
+
+
+        public static SQLiteCommand BuildUpdateEventCommand(BetEvent betEvent, SQLiteConnection connection)
+        {
+            return new SQLiteCommand(string.Format("UPDATE events SET name = '{0}', description = '{1}', betdeadline = '{2}', outcomes = '{3}' WHERE id = '{4}'",
+                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Outcomes, betEvent.Id.ToString()), connection);
+        }
+
+        public static SQLiteCommand BuildUpdateBetCommand(Bet bet, SQLiteConnection connection)
+        {
+            return new SQLiteCommand(string.Format("UPDATE bets SET bet = {0}, event-id = '{1}', user-id = '{2}', outcome = '{3}' WHERE id = '{4}'",
+                bet.BetSize, bet.EventId.ToString(), bet.UserId.ToString(), bet.Outcome, bet.Id.ToString()), connection);
+        }
+
+        public static SQLiteCommand BuildUpdateUserCommand(User user, SQLiteConnection connection)
+        {
+            return new SQLiteCommand(string.Format("UPDATE users SET balance = {0}, participate-bets-id = '{1}',  WHERE id = '{2}'",
+                user.Balance, user.ParticipateBetsId.ToString(), user.Id), connection);
+        }
+
+        public static SQLiteCommand DeleteTable(SQLiteConnection connection, string tablename)
+        {
+            return new SQLiteCommand(string.Format("DROP TABLE {0}", tablename), connection);
+        }
+
     }
 }
