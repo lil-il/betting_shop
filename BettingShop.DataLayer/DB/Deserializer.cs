@@ -21,7 +21,8 @@ namespace BettingShop.DataLayer.DB
                     Id = Guid.Parse(reader["id"].ToString()),
                     Name = reader["name"].ToString(),
                     Description = reader["description"].ToString(),
-                    BetDeadline = DateTime.Parse(reader["betdeadline"].ToString())
+                    BetDeadline = DateTime.Parse(reader["betdeadline"].ToString()),
+                    Outcomes = reader["outcomes"].ToString()
                 });
             }
             return events.ToArray();
