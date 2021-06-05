@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using BettingShop.DataLayer.Models;
 
 namespace BettingShop.DataLayer.DB
 {
-    public class EventRepository : IEventRepository
+    public class UserRepository : IUserRepository
     {
         private const string databaseFile = @"events.db";
         private const string connectionString = "Data source=" + databaseFile + ";";
         private SQLiteConnection connection;
         private IDeserializer deserializer;
 
-        public EventRepository(IDeserializer deserializer)
+        public UserRepository(IDeserializer deserializer)
         {
             if (!File.Exists(databaseFile))
             {
@@ -30,52 +30,52 @@ namespace BettingShop.DataLayer.DB
 
         private void CreateTable()
         {
-            var command = CommandBuilder.CreateEventTable(connection);
+            var command = CommandBuilder.CreateUserTable(connection);
             command.ExecuteNonQuery();
         }
 
         private void DeleteTable()
         {
-            var command = CommandBuilder.DeleteTable(connection, "events");
+            var command = CommandBuilder.DeleteTable(connection, "users");
             command.ExecuteNonQuery();
         }
 
-        public async Task<BetEvent[]> GetAllAsync()
+        public async Task<User[]> GetAllAsync()
         {
             var events = new List<BetEvent>();
-            var command = CommandBuilder.BuildGetAllCommand("events", connection);
+            var command = CommandBuilder.BuildGetAllCommand("users", connection);
             var reader = command.ExecuteReader();
-            return deserializer.DeserializeAllEvents(reader);
+            return deserializer.DeserializeAllUsers(reader);
         }
 
-        public async Task<BetEvent> GetByIdAsync(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
             var command = CommandBuilder.BuildGetByIdCommand(id, connection);
             var reader = command.ExecuteReader();
-            return deserializer.DeserializeOneEvent(reader);
+            return deserializer.DeserializeOneUser(reader);
         }
 
-        public async Task<BetEvent> CreateAsync(BetEvent betEvent)
+        public async Task<User> CreateAsync(User user)
         {
-            var command = CommandBuilder.BuildCreateEventCommand(betEvent, connection);
+            var command = CommandBuilder.BuildCreateUserCommand(user, connection);
             var reader = command.ExecuteReader();
-            return await GetByIdAsync(betEvent.Id);
+            return await GetByIdAsync(user.Id);
         }
 
-        public async Task<BetEvent> DeleteAsync(Guid id)
+        public async Task<User> DeleteAsync(Guid id)
         {
             var commandToGetId = CommandBuilder.BuildGetByIdCommand(id, connection);
             var returnReader = commandToGetId.ExecuteReader();
-            var command = CommandBuilder.BuildDeleteCommand(id, connection, "events");
+            var command = CommandBuilder.BuildDeleteCommand(id, connection, "users");
             command.ExecuteReader();
-            return deserializer.DeserializeOneEvent(returnReader);
+            return deserializer.DeserializeOneUser(returnReader);
         }
 
-        public async Task<BetEvent> UpdateAsync(BetEvent betEvent)
+        public async Task<User> UpdateAsync(User user)
         {
-            var command = CommandBuilder.BuildUpdateEventCommand(betEvent, connection);
+            var command = CommandBuilder.BuildUpdateUserCommand(user, connection);
             command.ExecuteReader();
-            return await GetByIdAsync(betEvent.Id);
+            return await GetByIdAsync(user.Id);
         }
     }
 }

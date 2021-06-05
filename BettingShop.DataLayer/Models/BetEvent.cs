@@ -2,8 +2,8 @@
 
 namespace BettingShop.DataLayer.Models
 {
-    public class BetEvent: BetEventMeta
+    public class BetEvent : BetEventMeta
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
     }
 }

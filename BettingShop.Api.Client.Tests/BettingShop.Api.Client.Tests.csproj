@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiClient\BetEvent.Api.Client.csproj" />
     <ProjectReference Include="..\BettingShop.Api.Client\BettingShop.Api.Client.csproj" />
   </ItemGroup>
 
