@@ -32,14 +32,14 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (betState.State)// нужно проверять на корректность ввода
                 {
                     case PlaceBetState.EventNumber:
-                        var chosenEvent = await eventClient.GetAsync((idDictionary[int.Parse(message.Tail)]));//надо как-то не по гуиду
+                        var chosenEvent = await eventClient.GetAsync((idDictionary[int.Parse(message.Tail)]));
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat, 
                             $"Событие {int.Parse(message.Tail)}  - {chosenEvent.Name}\n" +
                             $"Исходы: {chosenEvent.Outcomes}\n" +
                             $"Дедлайн: {chosenEvent.BetDeadline}\n" +
                             $"Описание: {chosenEvent.Description}\n" +
                             $"----------------\n" +
-                            $" Введите номер линии, на которую вы хотите сделать ставку");
+                            $" Введите исход, на которую вы хотите сделать ставку");
                         stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.Outcome, EventId = chosenEvent.Id});
                         break;
                     case PlaceBetState.Outcome:

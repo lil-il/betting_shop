@@ -50,7 +50,7 @@ namespace BettingShop.DataLayer.DB
 
         public async Task<Bet> GetByIdAsync(Guid id)
         {
-            var command = CommandBuilder.BuildGetByIdCommand(id, connection);
+            var command = CommandBuilder.BuildGetByIdCommand(id, connection, "bets");
             var reader = command.ExecuteReader();
             return deserializer.DeserializeOneBet(reader);
         }
@@ -59,12 +59,14 @@ namespace BettingShop.DataLayer.DB
         {
             var command = CommandBuilder.BuildCreateBetCommand(bet, connection);
             var reader = command.ExecuteReader();
-            return await GetByIdAsync(bet.Id);
+            var res = await GetByIdAsync(bet.Id);
+            var a = 2;
+            return res;
         }
 
         public async Task<Bet> DeleteAsync(Guid id)
         {
-            var commandToGetId = CommandBuilder.BuildGetByIdCommand(id, connection);
+            var commandToGetId = CommandBuilder.BuildGetByIdCommand(id, connection, "bets");
             var returnReader = commandToGetId.ExecuteReader();
             var command = CommandBuilder.BuildDeleteCommand(id, connection, "bets");
             command.ExecuteReader();

@@ -21,7 +21,8 @@ namespace BettingShop.DataLayer.DB
                     Id = Guid.Parse(reader["id"].ToString()),
                     Name = reader["name"].ToString(),
                     Description = reader["description"].ToString(),
-                    BetDeadline = DateTime.Parse(reader["betdeadline"].ToString())
+                    BetDeadline = DateTime.Parse(reader["betdeadline"].ToString()),
+                    Outcomes = reader["outcomes"].ToString()
                 });
             }
             return events.ToArray();
@@ -43,15 +44,19 @@ namespace BettingShop.DataLayer.DB
                     BetSize = (int)reader["bet"],
                     EventId = Guid.Parse(reader["event-id"].ToString()),
                     UserId = Guid.Parse(reader["user-id"].ToString()),
-                    Outcome = reader["description"].ToString()
+                    Outcome = reader["outcome"].ToString()
                 });
             }
+
+            var x = 4;
             return bets.ToArray();
         }
 
         public Bet DeserializeOneBet(SQLiteDataReader reader)
         {
-            return DeserializeAllBets(reader)[0];
+            var res = DeserializeAllBets(reader)[0];
+            var a = 2;
+            return res;
         }
 
         public User[] DeserializeAllUsers(SQLiteDataReader reader)

@@ -54,7 +54,7 @@ namespace BettingShop.Api.Controllers
         {
             var newBetMeta = mapper.Map<BetMeta>(betForCreating);
             var newBet = mapper.Map<BettingShop.DataLayer.Models.Bet>(newBetMeta);
-            var createdbet = await repo.CreateAsync(newBet);
+            await repo.CreateAsync(newBet);
             return CreatedAtAction(nameof(GetBet), new { id = newBet.Id }, mapper.Map<Client.Models.Bet>(newBet));
         }
 
