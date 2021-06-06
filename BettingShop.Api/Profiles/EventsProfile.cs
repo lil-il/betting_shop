@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BettingShop.Api.Client.Models;
+using BettingShop.Api.Models;
 
 namespace BettingShop.Api.Profiles
 {
@@ -15,7 +15,7 @@ namespace BettingShop.Api.Profiles
 
             CreateMap<BettingShop.DataLayer.Models.BetEvent, Client.Models.BetEvent>();
 
-            CreateMap<DataLayer.Models.BetEventMeta, BettingShop.DataLayer.Models.BetEvent>();
+            CreateMap<DataLayer.Models.BetEventMeta, DataLayer.Models.BetEvent>();
 
 
             CreateMap<Client.Models.BetMeta, BetMeta>();

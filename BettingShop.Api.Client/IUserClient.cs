@@ -15,5 +15,9 @@ namespace BettingShop.Api.Client
         Task<User[]> GetAllAsync();
 
         Task<User> UpdateAsync(User user);
+
+        Task<User> GetByTelegramIdAsync(int telegramId);
+
+        Task<User> AddParticipateBetId(int telegramId, string betId);
     }
 }

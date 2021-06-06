@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BettingShop.Api.Models
 {
     public class UserMeta
     {
+        [Required]
+        public int TelegramId { get; set; }
+
         [Required]
         public int Balance { get; set; }
 

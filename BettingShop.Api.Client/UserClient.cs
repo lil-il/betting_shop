@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +53,24 @@ namespace BettingShop.Api.Client
             var httpResponse = await httpClient.PutAsync($"{_address}/api/User/{user.Id}", stringContent);
             httpResponse.EnsureSuccessStatusCode();
             return user;
+        }
+
+        public async Task<User> GetByTelegramIdAsync(int telegramId)
+        {
+            var httpResponse = await httpClient.GetAsync($"{_address}/api/User");
+            var users = JsonConvert.DeserializeObject<List<User>>(await httpResponse.Content.ReadAsStringAsync());
+            if (users.Count == 0)
+                return new User() {Balance = 0, Id = new Guid(), ParticipateBetsId = "", TelegramId = -1};
+            return users.First(t => t.TelegramId == telegramId) == null ? 
+                new User() { Balance = 0, Id = new Guid(), ParticipateBetsId = "", TelegramId = -1 } : users.First(t => t.TelegramId == telegramId);
+        }
+
+        public async Task<User> AddParticipateBetId(int telegramId, string betId)
+        {
+            var userForUpdating = await GetByTelegramIdAsync(telegramId);
+            userForUpdating.ParticipateBetsId += "\n" + betId;
+            var updatedUser = await UpdateAsync(userForUpdating);
+            return updatedUser;
         }
     }
 }
