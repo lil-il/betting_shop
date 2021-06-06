@@ -18,9 +18,11 @@ namespace BettingShop.TelegramBot.Executor.Executors
         public async Task ExecuteAsync(UserMessage message)
         {
             var userClient = new UserClient("http://localhost:27254");
-            //var newUser = await UserClient.GetAsync(message.TelegramMessage.From.Id);
+            var myUser = await userClient.GetByTelegramIdAsync(message.TelegramMessage.From.Id);
             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                $"Информация о профиле");
+                $"Информация о профиле:" +
+                $"Баланс: {myUser.Balance}" +
+                $"Мои ставки: {myUser.ParticipateBetsId}");
         }
     }
 }

@@ -50,6 +50,8 @@ namespace BettingShop.TelegramBot
             container.Register<CreateEventCommandType>();
             container.Register<PlaceBetCommandType>();
             container.Register<ProfileInfoCommandType>();
+            container.Register<SimpleMessageCommandType>();
+            container.Register<StartCommandType>();
             container.Register<UnknownCommandType>();
             container.Register<HelpCommandType>();
             container.Register<ITelegramUser, TelegramUser>();
@@ -66,11 +68,15 @@ namespace BettingShop.TelegramBot
             container.Register<IExecutor<ProfileInfoCommandType>, ProfileInfoExecutor>();
             container.Register<IExecutor<UnknownCommandType>, UnknownCommandExecutor>();
             container.Register<IExecutor<HelpCommandType>, HelpExecutor>();
+            container.Register<IExecutor<SimpleMessageCommandType>, SimpleMessageExecutor>();
+            container.Register<IExecutor<StartCommandType>, StartExecutor>();
             container.Register<CreateEventExecutor>();
             container.RegisterSingleton<PlaceBetExecutor>();
             container.Register<ProfileInfoExecutor>();
             container.Register<UnknownCommandExecutor>();
             container.Register<HelpExecutor>();
+            container.Register<SimpleMessageExecutor>();
+            container.Register<StartExecutor>();
             container.Register<BotHandler>();
             container.Register<ExecutorsFactory>();
             container.Register<UserMessageParser>();

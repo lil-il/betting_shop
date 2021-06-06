@@ -65,7 +65,8 @@ namespace BettingShop.DataLayer.DB
                 {
                     Id = Guid.Parse(reader["id"].ToString()),
                     Balance = reader.GetInt32(1),
-                    ParticipateBetsId = reader["event-id"].ToString()
+                    ParticipateBetsId = reader["participate-bets-id"].ToString(),
+                    TelegramId = reader.GetInt64(3)
                 });
             }
             return users.ToArray();
