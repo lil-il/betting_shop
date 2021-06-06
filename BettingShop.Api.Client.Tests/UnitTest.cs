@@ -44,6 +44,7 @@ namespace BettingShop.Api.Client.Tests
             var client = new UserClient("http://localhost:27254");
             var unknownUser = await client.GetByTelegramIdAsync(3);
             var createdUser = await client.CreateAsync(new UserMeta { Balance = 1000, ParticipateBetsId = "ldncs", TelegramId = 1});
+            var secondUnknownUser = await client.GetByTelegramIdAsync(3);
             var userWithNewBet = await client.AddParticipateBetId(1, "klsnff");
             var allUsers = await client.GetAllAsync();
             var anotherCreatedUser = await client.CreateAsync(new UserMeta { Balance = 0, ParticipateBetsId = "klkdnsn", TelegramId = 2});

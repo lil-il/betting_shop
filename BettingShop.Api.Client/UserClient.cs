@@ -61,7 +61,7 @@ namespace BettingShop.Api.Client
             var users = JsonConvert.DeserializeObject<List<User>>(await httpResponse.Content.ReadAsStringAsync());
             if (users.Count == 0)
                 return new User() {Balance = 0, Id = new Guid(), ParticipateBetsId = "", TelegramId = -1};
-            return users.First(t => t.TelegramId == telegramId) == null ? 
+            return users.FirstOrDefault(t => t.TelegramId == telegramId) == null ? 
                 new User() { Balance = 0, Id = new Guid(), ParticipateBetsId = "", TelegramId = -1 } : users.First(t => t.TelegramId == telegramId);
         }
 
