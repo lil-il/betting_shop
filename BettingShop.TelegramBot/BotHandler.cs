@@ -48,7 +48,7 @@ namespace BettingShop.TelegramBot
             {
                 if (!commandTypeService.TryGetCurrentCommandType(userRequest.User, out var commandType))
                 {
-                    var executor = new HelpExecutor(botClient);
+                    var executor = new SimpleMessageExecutor(botClient);
                     executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
                 }
                 else

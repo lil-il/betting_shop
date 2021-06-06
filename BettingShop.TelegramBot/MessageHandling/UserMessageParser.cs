@@ -18,9 +18,13 @@ namespace BettingShop.TelegramBot.MessageHandling
                 if (firstSpaceIndex > 0)
                 {
                     result.Command = result.Command.Substring(0, firstSpaceIndex);
+                    result.Tail = message.Substring(firstSpaceIndex + 1);
                 }
-                
-                result.Tail = message.Substring(firstSpaceIndex + 1);
+                else
+                {
+                    result.Tail = "";
+                }
+
                 return result;
             }
 
