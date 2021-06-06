@@ -37,7 +37,10 @@ namespace BettingShop.TelegramBot
         public void OnMessageHandler(object sender, MessageEventArgs e)
         {
             if (e.Message.Type != MessageType.Text)
+            {
                 return;
+            }
+
             var userRequest = parser.ParseMessage(e.Message.Text);
             userRequest.User = new TelegramUser(e.Message.From.Id);
             userRequest.TelegramMessage = e.Message;

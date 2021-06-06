@@ -47,15 +47,12 @@ namespace BettingShop.DataLayer.DB
                     Outcome = reader["outcome"].ToString()
                 });
             }
-
-            var x = 4;
             return bets.ToArray();
         }
 
         public Bet DeserializeOneBet(SQLiteDataReader reader)
         {
             var res = DeserializeAllBets(reader)[0];
-            var a = 2;
             return res;
         }
 
