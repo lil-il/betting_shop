@@ -36,9 +36,9 @@ namespace BettingShop.DataLayer.DB
                 connection);
         }
 
-        public static SQLiteCommand BuildGetByIdCommand(Guid id, SQLiteConnection connection)
+        public static SQLiteCommand BuildGetByIdCommand(Guid id, SQLiteConnection connection, string tablename)
         {
-            return new SQLiteCommand(string.Format("SELECT * FROM events WHERE id = '{0}'", id.ToString()), connection);
+            return new SQLiteCommand(string.Format("SELECT * FROM {0} WHERE id = '{1}'", tablename, id.ToString()), connection);
         }
 
         public static SQLiteCommand BuildCreateEventCommand(BetEvent betEvent, SQLiteConnection connection)
