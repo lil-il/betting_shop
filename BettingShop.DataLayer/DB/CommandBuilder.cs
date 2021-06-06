@@ -11,9 +11,10 @@ namespace BettingShop.DataLayer.DB
 {
     static class CommandBuilder
     {
-        public static SQLiteCommand BuildGetAllCommand(string table, SQLiteConnection connection)
+
+        public static SQLiteCommand BuildGetAllCommand(string tablename, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("SELECT * from {0}", table), connection);
+            return new SQLiteCommand(string.Format("SELECT * from {0}", tablename), connection);
         }
 
         public static SQLiteCommand CreateEventTable(SQLiteConnection connection)
@@ -32,7 +33,7 @@ namespace BettingShop.DataLayer.DB
         public static SQLiteCommand CreateUserTable(SQLiteConnection connection)
         {
             return new SQLiteCommand(
-                "CREATE TABLE IF NOT EXISTS [users] ([id] NVARCHAR(32), [balance] INTEGER, [participate-bets-id] NVARCHAR(1024))",
+                "CREATE TABLE IF NOT EXISTS [users] ([id] NVARCHAR(32), [balance] INTEGER, [participate-bets-id] NVARCHAR(1024), [telegram-id] INTEGER)",
                 connection);
         }
 
@@ -55,8 +56,8 @@ namespace BettingShop.DataLayer.DB
 
         public static SQLiteCommand BuildCreateUserCommand(User user, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("INSERT INTO users VALUES('{0}', {1}, '{2}')", user.Id.ToString(),
-                user.Balance, user.ParticipateBetsId), connection);
+            return new SQLiteCommand(string.Format("INSERT INTO users VALUES('{0}', {1}, '{2}', {3})", user.Id.ToString(),
+                user.Balance, user.ParticipateBetsId, user.TelegramId), connection);
         }
 
         public static SQLiteCommand BuildDeleteCommand(Guid id, SQLiteConnection connection, string tablename)
@@ -79,8 +80,8 @@ namespace BettingShop.DataLayer.DB
 
         public static SQLiteCommand BuildUpdateUserCommand(User user, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("UPDATE users SET balance = {0}, participate-bets-id = '{1}',  WHERE id = '{2}'",
-                user.Balance, user.ParticipateBetsId.ToString(), user.Id), connection);
+            return new SQLiteCommand(string.Format("UPDATE users SET balance = {0}, participate-bets-id = '{1}' telegram-id = {2},  WHERE id = '{3}'",
+                user.Balance, user.ParticipateBetsId.ToString(), user.TelegramId, user.Id), connection);
         }
 
         public static SQLiteCommand DeleteTable(SQLiteConnection connection, string tablename)

@@ -10,6 +10,9 @@ namespace BettingShop.DataLayer.Models
     public class UserMeta
     {
         [Required]
+        public int TelegramId { get; set; }
+
+        [Required]
         public int Balance { get; set; }
 
         [Required]

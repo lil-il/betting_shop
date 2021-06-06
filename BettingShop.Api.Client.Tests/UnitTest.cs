@@ -12,11 +12,11 @@ namespace BettingShop.Api.Client.Tests
         public async Task CRUD_BetEvent_Test()
         {
             var client = new BetEventClient("http://localhost:27254");
-            var createdEvent = await client.CreateAsync(new BetEventMeta { Name = "Alex", BetDeadline = DateTime.Now, Outcomes = "yes, no", Description = "123" });
+            var createdEvent = await client.CreateAsync(new BetEventMeta { Name = "Alex", BetDeadline = DateTime.Now, Outcomes = "kdsmd" });
             var allEvents = await client.GetAllAsync();
-            var anotherCreatedEvent = await client.CreateAsync(new BetEventMeta { Name = "Steven", BetDeadline = DateTime.Now, Outcomes = "no" });
+            var anotherCreatedEvent = await client.CreateAsync(new BetEventMeta { Name = "Steven", BetDeadline = DateTime.Now, Outcomes = "ksmck" });
             var updatedEvent = await client.UpdateAsync(new Models.BetEvent
-            { Id = createdEvent.Id, Name = "Sam", Description = "Apple", BetDeadline = DateTime.Now, Outcomes = "1, 2 ,3" });
+            { Id = createdEvent.Id, Name = "Sam", Description = "Apple", BetDeadline = DateTime.Now, Outcomes = "ksdn" });
             var newEvent = await client.GetAsync(updatedEvent.Id);
             var deletedEvent = await client.DeleteAsync(newEvent.Id);
             var allEventsAfterDeletion = await client.GetAllAsync();
@@ -42,12 +42,15 @@ namespace BettingShop.Api.Client.Tests
         public async Task CRUD_User_Test()
         {
             var client = new UserClient("http://localhost:27254");
-            var createdUser = await client.CreateAsync(new UserMeta { Balance = 1000 });
+            var unknownUser = await client.GetByTelegramIdAsync(3);
+            var createdUser = await client.CreateAsync(new UserMeta { Balance = 1000, ParticipateBetsId = "ldncs", TelegramId = 1 });
+            var userWithNewBet = await client.AddParticipateBetId(1, "klsnff");
             var allUsers = await client.GetAllAsync();
-            var anotherCreatedUser = await client.CreateAsync(new UserMeta { Balance = 0 });
+            var anotherCreatedUser = await client.CreateAsync(new UserMeta { Balance = 0, ParticipateBetsId = "klkdnsn", TelegramId = 2 });
             var updatedUser = await client.UpdateAsync(new User
-            { Id = createdUser.Id, Balance = 900 });
+            { Id = createdUser.Id, Balance = 900, ParticipateBetsId = "mdmckndfr", TelegramId = 1 });
             var newUser = await client.GetAsync(updatedUser.Id);
+            var userBiTelegramId = await client.GetByTelegramIdAsync(2);
             var deletedUser = await client.DeleteAsync(newUser.Id);
             var allUsersAfterDeletion = await client.GetAllAsync();
             Console.WriteLine(allUsersAfterDeletion);
