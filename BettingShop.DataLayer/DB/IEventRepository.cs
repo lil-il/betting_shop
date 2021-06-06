@@ -8,7 +8,7 @@ namespace BettingShop.DataLayer.DB
 {
     public interface IEventRepository
     {
-        Task<BetEvent[]> GetAllAsync();
+        Task<List<BetEvent>> GetAllAsync();
         Task<BetEvent> GetByIdAsync(Guid EventId);
         Task<BetEvent> CreateAsync(BetEvent Event);
 

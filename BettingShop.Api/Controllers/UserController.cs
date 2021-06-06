@@ -6,11 +6,11 @@ using AutoMapper;
 using BettingShop.DataLayer.Models;
 using BettingShop.DataLayer.DB;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace BettingShop.Api.Controllers
 {
-    [Route("api/User")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -27,7 +27,7 @@ namespace BettingShop.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client.Models.User>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<Client.Models.User>>(await repo.GetAllAsync()).ToList());
+            return new(mapper.Map<IEnumerable<Client.Models.User>>((await repo.GetAllAsync())));
         }
 
         // GET: api/Users/5

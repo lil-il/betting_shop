@@ -11,7 +11,7 @@ namespace BettingShop.DataLayer.DB
 {
     public class Deserializer : IDeserializer
     {
-        public BetEvent[] DeserializeAllEvents(SQLiteDataReader reader)
+        public List<BetEvent> DeserializeAllEvents(SQLiteDataReader reader)
         {
             var events = new List<BetEvent>();
             while (reader.Read())
@@ -25,15 +25,15 @@ namespace BettingShop.DataLayer.DB
                     Outcomes = reader["outcomes"].ToString()
                 });
             }
-            return events.ToArray();
+            return events;
         }
 
         public BetEvent DeserializeOneEvent(SQLiteDataReader reader)
         {
-            return DeserializeAllEvents(reader)[0];
+            return DeserializeAllEvents(reader).FirstOrDefault();
         }
 
-        public Bet[] DeserializeAllBets(SQLiteDataReader reader)
+        public List<Bet> DeserializeAllBets(SQLiteDataReader reader)
         {
             var bets = new List<Bet>();
             while (reader.Read())
@@ -47,16 +47,15 @@ namespace BettingShop.DataLayer.DB
                     Outcome = reader["outcome"].ToString()
                 });
             }
-            return bets.ToArray();
+            return bets;
         }
 
         public Bet DeserializeOneBet(SQLiteDataReader reader)
         {
-            var res = DeserializeAllBets(reader)[0];
-            return res;
+            return DeserializeAllBets(reader).FirstOrDefault();
         }
 
-        public User[] DeserializeAllUsers(SQLiteDataReader reader)
+        public List<User> DeserializeAllUsers(SQLiteDataReader reader)
         {
             var users = new List<User>();
             while (reader.Read())
@@ -69,12 +68,12 @@ namespace BettingShop.DataLayer.DB
                     TelegramId = reader.GetInt64(3)
                 });
             }
-            return users.ToArray();
+            return users;
         }
 
         public User DeserializeOneUser(SQLiteDataReader reader)
         {
-            return DeserializeAllUsers(reader)[0];
+            return DeserializeAllUsers(reader).FirstOrDefault();
         }
     }
 }
