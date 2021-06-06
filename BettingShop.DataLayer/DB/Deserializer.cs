@@ -41,21 +41,18 @@ namespace BettingShop.DataLayer.DB
                 bets.Add(new Bet
                 {
                     Id = Guid.Parse(reader["id"].ToString()),
-                    BetSize = (int)reader["bet"],
+                    BetSize = reader.GetInt32(1),
                     EventId = Guid.Parse(reader["event-id"].ToString()),
                     UserId = Guid.Parse(reader["user-id"].ToString()),
                     Outcome = reader["outcome"].ToString()
                 });
             }
-
-            var x = 4;
             return bets.ToArray();
         }
 
         public Bet DeserializeOneBet(SQLiteDataReader reader)
         {
             var res = DeserializeAllBets(reader)[0];
-            var a = 2;
             return res;
         }
 
@@ -67,7 +64,7 @@ namespace BettingShop.DataLayer.DB
                 users.Add(new User
                 {
                     Id = Guid.Parse(reader["id"].ToString()),
-                    Balance = (int)reader["balance"],
+                    Balance = reader.GetInt32(1),
                     ParticipateBetsId = reader["event-id"].ToString()
                 });
             }
