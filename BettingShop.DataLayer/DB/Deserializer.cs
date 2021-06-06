@@ -42,8 +42,8 @@ namespace BettingShop.DataLayer.DB
                 {
                     Id = Guid.Parse(reader["id"].ToString()),
                     BetSize = reader.GetInt32(1),
-                    EventId = Guid.Parse(reader["event-id"].ToString()),
-                    UserId = Guid.Parse(reader["user-id"].ToString()),
+                    EventId = Guid.Parse(reader["event_id"].ToString()),
+                    UserId = Guid.Parse(reader["user_id"].ToString()),
                     Outcome = reader["outcome"].ToString()
                 });
             }
@@ -65,7 +65,8 @@ namespace BettingShop.DataLayer.DB
                 {
                     Id = Guid.Parse(reader["id"].ToString()),
                     Balance = reader.GetInt32(1),
-                    ParticipateBetsId = reader["event-id"].ToString()
+                    ParticipateBetsId = reader["participate_bets_id"].ToString(),
+                    TelegramId = reader.GetInt64(3)
                 });
             }
             return users.ToArray();

@@ -55,7 +55,7 @@ namespace BettingShop.Api.Controllers
         {
             var newUserMeta = mapper.Map<UserMeta>(userForCreating);
             var newUser = mapper.Map<User>(newUserMeta);
-            var createdEvent = await repo.CreateAsync(newUser);
+            var createdUser = await repo.CreateAsync(newUser);
             return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, mapper.Map<Client.Models.User>(newUser));
         }
 
