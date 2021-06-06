@@ -9,7 +9,7 @@ namespace BettingShop.DataLayer.DB
 {
     public interface IUserRepository
     {
-        Task<User[]> GetAllAsync();
+        Task<List<User>> GetAllAsync();
         Task<User> GetByIdAsync(Guid userId);
         Task<User> CreateAsync(User user);
 

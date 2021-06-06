@@ -9,7 +9,7 @@ namespace BettingShop.DataLayer.DB
 {
     public interface IBetRepository
     {
-        Task<Bet[]> GetAllAsync();
+        Task<List<Bet>> GetAllAsync();
         Task<Bet> GetByIdAsync(Guid betId);
         Task<Bet> CreateAsync(Bet bet);
 

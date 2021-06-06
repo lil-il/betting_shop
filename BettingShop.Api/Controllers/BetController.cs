@@ -44,7 +44,7 @@ namespace BettingShop.Api.Controllers
         {
             var betModelForUpdating = mapper.Map<BettingShop.DataLayer.Models.Bet>(betForUpdating);
             if (id != betModelForUpdating.Id) return BadRequest();
-            var updatedEvent = await repo.UpdateAsync(betModelForUpdating);
+            var updatedBet = await repo.UpdateAsync(betModelForUpdating);
             return NoContent();
         }
 

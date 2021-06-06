@@ -40,7 +40,7 @@ namespace BettingShop.DataLayer.DB
             command.ExecuteNonQuery();
         }
 
-        public async Task<Bet[]> GetAllAsync()
+        public async Task<List<Bet>> GetAllAsync()
         {
             var events = new List<BetEvent>();
             var command = CommandBuilder.BuildGetAllCommand("bets", connection);
