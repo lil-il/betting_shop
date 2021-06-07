@@ -20,7 +20,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
         public async Task ExecuteAsync(UserMessage message)
         {
             var userClient = new UserClient("http://localhost:27254");
-            await userClient.CreateAsync(new UserMeta { Balance = 1000, TelegramId = 12, ParticipateBetsId = "0" });
             var allUsers = await userClient.GetAllAsync();
             var usersTgId = allUsers.Select(user => user.TelegramId.ToString()).ToList();
             if (usersTgId.Contains(message.TelegramMessage.From.Id.ToString()))
