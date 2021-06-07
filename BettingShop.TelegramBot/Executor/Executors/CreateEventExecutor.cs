@@ -62,10 +62,16 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         if (!DateTime.TryParse(message.Tail, out date))
                         {
                             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                $"Введите существующее время");
+                                $"Введите существующую дату");
                             break;
                         }
 
+                        if (date < DateTime.Now)
+                        {
+                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                                $"Введите дату в будущем");
+                            break;
+                        }
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Напишите описание своего события, если не хотите, поставьте \"-\"");
                         stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Description, Name = createState.Name, Outcomes = createState.Outcomes, Deadline = date });

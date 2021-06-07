@@ -8,7 +8,6 @@ using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using LightInject;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using Newtonsoft.Json;
 using Telegram.Bot;
 

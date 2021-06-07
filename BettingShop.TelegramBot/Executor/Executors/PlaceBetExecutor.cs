@@ -76,7 +76,8 @@ namespace BettingShop.TelegramBot.Executor.Executors
                                 "Вы ввели некорректный размер ставки, размер ставки не должен превышать ваш баланс");
                             break;
                         }
-                        await betClient.CreateAsync(new BetMeta { BetSize = betAmount, EventId = betState.EventId, UserId = user.Id, Outcome = betState.Outcome });//поправить юзер айди
+                        var bet = await betClient.CreateAsync(new BetMeta { BetSize = betAmount, EventId = betState.EventId, UserId = user.Id, Outcome = betState.Outcome });//поправить юзер айди
+                        await userClient.AddParticipateBetId(message.TelegramMessage.From.Id, bet.Id.ToString());
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Ваша ставка сохранена");
                         stateService.DeleteState(message.User);
