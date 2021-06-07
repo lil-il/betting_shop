@@ -70,7 +70,7 @@ namespace BettingShop.TelegramBot
             container.Register<IExecutor<SimpleMessageCommandType>, SimpleMessageExecutor>();
             container.Register<IExecutor<StartCommandType>, StartExecutor>();
             container.Register<CreateEventExecutor>();
-            container.RegisterSingleton<PlaceBetExecutor>();
+            container.Register<PlaceBetExecutor>();
             container.Register<ProfileInfoExecutor>();
             container.Register<UnknownCommandExecutor>();
             container.Register<HelpExecutor>();

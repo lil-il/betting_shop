@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 
 namespace BettingShop.TelegramBot.Command.Commands
 {
@@ -13,5 +14,6 @@ namespace BettingShop.TelegramBot.Command.Commands
         public PlaceBetState State { get; set; }
         public Guid EventId { get; set; }
         public string Outcome { get; set; }
+        public ConcurrentDictionary<int, Guid> IdDictionary { get; set; }
     }
 }
