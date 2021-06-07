@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,6 +102,8 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 var allEventsString = new StringBuilder();
                 var i = 1;
                 var dictionary = new ConcurrentDictionary<int, Guid>();
+                var overduedEvents = allEvents.Where(oneEvent => oneEvent.BetDeadline < DateTime.Now).ToList();
+                allEvents = allEvents.Where(val => !overduedEvents.Contains(val)).ToArray();
                 if (allEvents.Length == 0)
                 {
                     await client.SendTextMessageAsync(message.TelegramMessage.Chat,
@@ -109,6 +112,8 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 }
                 foreach (var oneEvent in allEvents)
                 {
+                    if (oneEvent.BetDeadline < DateTime.Now)
+                        continue;
                     dictionary[i] = oneEvent.Id;
                     allEventsString.Append($"{i} - {oneEvent.Name}\n" +
                                            $"Исходы: \n" +
