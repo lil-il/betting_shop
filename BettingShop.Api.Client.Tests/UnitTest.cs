@@ -42,12 +42,12 @@ namespace BettingShop.Api.Client.Tests
         public async Task CRUD_User_Test()
         {
             var client = new UserClient("http://localhost:27254");
-            var unknownUser = await client.GetByTelegramIdAsync(3);
             var createdUser = await client.CreateAsync(new UserMeta { Balance = 1000, TelegramId = 1 });
             var allUsers = await client.GetAllAsync();
             var anotherCreatedUser = await client.CreateAsync(new UserMeta { Balance = 0,  TelegramId = 2 });
             var updatedUser = await client.UpdateAsync(new User
             { Id = createdUser.Id, Balance = 900, TelegramId = 1 });
+            var unknownUser = await client.GetByTelegramIdAsync(2);
             var newUser = await client.GetAsync(updatedUser.Id);
             var userBiTelegramId = await client.GetByTelegramIdAsync(2);
             var deletedUser = await client.DeleteAsync(newUser.Id);
