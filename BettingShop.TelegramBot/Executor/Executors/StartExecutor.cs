@@ -28,7 +28,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                     "Ты уже зарегистрирован");
                 return;
             }
-            await userClient.CreateAsync(new UserMeta { Balance = 1000, TelegramId = message.TelegramMessage.From.Id, ParticipateBetsId = "|" });
+            await userClient.CreateAsync(new UserMeta { Balance = 1000, TelegramId = message.TelegramMessage.From.Id });
             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                 "Круто, что ты теперь с нами, можешь ввести /help, чтобы узнать, что я умею");
         }

@@ -27,7 +27,7 @@ namespace BettingShop.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client.Models.User>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<Client.Models.User>>((await repo.GetAllAsync())));
+            return new(mapper.Map<IEnumerable<Client.Models.User>>((await repo.GetAllAsync()).ToArray()));
         }
 
         // GET: api/Users/5

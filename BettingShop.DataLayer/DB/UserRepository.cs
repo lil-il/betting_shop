@@ -42,7 +42,7 @@ namespace BettingShop.DataLayer.DB
 
         public async Task<List<User>> GetAllAsync()
         {
-            var events = new List<BetEvent>();
+            var users = new List<User>();
             var command = CommandBuilder.BuildGetAllCommand("users", connection);
             var reader = command.ExecuteReader();
             return deserializer.DeserializeAllUsers(reader);

@@ -35,7 +35,13 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 {
                     case PlaceBetState.EventNumber:
                         var allEvents = await eventClient.GetAllAsync();
-                        var chosenEventNumber = int.Parse(message.Tail);
+                        int chosenEventNumber;
+                        if (!Int32.TryParse(message.Tail, out chosenEventNumber))
+                        {
+                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                                "вводи цифры долбаеб");
+                            break;
+                        }
                         if (chosenEventNumber < 1 || chosenEventNumber > allEvents.Length)
                         {
                             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
@@ -67,7 +73,13 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         stateService.SaveState(message.User, new PlaceBetCommandState(){ State = PlaceBetState.BetAmount, EventId = betState.EventId, Outcome = chosenOutcome});
                         break;
                     case PlaceBetState.BetAmount:
-                        var betAmount = Int16.Parse(message.Tail);
+                        int betAmount;
+                        if (!Int32.TryParse(message.Tail, out betAmount))
+                        {
+                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                                "вводи цифры долбаеб");
+                            break;
+                        }
                         var user = await userClient.GetByTelegramIdAsync(message.TelegramMessage.From.Id);
                         var balance = user.Balance;
                         if (betAmount < 1 || balance < betAmount)
@@ -77,7 +89,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
                             break;
                         }
                         var bet = await betClient.CreateAsync(new BetMeta { BetSize = betAmount, EventId = betState.EventId, UserId = user.Id, Outcome = betState.Outcome });//поправить юзер айди
-                        await userClient.AddParticipateBetId(message.TelegramMessage.From.Id, bet.Id.ToString());
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Ваша ставка сохранена");
                         stateService.DeleteState(message.User);

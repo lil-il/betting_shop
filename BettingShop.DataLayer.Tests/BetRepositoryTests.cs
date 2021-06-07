@@ -55,7 +55,7 @@ namespace BettingShop.DataLayer.Tests
         public async Task GetAllTest()
         {
             var repo = new BetRepository(new Deserializer());
-            var lengthBefore = (await repo.GetAllAsync()).Length;
+            var lengthBefore = (await repo.GetAllAsync()).Count;
             var bet1 = new Bet
             { Id = Guid.NewGuid(), BetSize = 7, UserId = Guid.NewGuid(), EventId = Guid.NewGuid(), Outcome = "outcome3" };
             await repo.CreateAsync(bet1);
@@ -68,7 +68,7 @@ namespace BettingShop.DataLayer.Tests
             { Id = Guid.NewGuid(), BetSize = 12, UserId = Guid.NewGuid(), EventId = Guid.NewGuid(), Outcome = "outcome3" };
             await repo.CreateAsync(bet3);
             var events = await repo.GetAllAsync();
-            Assert.AreEqual(lengthBefore + 3, events.Length);
+            Assert.AreEqual(lengthBefore + 3, events.Count);
         }
     }
 }
