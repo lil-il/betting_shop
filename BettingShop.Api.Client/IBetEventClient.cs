@@ -20,5 +20,7 @@ namespace BettingShop.Api.Client
         Task<Models.BetEvent[]> GetAllAsync();
 
         Task<Models.BetEvent> UpdateAsync(Models.BetEvent betEvent);
+
+        Task<Models.BetEvent> CloseEventAsync(Guid id, string winOutcome);
     }
 }

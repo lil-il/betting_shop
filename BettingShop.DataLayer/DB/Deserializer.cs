@@ -22,7 +22,8 @@ namespace BettingShop.DataLayer.DB
                     Name = reader["name"].ToString(),
                     Description = reader["description"].ToString(),
                     BetDeadline = DateTime.Parse(reader["betdeadline"].ToString()),
-                    Outcomes = reader["outcomes"].ToString()
+                    Outcomes = reader["outcomes"].ToString(),
+                    CreatorId = reader.GetInt64(5)
                 });
             }
             return events;

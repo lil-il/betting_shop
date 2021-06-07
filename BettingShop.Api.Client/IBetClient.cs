@@ -17,5 +17,9 @@ namespace BettingShop.Api.Client
         Task<Bet> UpdateAsync(Bet bet);
 
         Task<Bet[]> AllBetsForUserAsync(int telegramId);
+
+        Task<Bet[]> AllWinBetsForBetEventAsync(Guid betEventId, string winOutcome);
+
+        Task<int> SumOfMoneyForEvent(Guid betEventId);
     }
 }
