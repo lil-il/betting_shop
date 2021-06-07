@@ -32,7 +32,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 switch (closeState.State)
                 {
                     case CloseEventState.EventChoosing:
-                        var allEvents = await eventClient.(message.TelegramMessage.From.Id);
+                        var allEvents = await eventClient.GetAllEventsFromCreatorAsync(message.TelegramMessage.From.Id);
                         int chosenEventNumber;
                         if (!Int32.TryParse(message.Tail, out chosenEventNumber))
                         {
@@ -54,7 +54,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                             $"Описание: {chosenEvent.Description}\n" +
                             $"----------------\n" +
                             $" Выберите произошедший исход");
-                        stateService.SaveState(message.User, new CloseEventCommandState() { State = CloseEventState.EventChoosing, ChosenEventId = chosenEvent.Id});
+                        stateService.SaveState(message.User, new CloseEventCommandState() { State = CloseEventState.WinningOutcome, ChosenEventId = chosenEvent.Id});
                         break;
                     case CloseEventState.WinningOutcome:
                         var chosenOutcome = message.Tail;
@@ -75,10 +75,16 @@ namespace BettingShop.TelegramBot.Executor.Executors
             }
             else
             {
-                var allEvents = await eventClient.(message.TelegramMessage.From.Id);
+                var allEvents = await eventClient.GetAllEventsFromCreatorAsync(message.TelegramMessage.From.Id);
                 var allEventsString = new StringBuilder();
                 var i = 1;
                 var dictionary = new ConcurrentDictionary<int, Guid>();
+                if (allEvents.Length == 0)
+                {
+                    await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                        $"Событий пока нет, чтобы предложить свое событие, напиши /createevent");
+                    return;
+                }
                 foreach (var oneEvent in allEvents)
                 {
                     dictionary[i] = oneEvent.Id;

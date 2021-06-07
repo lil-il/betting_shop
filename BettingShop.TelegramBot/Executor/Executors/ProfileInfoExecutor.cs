@@ -22,6 +22,11 @@ namespace BettingShop.TelegramBot.Executor.Executors
             var betClient = new BetClient("http://localhost:27254");
             var userClient = new UserClient("http://localhost:27254");
             var myUser = await userClient.GetByTelegramIdAsync(message.TelegramMessage.From.Id);
+            if (myUser == null)
+            {
+                await client.SendTextMessageAsync(message.TelegramMessage.Chat, "Ты еще не зарегистрирован, введи /start, чтобы это сделать");
+                return;
+            }
             var userBets = await betClient.AllBetsForUserAsync(message.TelegramMessage.From.Id);
             var outputMessage = new StringBuilder();
             outputMessage.Append($"Информация о профиле:\n" +

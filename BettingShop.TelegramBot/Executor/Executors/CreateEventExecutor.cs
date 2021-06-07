@@ -83,7 +83,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                             stateService.SaveState(message.User, new CreateEventCommandState() { State = CreateEventState.Name });
                             break;
                         }
-                        await eventClient.CreateAsync(new BetEventMeta { Name = createState.Name, BetDeadline = createState.Deadline, Outcomes = createState.Outcomes, Description = message.Tail });
+                        await eventClient.CreateAsync(new BetEventMeta { Name = createState.Name, BetDeadline = createState.Deadline, Outcomes = createState.Outcomes, Description = message.Tail, CreatorId = message.TelegramMessage.From.Id });
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Ваше событие сохранено");
                         stateService.DeleteState(message.User);

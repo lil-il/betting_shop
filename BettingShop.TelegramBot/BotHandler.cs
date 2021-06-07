@@ -1,4 +1,5 @@
-﻿using BettingShop.TelegramBot.Executor.Executors;
+﻿using BettingShop.TelegramBot.Executor;
+using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using Telegram.Bot;
@@ -13,13 +14,15 @@ namespace BettingShop.TelegramBot
         private readonly UserMessageParser parser;
         private readonly ExecutorsFactory executorsFactory;
         private readonly IUserCommandTypeService commandTypeService;
+        private readonly IUserCommandStateService commandStateService;
         private readonly CommandParser commandParser;
-        public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService, CommandParser commandParser)
+        public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService, IUserCommandStateService stateService, CommandParser commandParser)
         {
             this.botClient = botClient;
             this.executorsFactory = factory;
             this.parser = parser;
             this.commandTypeService = typeService;
+            this.commandStateService = stateService;
             this.commandParser = commandParser;
         }
 
@@ -59,8 +62,14 @@ namespace BettingShop.TelegramBot
             }
             else
             {
+                IExecutor executor;
+                if (userRequest.Command == "back")
+                {
+                    executor = new BackExecutor(botClient, commandStateService);
+                    executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
+                }
                 var commandType = commandParser.ParseCommandType(userRequest.Command);
-                var executor = executorsFactory.GetExecutor(commandType);
+                executor = executorsFactory.GetExecutor(commandType);
                 executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
             }
         }

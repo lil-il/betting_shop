@@ -38,7 +38,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         if (!Int32.TryParse(message.Tail, out chosenEventNumber))
                         {
                             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "вводи цифры долбаеб");
+                                "введите, пожалуйста, номер цифрами");
                             break;
                         }
                         if (chosenEventNumber < 1 || chosenEventNumber > allEvents.Length)
@@ -50,7 +50,8 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         var chosenEvent = await eventClient.GetAsync((betState.IdDictionary[chosenEventNumber]));
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Событие {chosenEventNumber}  - {chosenEvent.Name}\n" +
-                            $"Исходы: {chosenEvent.Outcomes}\n" +
+                            $"Исходы:\n" +
+                            $" {chosenEvent.Outcomes}\n" +
                             $"Дедлайн: {chosenEvent.BetDeadline}\n" +
                             $"Описание: {chosenEvent.Description}\n" +
                             $"----------------\n" +
@@ -76,7 +77,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         if (!Int32.TryParse(message.Tail, out betAmount))
                         {
                             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "вводи цифры долбаеб");
+                                "введите, пожалуйста, номер цифрами");
                             break;
                         }
                         var user = await userClient.GetByTelegramIdAsync(message.TelegramMessage.From.Id);
@@ -100,6 +101,12 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 var allEventsString = new StringBuilder();
                 var i = 1;
                 var dictionary = new ConcurrentDictionary<int, Guid>();
+                if (allEvents.Length == 0)
+                {
+                    await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                        $"Событий пока нет, чтобы предложить свое событие, напиши /createevent");
+                    return;
+                }
                 foreach (var oneEvent in allEvents)
                 {
                     dictionary[i] = oneEvent.Id;
