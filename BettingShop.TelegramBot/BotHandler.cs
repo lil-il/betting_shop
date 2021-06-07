@@ -68,9 +68,12 @@ namespace BettingShop.TelegramBot
                     executor = new BackExecutor(botClient, commandStateService);
                     executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
                 }
-                var commandType = commandParser.ParseCommandType(userRequest.Command);
-                executor = executorsFactory.GetExecutor(commandType);
-                executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
+                else
+                {
+                    var commandType = commandParser.ParseCommandType(userRequest.Command);
+                    executor = executorsFactory.GetExecutor(commandType);
+                    executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
+                }
             }
         }
 
