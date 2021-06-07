@@ -49,7 +49,8 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         var chosenEvent = await eventClient.GetAsync((closeState.IdDictionary[chosenEventNumber]));
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Событие {chosenEventNumber}  - {chosenEvent.Name}\n" +
-                            $"Исходы: {chosenEvent.Outcomes}\n" +
+                            $"Исходы:\n" +
+                            $"{chosenEvent.Outcomes}\n" +
                             $"Дедлайн: {chosenEvent.BetDeadline}\n" +
                             $"Описание: {chosenEvent.Description}\n" +
                             $"----------------\n" +
