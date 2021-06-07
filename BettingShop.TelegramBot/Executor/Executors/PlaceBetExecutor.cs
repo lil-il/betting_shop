@@ -15,7 +15,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
     {
         private readonly IUserCommandStateService stateService;
         private readonly ITelegramBotClient client;
-        private ConcurrentDictionary<int, Guid> idDictionary = new ConcurrentDictionary<int, Guid>();
 
         public PlaceBetExecutor(ITelegramBotClient botClient, IUserCommandStateService stateService)
         {
@@ -48,7 +47,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                                 "Введите, пожалуйста, существующий номер ставки");
                             break;
                         }
-                        var chosenEvent = await eventClient.GetAsync((idDictionary[chosenEventNumber]));
+                        var chosenEvent = await eventClient.GetAsync((betState.IdDictionary[chosenEventNumber]));
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Событие {chosenEventNumber}  - {chosenEvent.Name}\n" +
                             $"Исходы: {chosenEvent.Outcomes}\n" +
@@ -56,7 +55,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                             $"Описание: {chosenEvent.Description}\n" +
                             $"----------------\n" +
                             $" Введите исход, на которую вы хотите сделать ставку");
-                        stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.Outcome, EventId = chosenEvent.Id });
+                        stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.Outcome, EventId = chosenEvent.Id});
                         break;
                     case PlaceBetState.Outcome:
                         var chosenOutcome = message.Tail;
@@ -100,11 +99,13 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 var allEvents = await eventClient.GetAllAsync();
                 var allEventsString = new StringBuilder();
                 var i = 1;
+                var dictionary = new ConcurrentDictionary<int, Guid>();
                 foreach (var oneEvent in allEvents)
                 {
-                    idDictionary[i] = oneEvent.Id;
+                    dictionary[i] = oneEvent.Id;
                     allEventsString.Append($"{i} - {oneEvent.Name}\n" +
-                                           $"Исходы: {oneEvent.Outcomes}\n" +
+                                           $"Исходы: \n" +
+                                           $"{oneEvent.Outcomes}\n" +
                                            $"Дедлайн: {oneEvent.BetDeadline}\n" +
                                            $"Описание: {oneEvent.Description}\n" +
                                            $"----------------\n");
@@ -112,7 +113,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 }
                 await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                     $"{allEventsString.ToString()} \n Введите номер события, на которое хотите сделать ставку");
-                stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.EventNumber });
+                stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.EventNumber, IdDictionary = dictionary});
             }
         }
 

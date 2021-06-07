@@ -1,5 +1,4 @@
 ﻿using System;
-using BettingShop.Api.Client.Models;
 
 namespace BettingShop.TelegramBot.Command.Commands
 {
