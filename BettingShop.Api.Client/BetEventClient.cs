@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +53,26 @@ namespace BettingShop.Api.Client
             var httpResponse = await httpClient.PutAsync($"{_address}/api/BetEvent/{betEvent.Id.ToString()}", stringContent);
             httpResponse.EnsureSuccessStatusCode();
             return betEvent;
+        }
+
+        public async Task<BetEvent> CloseEventAsync(Guid id, string winOutcome)
+        {
+            var betClient = new BetClient(_address);
+            var userClient = new UserClient(_address);
+            var sumOfMoney = await betClient.SumOfMoneyForEvent(id);
+            var winners = new List<Bet>(await betClient.AllWinBetsForBetEventAsync(id, winOutcome)).Select(t => t.UserId).ToHashSet();
+            if (winners.Count != 0)
+            {
+                var gain = sumOfMoney / winners.Count;
+                foreach (var winner in winners)
+                {
+                    var winnerUser = await userClient.GetAsync(winner);
+                    winnerUser.Balance += gain;
+                    await userClient.UpdateAsync(winnerUser);
+                }
+            }
+            var eventForClosing = await DeleteAsync(id);
+            return eventForClosing;
         }
     }
 }

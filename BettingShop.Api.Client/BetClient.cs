@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace BettingShop.Api.Client
             var stringContent = new StringContent(betJson, Encoding.UTF8, "application/json");
             var httpResponse = await httpClient.PostAsync($"{_address}/api/Bet", stringContent);
             var newBet = JsonConvert.DeserializeObject<Bet>(await httpResponse.Content.ReadAsStringAsync());
-            var userClient = new UserClient("http://localhost:27254");
+            var userClient = new UserClient(_address);
             var user = await userClient.GetAsync(newBet.UserId);
             user.Balance -= newBet.BetSize;
             user = await userClient.UpdateAsync(user);
@@ -61,10 +62,25 @@ namespace BettingShop.Api.Client
 
         public async Task<Bet[]> AllBetsForUserAsync(int telegramId)
         {
-            var userClient = new UserClient("http://localhost:27254");
+            var userClient = new UserClient(_address);
             var user = await userClient.GetByTelegramIdAsync(telegramId);
             var allBets = await GetAllAsync();
             return new List<Bet>(allBets).FindAll(t => t.UserId == user.Id).ToArray();
+        }
+
+        public async Task<Bet[]> AllWinBetsForBetEventAsync(Guid betEventId, string winOutcome)
+        {
+            var betClient = new BetClient(_address);
+            var bets= await betClient.GetAllAsync();
+            return new List<Bet>(bets).FindAll(t => t.EventId == betEventId && t.Outcome == winOutcome).ToArray();
+        }
+
+        public async Task<int> SumOfMoneyForEvent(Guid betEventId)
+        {
+            var betClient = new BetClient(_address);
+            var bets = await betClient.GetAllAsync();
+            var betsForEvent = new List<Bet>(bets).FindAll(t => t.EventId == betEventId);
+            return betsForEvent.Select(t => t.BetSize).Sum();
         }
     }
 }
