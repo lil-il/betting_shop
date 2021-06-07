@@ -68,6 +68,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         }
 
                         await eventClient.CloseEventAsync(closeState.ChosenEventId, chosenOutcome);
+                        stateService.DeleteState(message.User);
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Событие успешно закрыто");
                         break;
