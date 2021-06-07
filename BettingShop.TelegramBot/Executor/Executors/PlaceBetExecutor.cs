@@ -15,6 +15,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
     {
         private readonly IUserCommandStateService stateService;
         private readonly ITelegramBotClient client;
+        private ConcurrentDictionary<int, Guid> idDictionary = new ConcurrentDictionary<int, Guid>();
 
         public PlaceBetExecutor(ITelegramBotClient botClient, IUserCommandStateService stateService)
         {
@@ -34,22 +35,28 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 {
                     case PlaceBetState.EventNumber:
                         var allEvents = await eventClient.GetAllAsync();
-                        var chosenEventNumber = int.Parse(message.Tail);
+                        int chosenEventNumber;
+                        if (!Int32.TryParse(message.Tail, out chosenEventNumber))
+                        {
+                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                                "вводи цифры долбаеб");
+                            break;
+                        }
                         if (chosenEventNumber < 1 || chosenEventNumber > allEvents.Length)
                         {
                             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                                 "Введите, пожалуйста, существующий номер ставки");
                             break;
                         }
-                        var chosenEvent = await eventClient.GetAsync((betState.IdDictionary[chosenEventNumber]));
-                        await client.SendTextMessageAsync(message.TelegramMessage.Chat, 
+                        var chosenEvent = await eventClient.GetAsync((idDictionary[chosenEventNumber]));
+                        await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             $"Событие {chosenEventNumber}  - {chosenEvent.Name}\n" +
                             $"Исходы: {chosenEvent.Outcomes}\n" +
                             $"Дедлайн: {chosenEvent.BetDeadline}\n" +
                             $"Описание: {chosenEvent.Description}\n" +
                             $"----------------\n" +
                             $" Введите исход, на которую вы хотите сделать ставку");
-                        stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.Outcome, EventId = chosenEvent.Id, IdDictionary = betState.IdDictionary});
+                        stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.Outcome, EventId = chosenEvent.Id });
                         break;
                     case PlaceBetState.Outcome:
                         var chosenOutcome = message.Tail;
@@ -63,10 +70,16 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         }
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                                 "Введите размер ставки");
-                        stateService.SaveState(message.User, new PlaceBetCommandState(){ State = PlaceBetState.BetAmount, EventId = betState.EventId, Outcome = chosenOutcome, IdDictionary = betState.IdDictionary });
+                        stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.BetAmount, EventId = betState.EventId, Outcome = chosenOutcome });
                         break;
                     case PlaceBetState.BetAmount:
-                        var betAmount = Int16.Parse(message.Tail);
+                        int betAmount;
+                        if (!Int32.TryParse(message.Tail, out betAmount))
+                        {
+                            await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                                "вводи цифры долбаеб");
+                            break;
+                        }
                         var user = await userClient.GetByTelegramIdAsync(message.TelegramMessage.From.Id);
                         var balance = user.Balance;
                         if (betAmount < 1 || balance < betAmount)
@@ -75,7 +88,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                                 "Вы ввели некорректный размер ставки, размер ставки не должен превышать ваш баланс");
                             break;
                         }
-                        var bet = await betClient.CreateAsync(new BetMeta { BetSize = betAmount, EventId = betState.EventId, UserId = user.Id, Outcome = betState.Outcome });
+                        var bet = await betClient.CreateAsync(new BetMeta { BetSize = betAmount, EventId = betState.EventId, UserId = user.Id, Outcome = betState.Outcome });//поправить юзер айди
                         await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                             "Ваша ставка сохранена");
                         stateService.DeleteState(message.User);
@@ -87,10 +100,9 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 var allEvents = await eventClient.GetAllAsync();
                 var allEventsString = new StringBuilder();
                 var i = 1;
-                var dictionary = new ConcurrentDictionary<int, Guid>();
                 foreach (var oneEvent in allEvents)
                 {
-                    dictionary[i] = oneEvent.Id;
+                    idDictionary[i] = oneEvent.Id;
                     allEventsString.Append($"{i} - {oneEvent.Name}\n" +
                                            $"Исходы: {oneEvent.Outcomes}\n" +
                                            $"Дедлайн: {oneEvent.BetDeadline}\n" +
@@ -100,7 +112,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 }
                 await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                     $"{allEventsString.ToString()} \n Введите номер события, на которое хотите сделать ставку");
-                stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.EventNumber, IdDictionary = dictionary});
+                stateService.SaveState(message.User, new PlaceBetCommandState() { State = PlaceBetState.EventNumber });
             }
         }
 
