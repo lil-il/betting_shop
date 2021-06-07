@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using BettingShop.Api.Client;
 using BettingShop.Api.Client.Models;
 using BettingShop.TelegramBot.Command.Commands;
@@ -19,7 +20,16 @@ namespace BettingShop.TelegramBot.Executor.Executors
         public async Task ExecuteAsync(UserMessage message)
         {
             var userClient = new UserClient("http://localhost:27254");
-            await userClient.CreateAsync(new UserMeta { Balance = 1000, TelegramId = message.TelegramMessage.From.Id, ParticipateBetsId = ""});
+            await userClient.CreateAsync(new UserMeta { Balance = 1000, TelegramId = 12, ParticipateBetsId = "0" });
+            var allUsers = await userClient.GetAllAsync();
+            var usersTgId = allUsers.Select(user => user.TelegramId.ToString()).ToList();
+            if (usersTgId.Contains(message.TelegramMessage.From.Id.ToString()))
+            {
+                await client.SendTextMessageAsync(message.TelegramMessage.Chat,
+                    "Ты уже зарегистрирован");
+                return;
+            }
+            await userClient.CreateAsync(new UserMeta { Balance = 1000, TelegramId = message.TelegramMessage.From.Id, ParticipateBetsId = "|" });
             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
                 "Круто, что ты теперь с нами, можешь ввести /help, чтобы узнать, что я умею");
         }
