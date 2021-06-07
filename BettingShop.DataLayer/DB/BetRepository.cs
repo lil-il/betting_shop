@@ -60,7 +60,6 @@ namespace BettingShop.DataLayer.DB
             var command = CommandBuilder.BuildCreateBetCommand(bet, connection);
             var reader = command.ExecuteReader();
             var res = await GetByIdAsync(bet.Id);
-            var a = 2;
             return res;
         }
 

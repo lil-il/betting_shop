@@ -20,7 +20,7 @@ namespace BettingShop.DataLayer.DB
         public static SQLiteCommand CreateEventTable(SQLiteConnection connection)
         {
             return new SQLiteCommand(
-                "CREATE TABLE IF NOT EXISTS [events] ([id] NVARCHAR(32), [name] NVARCHAR(150), [description] NVARCHAR(1024), [betdeadline] NVARCHAR(100), [outcomes] NVARCHAR(1024))", connection);
+                "CREATE TABLE IF NOT EXISTS [events] ([id] NVARCHAR(32), [name] NVARCHAR(150), [description] NVARCHAR(1024), [betdeadline] NVARCHAR(100), [outcomes] NVARCHAR(1024), [creator_id] INTEGER)", connection);
         }
 
         public static SQLiteCommand CreateBetTable(SQLiteConnection connection)
@@ -44,8 +44,8 @@ namespace BettingShop.DataLayer.DB
 
         public static SQLiteCommand BuildCreateEventCommand(BetEvent betEvent, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("INSERT INTO events VALUES('{0}', '{1}', '{2}', '{3}', '{4}')", betEvent.Id.ToString(),
-                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Outcomes), connection);
+            return new SQLiteCommand(string.Format("INSERT INTO events VALUES('{0}', '{1}', '{2}', '{3}', '{4}', {5})", betEvent.Id.ToString(),
+                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Outcomes, betEvent.CreatorId), connection);
         }
 
         public static SQLiteCommand BuildCreateBetCommand(Bet bet, SQLiteConnection connection)
@@ -68,8 +68,8 @@ namespace BettingShop.DataLayer.DB
 
         public static SQLiteCommand BuildUpdateEventCommand(BetEvent betEvent, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("UPDATE events SET name = '{0}', description = '{1}', betdeadline = '{2}', outcomes = '{3}' WHERE id = '{4}'",
-                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Outcomes, betEvent.Id.ToString()), connection);
+            return new SQLiteCommand(string.Format("UPDATE events SET name = '{0}', description = '{1}', betdeadline = '{2}', outcomes = '{3}', creator_id = {4} WHERE id = '{5}'",
+                betEvent.Name, betEvent.Description, betEvent.BetDeadline.ToString(), betEvent.Outcomes, betEvent.CreatorId, betEvent.Id.ToString()), connection);
         }
 
         public static SQLiteCommand BuildUpdateBetCommand(Bet bet, SQLiteConnection connection)

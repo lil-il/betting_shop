@@ -23,7 +23,7 @@ namespace BettingShop.DataLayer.Tests
         {
             var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent
-            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
+            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now, CreatorId = 235 };
             var createdEvent = await repo.CreateAsync(event1);
             Assert.AreEqual(event1.Id, createdEvent.Id);
         }
@@ -33,10 +33,10 @@ namespace BettingShop.DataLayer.Tests
         {
             var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent
-            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
+            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now, CreatorId = 134 };
             await repo.CreateAsync(event1);
             var event2 = new BetEvent
-            { Id = event1.Id, Name = "namenew", Description = "descnew", BetDeadline = DateTime.Now };
+            { Id = event1.Id, Name = "namenew", Description = "descnew", BetDeadline = DateTime.Now, CreatorId = event1.CreatorId };
             var updatedEvent = await repo.UpdateAsync(event2);
             Assert.AreEqual(updatedEvent.Id, event1.Id);
         }
@@ -46,7 +46,7 @@ namespace BettingShop.DataLayer.Tests
         {
             var repo = new EventRepository(new Deserializer());
             var event1 = new BetEvent
-            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
+            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now, CreatorId = 389 };
             await repo.CreateAsync(event1);
             await repo.DeleteAsync(event1.Id);
         }
@@ -57,15 +57,15 @@ namespace BettingShop.DataLayer.Tests
             var repo = new EventRepository(new Deserializer());
             var lengthBefore = (await repo.GetAllAsync()).Count;
             var event1 = new BetEvent
-            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now };
+            { Id = Guid.NewGuid(), Name = "name1", Description = "desc1", BetDeadline = DateTime.Now, CreatorId = 1000000 };
             await repo.CreateAsync(event1);
             Thread.Sleep(1000);
             var event2 = new BetEvent
-            { Id = Guid.NewGuid(), Name = "name2", Description = "desc2", BetDeadline = DateTime.Now };
+            { Id = Guid.NewGuid(), Name = "name2", Description = "desc2", BetDeadline = DateTime.Now, CreatorId = event1.CreatorId };
             await repo.CreateAsync(event2);
             Thread.Sleep(1000);
             var event3 = new BetEvent
-            { Id = Guid.NewGuid(), Name = "name3", Description = "desc3", BetDeadline = DateTime.Now };
+            { Id = Guid.NewGuid(), Name = "name3", Description = "desc3", BetDeadline = DateTime.Now, CreatorId = event1.CreatorId };
             await repo.CreateAsync(event3);
             var events = await repo.GetAllAsync();
             Assert.AreEqual(lengthBefore + 3, events.Count);

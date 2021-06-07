@@ -16,5 +16,8 @@ namespace BettingShop.DataLayer.Models
 
         [Required]
         public string Outcomes { get; set; }
+
+        [Required]
+        public long CreatorId { get; set; }
     }
 }
