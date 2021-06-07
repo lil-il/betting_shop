@@ -74,5 +74,11 @@ namespace BettingShop.Api.Client
             var eventForClosing = await DeleteAsync(id);
             return eventForClosing;
         }
+
+        public async Task<BetEvent[]> GetAllEventsFromCreatorAsync(long creatorId)
+        {
+            var events = await GetAllAsync();
+            return new List<BetEvent>(events).FindAll(t => t.CreatorId == creatorId).ToArray();
+        }
     }
 }
