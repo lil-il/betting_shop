@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +23,13 @@ namespace BettingShop.Api.Client
             var betJson = JsonConvert.SerializeObject(betMeta);
             var stringContent = new StringContent(betJson, Encoding.UTF8, "application/json");
             var httpResponse = await httpClient.PostAsync($"{_address}/api/Bet", stringContent);
+            var newBet = JsonConvert.DeserializeObject<Bet>(await httpResponse.Content.ReadAsStringAsync());
+            var userClient = new UserClient("http://localhost:27254");
+            var user = await userClient.GetAsync(newBet.UserId);
+            user.Balance -= newBet.BetSize;
+            user = await userClient.UpdateAsync(user);
             httpResponse.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<Bet>(await httpResponse.Content.ReadAsStringAsync());
+            return newBet;
         }
 
         public async Task<Bet> DeleteAsync(Guid id)
@@ -51,6 +57,14 @@ namespace BettingShop.Api.Client
             var httpResponse = await httpClient.PutAsync($"{_address}/api/Bet/{bet.Id}", stringContent);
             httpResponse.EnsureSuccessStatusCode();
             return bet;
+        }
+
+        public async Task<Bet[]> AllBetsForUserAsync(int telegramId)
+        {
+            var userClient = new UserClient("http://localhost:27254");
+            var user = await userClient.GetByTelegramIdAsync(telegramId);
+            var allBets = await GetAllAsync();
+            return new List<Bet>(allBets).FindAll(t => t.UserId == user.Id).ToArray();
         }
     }
 }
