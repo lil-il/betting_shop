@@ -39,6 +39,16 @@ namespace BettingShop.Api.Controllers
             return mapper.Map<Client.Models.User>(user);
         }
 
+        [HttpGet("{telegramId:int}")]
+        public async Task<ActionResult<Client.Models.User>> GetByTelegramId(int telegramId)
+        {
+            var users = mapper.Map<IEnumerable<Client.Models.User>>((await repo.GetAllAsync()).ToList()).ToList();
+            if (users.Count == 0) return NotFound();
+            var j = users.FirstOrDefault(t => t.TelegramId == telegramId);
+            return users.FirstOrDefault(t => t.TelegramId == telegramId) == null ?
+                NotFound() : users.FirstOrDefault(t => t.TelegramId == telegramId);
+        }
+
         // PUT: api/Users/5
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutUser(Guid id, Client.Models.User userForUpdating)

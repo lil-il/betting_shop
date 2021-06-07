@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,18 +29,21 @@ namespace BettingShop.Api.Client
         public async Task<User> DeleteAsync(Guid id)
         {
             var httpResponse = await httpClient.DeleteAsync($"{_address}/api/User/{id}");
+            httpResponse.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<User>(await httpResponse.Content.ReadAsStringAsync());
         }
 
         public async Task<User> GetAsync(Guid id)
         {
             var httpResponse = await httpClient.GetAsync($"{_address}/api/User/{id}");
+            httpResponse.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<User>(await httpResponse.Content.ReadAsStringAsync());
         }
 
         public async Task<User[]> GetAllAsync()
         {
             var httpResponse = await httpClient.GetAsync($"{_address}/api/User");
+            httpResponse.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<User[]>(await httpResponse.Content.ReadAsStringAsync());
         }
 
@@ -56,12 +57,9 @@ namespace BettingShop.Api.Client
         }
         public async Task<User> GetByTelegramIdAsync(int telegramId)
         {
-            var httpResponse = await httpClient.GetAsync($"{_address}/api/User");
-            var users = JsonConvert.DeserializeObject<List<User>>(await httpResponse.Content.ReadAsStringAsync());
-            if (users.Count == 0)
-                return new User() { Balance = 0, Id = new Guid(), TelegramId = -1 };
-            return users.FirstOrDefault(t => t.TelegramId == telegramId) == null ?
-                new User() { Balance = 0, Id = new Guid(),  TelegramId = -1 } : users.FirstOrDefault(t => t.TelegramId == telegramId);
+            var httpResponse = await httpClient.GetAsync($"{_address}/api/User/{telegramId}");
+            httpResponse.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<User>(await httpResponse.Content.ReadAsStringAsync());
         }
     }
 }
