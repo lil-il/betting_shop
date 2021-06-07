@@ -59,17 +59,9 @@ namespace BettingShop.Api.Client
             var httpResponse = await httpClient.GetAsync($"{_address}/api/User");
             var users = JsonConvert.DeserializeObject<List<User>>(await httpResponse.Content.ReadAsStringAsync());
             if (users.Count == 0)
-                return new User() { Balance = 0, Id = new Guid(), ParticipateBetsId = "", TelegramId = -1 };
+                return new User() { Balance = 0, Id = new Guid(), TelegramId = -1 };
             return users.FirstOrDefault(t => t.TelegramId == telegramId) == null ?
-                new User() { Balance = 0, Id = new Guid(), ParticipateBetsId = "", TelegramId = -1 } : users.FirstOrDefault(t => t.TelegramId == telegramId);
-        }
-
-        public async Task<User> AddParticipateBetId(int telegramId, string betId)
-        {
-            var userForUpdating = await GetByTelegramIdAsync(telegramId);
-            userForUpdating.ParticipateBetsId += "\n" + betId;
-            var updatedUser = await UpdateAsync(userForUpdating);
-            return updatedUser;
+                new User() { Balance = 0, Id = new Guid(),  TelegramId = -1 } : users.FirstOrDefault(t => t.TelegramId == telegramId);
         }
     }
 }

@@ -14,8 +14,5 @@ namespace BettingShop.DataLayer.Models
 
         [Required]
         public int Balance { get; set; }
-
-        [Required]
-        public string ParticipateBetsId { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace BettingShop.DataLayer.DB
         public static SQLiteCommand CreateUserTable(SQLiteConnection connection)
         {
             return new SQLiteCommand(
-                "CREATE TABLE IF NOT EXISTS [users] ([id] NVARCHAR(32), [balance] INTEGER, [participate_bets_id] NVARCHAR(1024), [telegram_id] INTEGER)",
+                "CREATE TABLE IF NOT EXISTS [users] ([id] NVARCHAR(32), [balance] INTEGER, [telegram_id] INTEGER)",
                 connection);
         }
 
@@ -56,8 +56,8 @@ namespace BettingShop.DataLayer.DB
 
         public static SQLiteCommand BuildCreateUserCommand(User user, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("INSERT INTO users VALUES('{0}', {1}, '{2}', {3})", user.Id.ToString(),
-                user.Balance, user.ParticipateBetsId, user.TelegramId), connection);
+            return new SQLiteCommand(string.Format("INSERT INTO users VALUES('{0}', {1}, '{2}')", user.Id.ToString(),
+                user.Balance, user.TelegramId), connection);
         }
 
         public static SQLiteCommand BuildDeleteCommand(Guid id, SQLiteConnection connection, string tablename)
@@ -80,8 +80,8 @@ namespace BettingShop.DataLayer.DB
 
         public static SQLiteCommand BuildUpdateUserCommand(User user, SQLiteConnection connection)
         {
-            return new SQLiteCommand(string.Format("UPDATE users SET balance = {0}, participate_bets_id = '{1}' WHERE telegram_id = {2}",
-                user.Balance, user.ParticipateBetsId, user.TelegramId), connection);
+            return new SQLiteCommand(string.Format("UPDATE users SET balance = {0} WHERE telegram_id = {1}",
+                user.Balance, user.TelegramId), connection);
         }
 
         public static SQLiteCommand DeleteTable(SQLiteConnection connection, string tablename)
