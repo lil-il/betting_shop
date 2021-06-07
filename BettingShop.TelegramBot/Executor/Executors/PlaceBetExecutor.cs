@@ -112,8 +112,6 @@ namespace BettingShop.TelegramBot.Executor.Executors
                 }
                 foreach (var oneEvent in allEvents)
                 {
-                    if (oneEvent.BetDeadline < DateTime.Now)
-                        continue;
                     dictionary[i] = oneEvent.Id;
                     allEventsString.Append($"{i} - {oneEvent.Name}\n" +
                                            $"Исходы: \n" +
