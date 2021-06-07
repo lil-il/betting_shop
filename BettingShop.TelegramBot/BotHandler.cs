@@ -1,4 +1,5 @@
-﻿using BettingShop.TelegramBot.Executor.Executors;
+﻿using BettingShop.TelegramBot.Executor;
+using BettingShop.TelegramBot.Executor.Executors;
 using BettingShop.TelegramBot.MessageHandling;
 using BettingShop.TelegramBot.User;
 using Telegram.Bot;
@@ -13,13 +14,15 @@ namespace BettingShop.TelegramBot
         private readonly UserMessageParser parser;
         private readonly ExecutorsFactory executorsFactory;
         private readonly IUserCommandTypeService commandTypeService;
+        private readonly IUserCommandStateService commandStateService;
         private readonly CommandParser commandParser;
-        public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService, CommandParser commandParser)
+        public BotHandler(ITelegramBotClient botClient, ExecutorsFactory factory, UserMessageParser parser, IUserCommandTypeService typeService, IUserCommandStateService stateService, CommandParser commandParser)
         {
             this.botClient = botClient;
             this.executorsFactory = factory;
             this.parser = parser;
             this.commandTypeService = typeService;
+            this.commandStateService = stateService;
             this.commandParser = commandParser;
         }
 
@@ -37,7 +40,10 @@ namespace BettingShop.TelegramBot
         public void OnMessageHandler(object sender, MessageEventArgs e)
         {
             if (e.Message.Type != MessageType.Text)
+            {
                 return;
+            }
+
             var userRequest = parser.ParseMessage(e.Message.Text);
             userRequest.User = new TelegramUser(e.Message.From.Id);
             userRequest.TelegramMessage = e.Message;
@@ -45,7 +51,7 @@ namespace BettingShop.TelegramBot
             {
                 if (!commandTypeService.TryGetCurrentCommandType(userRequest.User, out var commandType))
                 {
-                    var executor = new HelpExecutor(botClient);
+                    var executor = new SimpleMessageExecutor(botClient);
                     executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
                 }
                 else
@@ -56,9 +62,18 @@ namespace BettingShop.TelegramBot
             }
             else
             {
-                var commandType = commandParser.ParseCommandType(userRequest.Command);
-                var executor = executorsFactory.GetExecutor(commandType);
-                executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
+                IExecutor executor;
+                if (userRequest.Command == "back")
+                {
+                    executor = new BackExecutor(botClient, commandStateService);
+                    executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    var commandType = commandParser.ParseCommandType(userRequest.Command);
+                    executor = executorsFactory.GetExecutor(commandType);
+                    executor.ExecuteAsync(userRequest).GetAwaiter().GetResult();
+                }
             }
         }
 

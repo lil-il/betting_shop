@@ -5,9 +5,9 @@ namespace BettingShop.Api.Client.Models
     public class UserMeta
     {
         [Required]
-        public int Balance { get; set; }
+        public long TelegramId { get; set; }
 
         [Required]
-        public string ParticipateBetsId { get; set; }
+        public int Balance { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using BettingShop.Api.Models;
 using BettingShop.DataLayer.DB;
 using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Builder;
@@ -22,14 +21,16 @@ namespace BettingShop.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BetEventContext>(opt =>
+            /*services.AddDbContext<BetEventContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddDbContext<BetContext>(opt =>
                 opt.UseInMemoryDatabase("TodoList"));
             services.AddDbContext<UserContext>(opt =>
-                opt.UseInMemoryDatabase("TodoList"));
+                opt.UseInMemoryDatabase("TodoList"));*/
             services.AddControllers();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IBetRepository, BetRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IDeserializer, Deserializer>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }

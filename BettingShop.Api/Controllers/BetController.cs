@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BettingShop.Api.Models;
+using BettingShop.DataLayer.DB;
+using BettingShop.DataLayer.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BettingShop.Api.Controllers
 {
@@ -12,12 +13,12 @@ namespace BettingShop.Api.Controllers
     [ApiController]
     public class BetController : ControllerBase
     {
-        private readonly BetContext context;
+        private readonly IBetRepository repo;
         private readonly IMapper mapper;
 
-        public BetController(BetContext context, IMapper mapper)
+        public BetController(IBetRepository repo, IMapper mapper)
         {
-            this.context = context;
+            this.repo = repo;
             this.mapper = mapper;
         }
 
@@ -25,14 +26,14 @@ namespace BettingShop.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client.Models.Bet>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<Client.Models.Bet>>(await context.Bets.ToListAsync()));
+            return new(mapper.Map<IEnumerable<Client.Models.Bet>>((await repo.GetAllAsync()).ToList()));
         }
 
         // GET: api/Bets/5
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Client.Models.Bet>> GetBet(Guid id)
         {
-            var betItem = await context.Bets.FindAsync(id);
+            var betItem = await repo.GetByIdAsync(id);
             if (betItem == null) return NotFound();
             return mapper.Map<Client.Models.Bet>(betItem);
         }
@@ -41,10 +42,9 @@ namespace BettingShop.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> PutBet(Guid id, Client.Models.Bet betForUpdating)
         {
-            var betModelForUpdating = mapper.Map<Bet>(betForUpdating);
+            var betModelForUpdating = mapper.Map<BettingShop.DataLayer.Models.Bet>(betForUpdating);
             if (id != betModelForUpdating.Id) return BadRequest();
-            context.Entry(betModelForUpdating).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            var updatedBet = await repo.UpdateAsync(betModelForUpdating);
             return NoContent();
         }
 
@@ -53,9 +53,8 @@ namespace BettingShop.Api.Controllers
         public async Task<ActionResult<Client.Models.Bet>> PostBet(Client.Models.BetMeta betForCreating)
         {
             var newBetMeta = mapper.Map<BetMeta>(betForCreating);
-            var newBet = mapper.Map<Bet>(newBetMeta);
-            context.Bets.Add(newBet);
-            await context.SaveChangesAsync();
+            var newBet = mapper.Map<BettingShop.DataLayer.Models.Bet>(newBetMeta);
+            await repo.CreateAsync(newBet);
             return CreatedAtAction(nameof(GetBet), new { id = newBet.Id }, mapper.Map<Client.Models.Bet>(newBet));
         }
 
@@ -63,10 +62,8 @@ namespace BettingShop.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Client.Models.Bet>> DeleteBet(Guid id)
         {
-            var bet = await context.Bets.FindAsync(id);
-            if (bet == null) return NotFound();
-            context.Bets.Remove(bet);
-            await context.SaveChangesAsync();
+            var bet = await repo.DeleteAsync(id);
+            if (bet == null) return NotFound(); ;
             return mapper.Map<Client.Models.Bet>(bet);
         }
     }

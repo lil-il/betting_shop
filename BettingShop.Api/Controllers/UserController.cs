@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using BettingShop.Api.Models;
+using BettingShop.DataLayer.Models;
+using BettingShop.DataLayer.DB;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace BettingShop.Api.Controllers
 {
-    [Route("api/User")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserContext context;
+        private readonly IUserRepository repo;
         private readonly IMapper mapper;
 
-        public UserController(UserContext context, IMapper mapper)
+        public UserController(IUserRepository repo, IMapper mapper)
         {
-            this.context = context;
+            this.repo = repo;
             this.mapper = mapper;
         }
 
@@ -25,16 +27,27 @@ namespace BettingShop.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client.Models.User>>> GetAll()
         {
-            return new(mapper.Map<IEnumerable<Client.Models.User>>(await context.Users.ToListAsync()));
+            return new(mapper.Map<IEnumerable<Client.Models.User>>((await repo.GetAllAsync()).ToArray()));
         }
 
         // GET: api/Users/5
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Client.Models.User>> GetUser(Guid id)
         {
-            var user = await context.Users.FindAsync(id);
+            var user = await repo.GetByIdAsync(id);
             if (user == null) return NotFound();
             return mapper.Map<Client.Models.User>(user);
+        }
+
+        [HttpGet("{telegramId:int}")]
+        public async Task<ActionResult<Client.Models.User>> GetByTelegramId(int telegramId)
+        {
+            var users = mapper.Map<IEnumerable<Client.Models.User>>((await repo.GetAllAsync()).ToList()).ToList();
+            //if (users.Count == 0) return NotFound();
+            var j = users.FirstOrDefault(t => t.TelegramId == telegramId);
+            //return users.FirstOrDefault(t => t.TelegramId == telegramId) == null ?
+            //    NotFound() : users.FirstOrDefault(t => t.TelegramId == telegramId);
+            return users.FirstOrDefault(t => t.TelegramId == telegramId);
         }
 
         // PUT: api/Users/5
@@ -43,8 +56,7 @@ namespace BettingShop.Api.Controllers
         {
             var userModelForUpdating = mapper.Map<User>(userForUpdating);
             if (id != userModelForUpdating.Id) return BadRequest();
-            context.Entry(userModelForUpdating).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            var updatedUser = await repo.UpdateAsync(userModelForUpdating);
             return NoContent();
         }
 
@@ -54,8 +66,7 @@ namespace BettingShop.Api.Controllers
         {
             var newUserMeta = mapper.Map<UserMeta>(userForCreating);
             var newUser = mapper.Map<User>(newUserMeta);
-            context.Users.Add(newUser);
-            await context.SaveChangesAsync();
+            var createdUser = await repo.CreateAsync(newUser);
             return CreatedAtAction(nameof(GetUser), new { id = newUser.Id }, mapper.Map<Client.Models.User>(newUser));
         }
 
@@ -63,10 +74,8 @@ namespace BettingShop.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Client.Models.User>> DeleteUser(Guid id)
         {
-            var user = await context.Users.FindAsync(id);
+            var user = await repo.DeleteAsync(id);
             if (user == null) return NotFound();
-            context.Users.Remove(user);
-            await context.SaveChangesAsync();
             return mapper.Map<Client.Models.User>(user);
         }
     }
