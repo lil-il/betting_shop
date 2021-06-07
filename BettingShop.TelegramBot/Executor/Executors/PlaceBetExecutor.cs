@@ -44,7 +44,7 @@ namespace BettingShop.TelegramBot.Executor.Executors
                         if (chosenEventNumber < 1 || chosenEventNumber > allEvents.Length)
                         {
                             await client.SendTextMessageAsync(message.TelegramMessage.Chat,
-                                "Введите, пожалуйста, существующий номер ставки");
+                                "Введите, пожалуйста, существующий номер события");
                             break;
                         }
                         var chosenEvent = await eventClient.GetAsync((betState.IdDictionary[chosenEventNumber]));
