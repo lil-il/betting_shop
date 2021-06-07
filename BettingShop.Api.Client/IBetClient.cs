@@ -20,6 +20,8 @@ namespace BettingShop.Api.Client
 
         Task<Bet[]> AllWinBetsForBetEventAsync(Guid betEventId, string winOutcome);
 
+        Task<Bet[]> AllBetsForBetEventAsync(Guid betEventId);
+
         Task<int> SumOfMoneyForEvent(Guid betEventId);
     }
 }
