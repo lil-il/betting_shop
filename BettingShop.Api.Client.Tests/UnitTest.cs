@@ -12,9 +12,10 @@ namespace BettingShop.Api.Client.Tests
         public async Task CRUD_BetEvent_Test()
         {
             var client = new BetEventClient("http://localhost:27254");
-            var createdEvent = await client.CreateAsync(new BetEventMeta { Name = "Alex", BetDeadline = DateTime.Now, Outcomes = "kdsmd" });
+            var createdEvent = await client.CreateAsync(new BetEventMeta { Name = "Alex", BetDeadline = DateTime.Now, Outcomes = "kdsmd", CreatorId = 0});
+            var k = await client.CloseEventAsync(createdEvent.Id, "dmls");
             var allEvents = await client.GetAllAsync();
-            var anotherCreatedEvent = await client.CreateAsync(new BetEventMeta { Name = "Steven", BetDeadline = DateTime.Now, Outcomes = "ksmck" });
+            var anotherCreatedEvent = await client.CreateAsync(new BetEventMeta { Name = "Steven", BetDeadline = DateTime.Now, Outcomes = "ksmck", CreatorId = 1});
             var updatedEvent = await client.UpdateAsync(new Models.BetEvent
             { Id = createdEvent.Id, Name = "Sam", Description = "Apple", BetDeadline = DateTime.Now, Outcomes = "ksdn" });
             var newEvent = await client.GetAsync(updatedEvent.Id);

@@ -61,6 +61,7 @@ namespace BettingShop.Api.Client
             var userClient = new UserClient(_address);
             var sumOfMoney = await betClient.SumOfMoneyForEvent(id);
             var winners = new List<Bet>(await betClient.AllWinBetsForBetEventAsync(id, winOutcome)).Select(t => t.UserId).ToHashSet();
+            var allBets = await betClient.AllBetsForBetEventAsync(id);
             if (winners.Count != 0)
             {
                 var gain = sumOfMoney / winners.Count;
@@ -71,6 +72,8 @@ namespace BettingShop.Api.Client
                     await userClient.UpdateAsync(winnerUser);
                 }
             }
+            foreach (var bet in allBets)
+                await betClient.DeleteAsync(bet.Id);
             var eventForClosing = await DeleteAsync(id);
             return eventForClosing;
         }

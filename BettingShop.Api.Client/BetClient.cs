@@ -70,15 +70,18 @@ namespace BettingShop.Api.Client
 
         public async Task<Bet[]> AllWinBetsForBetEventAsync(Guid betEventId, string winOutcome)
         {
-            var betClient = new BetClient(_address);
-            var bets= await betClient.GetAllAsync();
-            return new List<Bet>(bets).FindAll(t => t.EventId == betEventId && t.Outcome == winOutcome).ToArray();
+            return new List<Bet>(await AllBetsForBetEventAsync(betEventId)).FindAll(t => t.Outcome == winOutcome).ToArray();
+        }
+
+        public async Task<Bet[]> AllBetsForBetEventAsync(Guid betEventId)
+        {
+            var bets = await GetAllAsync();
+            return new List<Bet>(bets).FindAll(t => t.EventId == betEventId).ToArray();
         }
 
         public async Task<int> SumOfMoneyForEvent(Guid betEventId)
         {
-            var betClient = new BetClient(_address);
-            var bets = await betClient.GetAllAsync();
+            var bets = await GetAllAsync();
             var betsForEvent = new List<Bet>(bets).FindAll(t => t.EventId == betEventId);
             return betsForEvent.Select(t => t.BetSize).Sum();
         }

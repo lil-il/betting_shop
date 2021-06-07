@@ -62,7 +62,7 @@ namespace BettingShop.DataLayer.DB
 
         public static SQLiteCommand BuildDeleteCommand(Guid id, SQLiteConnection connection, string tablename)
         {
-            return new SQLiteCommand(string.Format("DELETE FROM {0} WHERE id = '{0}'", tablename, id.ToString()), connection);
+            return new SQLiteCommand(string.Format("DELETE FROM {0} WHERE id = '{1}'", tablename, id.ToString()), connection);
         }
 
 
