@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NUnit.Framework;
 using BettingShop.DataLayer.DB;
 using BettingShop.DataLayer.Models;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
